@@ -6,14 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress:server": "cypress open",
+    "cypress": "cypress run"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
+    "@web3auth/web3auth": "^2.1.2",
     "axios": "0.27.2",
     "ethers": "5.7.1",
     "next": "12.3.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-redux": "^8.0.4"
   },
   "devDependencies": {
     "@types/node": "18.7.23",
@@ -21,6 +26,7 @@
     "@types/react-dom": "18.0.6",
     "@typescript-eslint/eslint-plugin": "5.36.1",
     "@typescript-eslint/parser": "5.36.1",
+    "cypress": "^10.9.0",
     "eslint": "8.24.0",
     "eslint-config-next": "12.3.1",
     "eslint-plugin-react": "7.31.1",

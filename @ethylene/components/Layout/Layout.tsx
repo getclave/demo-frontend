@@ -1,4 +1,4 @@
-import { Head } from '@ethylene/core';
+import { Head } from '@ethylene/components';
 import { ComponentPropsWithoutRef } from 'react';
 import styles from './Layout.module.scss';
 
