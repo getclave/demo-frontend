@@ -1,4 +1,4 @@
-import clsnm from '@ethylene/utils/clsnm';
+import { clsnm } from '@ethylene/utils';
 
 describe('sum module', () => {
   it('Correcly concat classes', () => {

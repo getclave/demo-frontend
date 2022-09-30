@@ -1,13 +1,10 @@
 import 'styles/global.scss';
 import type { AppProps } from 'next/app';
-import { useEffect } from 'react';
-import { CONFIG } from 'config';
 import { EthyleneProvider } from '@ethylene/redux';
+import { useStyling } from 'hooks/useStyling';
 
 function EthyleneApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    document.body.style.fontFamily = CONFIG.FONT_FAMILY;
-  }, []);
+  useStyling();
 
   return (
     <EthyleneProvider>
