@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { JsonRpcSigner } from '@ethersproject/providers';
 
 export interface Web3State {
+  address: string | null;
   connected: boolean;
   isConnecting: boolean;
   provider: ethers.providers.Web3Provider | null;
@@ -13,6 +14,7 @@ export interface Web3State {
 }
 
 const initialState: Web3State = {
+  address: null,
   connected: false,
   isConnecting: false,
   provider: null,
@@ -24,6 +26,9 @@ export const web3Slice = createSlice({
   initialState,
   name: 'web3',
   reducers: {
+    setAddress: (state, action: PayloadAction<string | null>) => {
+      state.address = action.payload;
+    },
     setIsConnected: (state, action: PayloadAction<boolean>) => {
       state.connected = action.payload;
     },
@@ -43,6 +48,7 @@ export const web3Slice = createSlice({
 });
 
 export const {
+  setAddress,
   setIsConnected,
   setWeb3AuthInstance,
   setIsConnecting,
