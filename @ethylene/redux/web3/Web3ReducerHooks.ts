@@ -2,9 +2,11 @@ import { useTypedSelector } from '@ethylene/redux';
 import {
   setIsConnected,
   setIsConnecting,
+  setProvider,
   setWeb3AuthInstance,
 } from '@ethylene/redux/web3/Web3Reducer';
 import { Web3Auth } from '@web3auth/web3auth';
+import { ethers } from 'ethers';
 import { useDispatch } from 'react-redux';
 
 export const useIsConnected = () =>
@@ -29,4 +31,13 @@ export const useIsConnecting = () =>
 export const useSetIsConnecting = () => {
   const dispatch = useDispatch();
   return (value: boolean) => dispatch(setIsConnecting(value));
+};
+
+export const useProvider = () =>
+  useTypedSelector((state) => state.web3.provider);
+
+export const useSetProvider = () => {
+  const dispatch = useDispatch();
+  return (value: ethers.providers.Web3Provider | null) =>
+    dispatch(setProvider(value));
 };

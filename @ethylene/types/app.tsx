@@ -1,6 +1,9 @@
+import { ethers } from 'ethers';
 import React from 'react';
 
 export type MixedElement = React.ReactElement | string;
+
+export type Web3ProviderType = ethers.providers.Web3Provider | null;
 
 export type EthyleneConnectionType = 'web3auth' | 'metamask'; // TODO: add Starknet
 
