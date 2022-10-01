@@ -2,7 +2,7 @@ import React from 'react';
 
 export type MixedElement = React.ReactElement | string;
 
-export type EthyleneConnectionType = 'web3auth' | 'metamask';
+export type EthyleneConnectionType = 'web3auth' | 'metamask'; // TODO: add Starknet
 
 interface IEthyleneConnector {
   connect: () => Promise<void>;
@@ -12,11 +12,14 @@ interface IEthyleneConnector {
 export interface EthyleneMetamaskConnector extends IEthyleneConnector {}
 export interface EthyleneWeb3AuthConnector extends IEthyleneConnector {}
 
-export type EthyleneConnector = (
-  | EthyleneMetamaskConnector
-  | EthyleneWeb3AuthConnector
-) & {
+type EthyleneConnectorExtra = {
   isConnecting: boolean;
   type: EthyleneConnectionType;
   isConnected: boolean;
 };
+
+export type EthyleneConnector = (
+  | EthyleneMetamaskConnector
+  | EthyleneWeb3AuthConnector
+) &
+  EthyleneConnectorExtra;

@@ -1,5 +1,4 @@
 import { Web3Auth } from '@web3auth/web3auth';
-import { CHAIN_NAMESPACES } from '@web3auth/base';
 import { __dev__ } from '@ethylene/utils';
 import {
   useIsConnected,
@@ -19,14 +18,11 @@ export function useWeb3Auth(): EthyleneWeb3AuthConnector {
   const setIsConnecting = useSetIsConnecting();
   const web3AuthInstance = useWeb3AuthInstance();
 
-  const getInstance = (): Web3Auth => {
+  const getInstance = (): Web3Auth | null => {
+    if (CONFIG.WEB3AUTH_CHAIN_CONFIG == null) return null;
     const clientId = CONFIG.WEB3AUTH_CLIENT_ID;
     const _web3AuthInstance = new Web3Auth({
-      chainConfig: {
-        chainId: '0x1',
-        chainNamespace: CHAIN_NAMESPACES.EIP155,
-        rpcTarget: CONFIG.RPC_URL,
-      },
+      chainConfig: CONFIG.WEB3AUTH_CHAIN_CONFIG,
       clientId: String(clientId),
     });
     return _web3AuthInstance;
@@ -34,8 +30,12 @@ export function useWeb3Auth(): EthyleneWeb3AuthConnector {
 
   const connect = async (): Promise<void> => {
     if (isConnected || CONFIG.CONNECTION !== 'web3auth') return;
-
     const web3AuthInstance = getInstance();
+
+    if (web3AuthInstance == null) {
+      return;
+    }
+
     try {
       setIsConnecting(true);
       await web3AuthInstance.initModal();
