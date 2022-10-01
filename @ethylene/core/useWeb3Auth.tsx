@@ -15,7 +15,7 @@ import { UseConnectionProps } from '@ethylene/types/app';
 export function useWeb3Auth({
   onError,
   onConnect,
-}: UseConnectionProps): EthyleneWeb3AuthConnector {
+}: UseConnectionProps | undefined = {}): EthyleneWeb3AuthConnector {
   const isConnected = useIsConnected();
   const setIsConnected = useSetIsConnected();
   const setWeb3AuthInstance = useSetWeb3AuthInstance();

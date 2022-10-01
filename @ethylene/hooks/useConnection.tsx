@@ -8,7 +8,9 @@ import { EthyleneConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
 import { CONFIG } from 'config';
 
-export const useConnection = (props: UseConnectionProps): EthyleneConnector => {
+export const useConnection = (
+  props?: UseConnectionProps,
+): EthyleneConnector => {
   const { connect: connectMetamask, disconnect: disconnectMetamask } =
     useDefaultAuth(props);
 
@@ -19,6 +21,8 @@ export const useConnection = (props: UseConnectionProps): EthyleneConnector => {
   const isConnected = useIsConnected();
 
   const connect = async (): Promise<void> => {
+    if (isConnected) return;
+
     if (CONFIG.CONNECTION === 'web3auth') {
       await connectWeb3Auth();
     } else if (CONFIG.CONNECTION === 'injected') {

@@ -15,7 +15,7 @@ declare let window: Window & {
 export const useDefaultAuth = ({
   onError,
   onConnect,
-}: UseConnectionProps): EthyleneMetamaskConnector => {
+}: UseConnectionProps | undefined = {}): EthyleneMetamaskConnector => {
   const isConnected = useIsConnected();
   const setIsConnected = useSetIsConnected();
   const setIsConnecting = useSetIsConnecting();
