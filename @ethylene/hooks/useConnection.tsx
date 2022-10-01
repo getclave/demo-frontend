@@ -5,14 +5,15 @@ import {
   useIsConnecting,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { EthyleneConnector } from '@ethylene/types';
+import { UseConnectionProps } from '@ethylene/types/app';
 import { CONFIG } from 'config';
 
-export const useConnection = (): EthyleneConnector => {
+export const useConnection = (props: UseConnectionProps): EthyleneConnector => {
   const { connect: connectMetamask, disconnect: disconnectMetamask } =
-    useDefaultAuth();
+    useDefaultAuth(props);
 
   const { connect: connectWeb3Auth, disconnect: disconnectWeb3Auth } =
-    useWeb3Auth();
+    useWeb3Auth(props);
 
   const isConnecting = useIsConnecting();
   const isConnected = useIsConnected();
@@ -20,7 +21,7 @@ export const useConnection = (): EthyleneConnector => {
   const connect = async (): Promise<void> => {
     if (CONFIG.CONNECTION === 'web3auth') {
       await connectWeb3Auth();
-    } else if (CONFIG.CONNECTION === 'metamask') {
+    } else if (CONFIG.CONNECTION === 'injected') {
       await connectMetamask();
     } else {
       throw new Error('Invalid connection type');

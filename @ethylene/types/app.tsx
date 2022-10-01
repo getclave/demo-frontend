@@ -5,7 +5,12 @@ export type MixedElement = React.ReactElement | string;
 
 export type Web3ProviderType = ethers.providers.Web3Provider | null;
 
-export type EthyleneConnectionType = 'web3auth' | 'metamask'; // TODO: add Starknet
+export type EthyleneConnectionType = 'web3auth' | 'injected'; // TODO: add Starknet
+
+export type UseConnectionProps = {
+  onError?: () => void;
+  onConnect?: () => void;
+};
 
 interface IEthyleneConnector {
   connect: () => Promise<void>;

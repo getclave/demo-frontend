@@ -6,7 +6,7 @@ declare let window: Window & {
 };
 
 export const getDefaultProvider = () => {
-  if (CONFIG.CONNECTION === 'metamask') {
+  if (CONFIG.CONNECTION === 'injected') {
     if (window.ethereum != null) {
       return window.ethereum;
     }

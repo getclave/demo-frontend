@@ -10,8 +10,12 @@ import {
 import { CONFIG } from 'config';
 import { batch } from 'react-redux';
 import { EthyleneWeb3AuthConnector } from '@ethylene/types';
+import { UseConnectionProps } from '@ethylene/types/app';
 
-export function useWeb3Auth(): EthyleneWeb3AuthConnector {
+export function useWeb3Auth({
+  onError,
+  onConnect,
+}: UseConnectionProps): EthyleneWeb3AuthConnector {
   const isConnected = useIsConnected();
   const setIsConnected = useSetIsConnected();
   const setWeb3AuthInstance = useSetWeb3AuthInstance();
@@ -45,11 +49,14 @@ export function useWeb3Auth(): EthyleneWeb3AuthConnector {
         setWeb3AuthInstance(web3AuthInstance);
         setIsConnecting(false);
       });
+      onConnect?.();
     } catch (err) {
-      setIsConnecting(false);
       if (__dev__) {
         console.error(err);
       }
+
+      setIsConnecting(false);
+      onError?.();
     }
   };
 
