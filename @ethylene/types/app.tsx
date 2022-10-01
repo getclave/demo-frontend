@@ -31,3 +31,14 @@ export type EthyleneConnector = (
   | EthyleneWeb3AuthConnector
 ) &
   EthyleneConnectorExtra;
+
+export interface IEthyleneNetwork {
+  chainId: string;
+  name: string;
+  rpcUrls: string[];
+  nativeCurrency: { name?: string; decimals?: number; symbol?: string };
+}
+
+export interface EthyleneNetwork extends IEthyleneNetwork {
+  type: 'testnet' | 'mainnet';
+}

@@ -4,6 +4,8 @@ import {
   useIsConnected,
   useSetIsConnected,
   useSetIsConnecting,
+  useSetProvider,
+  useSetSigner,
   useSetWeb3AuthInstance,
   useWeb3AuthInstance,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
@@ -11,6 +13,7 @@ import { CONFIG } from 'config';
 import { batch } from 'react-redux';
 import { EthyleneWeb3AuthConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
+import { ethers } from 'ethers';
 
 export function useWeb3Auth({
   onError,
@@ -21,6 +24,8 @@ export function useWeb3Auth({
   const setWeb3AuthInstance = useSetWeb3AuthInstance();
   const setIsConnecting = useSetIsConnecting();
   const web3AuthInstance = useWeb3AuthInstance();
+  const setProvider = useSetProvider();
+  const setSigner = useSetSigner();
 
   const getInstance = (): Web3Auth | null => {
     if (CONFIG.WEB3AUTH_CHAIN_CONFIG == null) return null;
@@ -47,6 +52,11 @@ export function useWeb3Auth({
       batch(() => {
         setIsConnected(true);
         setWeb3AuthInstance(web3AuthInstance);
+        const _provider = new ethers.providers.Web3Provider(
+          web3AuthInstance.provider as ethers.providers.ExternalProvider,
+        );
+        setProvider(_provider);
+        setSigner(_provider.getSigner());
         setIsConnecting(false);
       });
       onConnect?.();
