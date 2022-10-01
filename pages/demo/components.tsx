@@ -5,6 +5,8 @@ import {
   useProvider,
   useSigner,
 } from '@ethylene/hooks';
+import { useBalance } from '@ethylene/hooks/useBalance';
+import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
 import { useRef } from 'react';
 
@@ -19,11 +21,12 @@ const Components: NextPage = () => {
   const signer = useSigner();
   const address = useAddress();
 
+  const { balance } = useBalance();
+
   const ref = useRef<HTMLDivElement>(null);
   return (
-    <div>
-      {isConnected && <div>Connected: {address}</div>}
-      <Container forwardedRef={ref}>components</Container>
+    <Container forwardedRef={ref}>
+      <div>Components</div>
       <button onClick={connect}>Connect</button>
       <button onClick={disconnect}>disconnect</button>
       <button onClick={() => console.log(provider)}>Provider</button>
@@ -32,7 +35,15 @@ const Components: NextPage = () => {
       </button>
       <button onClick={() => console.log(signer)}>Signer</button>
       <button onClick={() => console.log(address)}>Address</button>
-    </div>
+      <div>
+        {isConnected && (
+          <div>
+            <div>Connected: {address}</div>
+            <div>Balance: {formatEther(balance)}</div>
+          </div>
+        )}
+      </div>
+    </Container>
   );
 };
 
