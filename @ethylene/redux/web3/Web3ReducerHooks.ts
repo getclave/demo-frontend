@@ -7,10 +7,9 @@ import {
   setSigner,
   setWeb3AuthInstance,
 } from '@ethylene/redux/web3/Web3Reducer';
-import { Web3ProviderType } from '@ethylene/types/app';
+import { EthyleneSigner, Web3ProviderType } from '@ethylene/types/app';
 import { Web3Auth } from '@web3auth/web3auth';
 import { useDispatch } from 'react-redux';
-import { JsonRpcSigner } from '@ethersproject/providers';
 import { useCallback } from 'react';
 
 export const useIsConnected = () =>
@@ -59,7 +58,7 @@ export const useSigner = () => useTypedSelector((state) => state.web3.signer);
 export const useSetSigner = () => {
   const dispatch = useDispatch();
   return useCallback(
-    (signer: JsonRpcSigner | null) => {
+    (signer: EthyleneSigner | null) => {
       dispatch(setSigner(signer));
     },
     [dispatch],

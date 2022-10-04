@@ -1,3 +1,4 @@
+import { useResetWeb3Connection } from '@ethylene/core/useResetWeb3Connection';
 import {
   useIsConnected,
   useSetIsConnected,
@@ -19,6 +20,7 @@ export const useDefaultAuth = ({
   const isConnected = useIsConnected();
   const setIsConnected = useSetIsConnected();
   const setIsConnecting = useSetIsConnecting();
+  const resetWeb3Connection = useResetWeb3Connection();
 
   const connect = async (): Promise<void> => {
     try {
@@ -42,7 +44,7 @@ export const useDefaultAuth = ({
 
   const disconnect = async (): Promise<void> => {
     if (!isConnected) return;
-    setIsConnected(false);
+    resetWeb3Connection();
   };
 
   return { connect, disconnect };

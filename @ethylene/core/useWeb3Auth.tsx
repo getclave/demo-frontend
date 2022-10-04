@@ -13,6 +13,7 @@ import { batch } from 'react-redux';
 import { EthyleneWeb3AuthConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
 import { ethers } from 'ethers';
+import { useResetWeb3Connection } from '@ethylene/core/useResetWeb3Connection';
 
 export function useWeb3Auth({
   onError,
@@ -24,6 +25,7 @@ export function useWeb3Auth({
   const setIsConnecting = useSetIsConnecting();
   const web3AuthInstance = useWeb3AuthInstance();
   const setProvider = useSetProvider();
+  const resetWeb3Connection = useResetWeb3Connection();
 
   const getInstance = (): Web3Auth | null => {
     if (CONFIG.WEB3AUTH_CHAIN_CONFIG == null) return null;
@@ -77,10 +79,7 @@ export function useWeb3Auth({
     try {
       await web3AuthInstance.logout();
       web3AuthInstance.clearCache();
-      batch(() => {
-        setWeb3AuthInstance(null);
-        setIsConnected(false);
-      });
+      resetWeb3Connection();
     } catch (err) {
       if (__dev__) {
         console.error(err);

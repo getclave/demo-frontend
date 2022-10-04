@@ -4,8 +4,9 @@ import {
   useConnection,
   useProvider,
   useSigner,
+  useBalance,
+  useOnAccountsChange,
 } from '@ethylene/hooks';
-import { useBalance } from '@ethylene/hooks/useBalance';
 import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
 import { useRef } from 'react';
@@ -22,6 +23,8 @@ const Components: NextPage = () => {
   const address = useAddress();
 
   const { balance } = useBalance();
+
+  useOnAccountsChange(() => window.location.reload());
 
   const ref = useRef<HTMLDivElement>(null);
   return (
