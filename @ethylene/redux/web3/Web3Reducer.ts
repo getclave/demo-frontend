@@ -1,7 +1,7 @@
 import { EthyleneSigner, Web3ProviderType } from '@ethylene/types/app';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Web3Auth } from '@web3auth/web3auth';
-import { ethers, Signer } from 'ethers';
+import { ethers } from 'ethers';
 
 export interface Web3State {
   address: string | null;
@@ -37,7 +37,7 @@ export const web3Slice = createSlice({
     setProvider: (state, action: PayloadAction<Web3ProviderType>) => {
       state.provider = action.payload;
     },
-    setSigner: (state, action: PayloadAction<Signer | null>) => {
+    setSigner: (state, action: PayloadAction<EthyleneSigner | null>) => {
       state.signer = action.payload;
     },
     setWeb3AuthInstance: (state, action: PayloadAction<Web3Auth | null>) => {

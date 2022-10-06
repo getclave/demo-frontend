@@ -1,4 +1,5 @@
 import { Container } from '@ethylene/components';
+import { ERC20 } from '@ethylene/constants';
 import {
   useAddress,
   useConnection,
@@ -7,9 +8,11 @@ import {
   useBalance,
   useOnAccountsChange,
 } from '@ethylene/hooks';
+import { useContractFunction } from '@ethylene/hooks/useContractFunction';
+import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const Components: NextPage = () => {
   const { connect, disconnect, isConnected } = useConnection({
@@ -18,13 +21,31 @@ const Components: NextPage = () => {
     },
   });
 
-  const { provider } = useProvider();
+  const provider = useProvider();
   const signer = useSigner();
   const address = useAddress();
 
   const { balance } = useBalance();
 
   useOnAccountsChange(() => window.location.reload());
+
+  const fn = useContractFunction<BigNumber>({
+    abi: ERC20,
+    address: '0xFeDFAF1A10335448b7FA0268F56D2B44DBD357de',
+    method: 'balanceOf',
+    onError: () => {
+      console.log('error');
+    },
+    onSuccess: () => {
+      console.log('here');
+    },
+  });
+
+  useEffect(() => {
+    if (address != null) {
+      fn.read<[string | null]>(address);
+    }
+  }, [address]);
 
   const ref = useRef<HTMLDivElement>(null);
   return (

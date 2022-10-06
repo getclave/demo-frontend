@@ -4,3 +4,5 @@ export { useConnection } from './useConnection';
 export { useProvider } from './useProvider';
 export { useOnAccountsChange } from './useOnAccountsChange';
 export { useSigner } from './useSigner';
+export { useContract } from './useContract_EXPERIMENTAL';
+export { useContractFunction } from './useContractFunction';

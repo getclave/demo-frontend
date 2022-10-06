@@ -43,3 +43,12 @@ export interface IEthyleneNetwork {
 export interface EthyleneNetwork extends IEthyleneNetwork {
   type: 'testnet' | 'mainnet';
 }
+
+export type EthyleneAbiItem = {
+  anonymous: boolean;
+  inputs: Array<unknown>;
+  name: string;
+  type: string;
+};
+
+export type MapStringToBoolean = { [key: string]: boolean };
