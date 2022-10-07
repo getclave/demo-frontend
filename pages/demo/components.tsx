@@ -45,7 +45,7 @@ const Components: NextPage = () => {
     if (address != null) {
       fn.read<[string | null]>(address);
     }
-  }, [address]);
+  }, []);
 
   const ref = useRef<HTMLDivElement>(null);
   return (

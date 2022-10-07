@@ -10,6 +10,10 @@ export const CONFIG: BaseConfig<ExtraConfig> = {
   CONNECTION: 'injected',
   FONT_FAMILY: '"Prompt", sans-serif',
   INITIAL_THEME: 'dark',
+  MORALIS: {
+    API_KEY: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
+    ENABLED: true,
+  },
   WEB3AUTH_CHAIN_CONFIG: {
     chainId: AVAX_FUJI_C_CHAIN.chainId,
     chainNamespace: CHAIN_NAMESPACES.EIP155,

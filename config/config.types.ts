@@ -10,6 +10,12 @@ export type BaseConfig<TExtra> = {
   CONNECTION: EthyleneConnectionType;
   FONT_FAMILY: string;
   INITIAL_THEME: 'dark' | 'light';
+  MORALIS:
+    | {
+        API_KEY?: string;
+        ENABLED: boolean;
+      }
+    | undefined;
   WEB3AUTH_CLIENT_ID?: string;
   WEB3AUTH_CHAIN_CONFIG?: {
     chainId: string;

@@ -6,7 +6,7 @@ export type MixedElement = React.ReactElement | string;
 export type Web3ProviderType = ethers.providers.Web3Provider | null;
 
 export type EthyleneSigner = ethers.providers.JsonRpcSigner;
-export type EthyleneConnectionType = 'web3auth' | 'injected'; // TODO: add Starknet
+export type EthyleneConnectionType = 'web3auth' | 'injected';
 
 export type UseConnectionProps = {
   onError?: () => void;
