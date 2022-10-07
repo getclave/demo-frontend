@@ -7,3 +7,4 @@ export { useSigner } from './useSigner';
 export { useContract } from './useContract_EXPERIMENTAL';
 export { useContractFunction } from './useContractFunction';
 export { useRightNetwork } from './useRightNetwork';
+export { useIsConnected } from './useIsConnected';
