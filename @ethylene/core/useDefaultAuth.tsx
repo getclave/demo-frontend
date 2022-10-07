@@ -33,7 +33,6 @@ export const useDefaultAuth = ({
       );
       await provider.send('eth_requestAccounts', []);
       setProvider(provider);
-
       setIsConnected(true);
       onConnect?.();
       setIsConnecting(false);

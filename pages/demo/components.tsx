@@ -13,7 +13,7 @@ import {
   useOnAccountsChange,
 } from '@ethylene/hooks';
 import { useContractFunction } from '@ethylene/hooks/useContractFunction';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
 import { useEffect, useRef } from 'react';
@@ -21,6 +21,15 @@ import Moralis from 'moralis';
 import { CONFIG } from 'config';
 import { EvmChain } from '@moralisweb3/evm-utils';
 import { useRightNetwork } from '@ethylene/hooks/useRightNetwork';
+import { useOnNetworkChange } from '@ethylene/hooks/useOnNetworkChange';
+import { resetProvider } from '@ethylene/core/resetProvider';
+import {
+  useSetProvider,
+  useSetSigner,
+  useWeb3AuthInstance,
+} from '@ethylene/redux/web3/Web3ReducerHooks';
+import { getDefaultProvider } from '@ethylene/core/getDefaultProvider';
+import { Web3ProviderType } from '@ethylene/types/app';
 
 const Components: NextPage = () => {
   const { connect, disconnect, isConnected } = useConnection({
@@ -32,21 +41,14 @@ const Components: NextPage = () => {
   const provider = useProvider();
   const signer = useSigner();
   const address = useAddress();
+  const setProvider = useSetProvider();
+  const setSigner = useSetSigner();
+  const web3AuthInstance = useWeb3AuthInstance();
 
   const { balance } = useBalance();
 
   useOnAccountsChange(() => window.location.reload());
   const { switchTo, isRightNetwork } = useRightNetwork(ETHEREUM_MAINNET);
-
-  useEffect(() => {
-    if (provider == null) return;
-    console.log('here');
-    const fetch = async () => {
-      const res = await provider.send('eth_chainId', []);
-      console.log(res);
-    };
-    fetch();
-  }, [provider]);
 
   const fn = useContractFunction<BigNumber>({
     abi: ERC20,
@@ -79,6 +81,16 @@ const Components: NextPage = () => {
     console.log(fn.isLoading);
     console.log(response);
   };
+
+  useOnNetworkChange(() => {
+    const fetch = async () => {
+      if (provider != null) {
+        const _signer = provider.getSigner();
+        setSigner(_signer);
+      }
+    };
+    fetch();
+  });
 
   const ref = useRef<HTMLDivElement>(null);
   return (

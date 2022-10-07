@@ -1,4 +1,5 @@
 import { getDefaultProvider } from '@ethylene/core/getDefaultProvider';
+import { resetProvider } from '@ethylene/core/resetProvider';
 import { useProvider } from '@ethylene/hooks/useProvider';
 import {
   useIsConnected,
@@ -69,23 +70,7 @@ const checkIfRightNetwork = async (
             await provider.send('wallet_switchEthereumChain', [
               { chainId: network.chainId },
             ]);
-
-            if (CONFIG.CONNECTION === 'injected') {
-              const defaultExternalProvider = getDefaultProvider();
-              if (defaultExternalProvider != null) {
-                setProvider(
-                  new ethers.providers.Web3Provider(defaultExternalProvider),
-                );
-              }
-            } else if (
-              CONFIG.CONNECTION === 'web3auth' &&
-              web3AuthInstance != null
-            ) {
-              const _provider = web3AuthInstance.provider;
-              if (_provider != null) {
-                setProvider(new ethers.providers.Web3Provider(_provider));
-              }
-            }
+            resetProvider(setProvider, web3AuthInstance);
             setIsRightNetwork(true);
           } catch (error: unknown) {
             const WALLET_ERROR_CODE = 4902;
