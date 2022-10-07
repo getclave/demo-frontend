@@ -72,23 +72,25 @@ const checkIfRightNetwork = async (
 
             if (CONFIG.CONNECTION === 'injected') {
               const defaultExternalProvider = getDefaultProvider();
-              setProvider(
-                new ethers.providers.Web3Provider(
-                  defaultExternalProvider as any,
-                ),
-              );
+              if (defaultExternalProvider != null) {
+                setProvider(
+                  new ethers.providers.Web3Provider(defaultExternalProvider),
+                );
+              }
             } else if (
               CONFIG.CONNECTION === 'web3auth' &&
               web3AuthInstance != null
             ) {
               const _provider = web3AuthInstance.provider;
-              setProvider(new ethers.providers.Web3Provider(_provider as any));
+              if (_provider != null) {
+                setProvider(new ethers.providers.Web3Provider(_provider));
+              }
             }
             setIsRightNetwork(true);
-          } catch (error: any) {
+          } catch (error: unknown) {
             const WALLET_ERROR_CODE = 4902;
 
-            if (error.code === WALLET_ERROR_CODE) {
+            if ((error as { code: number })?.code === WALLET_ERROR_CODE) {
               try {
                 await provider.send('wallet_addEthereumChain', [
                   {
