@@ -13,9 +13,6 @@ import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
 import { useEffect, useRef } from 'react';
-import Moralis from 'moralis';
-import { CONFIG } from 'config';
-import { EvmChain } from '@moralisweb3/evm-utils';
 import { useRightNetwork } from '@ethylene/hooks/useRightNetwork';
 
 const Components: NextPage = () => {
