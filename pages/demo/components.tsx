@@ -1,9 +1,5 @@
 import { Container } from '@ethylene/components';
-import {
-  AVAX_FUJI_C_CHAIN,
-  ERC20,
-  ETHEREUM_MAINNET,
-} from '@ethylene/constants';
+import { ERC20, ETHEREUM_MAINNET } from '@ethylene/constants';
 import {
   useAddress,
   useConnection,
@@ -81,16 +77,6 @@ const Components: NextPage = () => {
     console.log(fn.isLoading);
     console.log(response);
   };
-
-  useOnNetworkChange(() => {
-    const fetch = async () => {
-      if (provider != null) {
-        const _signer = provider.getSigner();
-        setSigner(_signer);
-      }
-    };
-    fetch();
-  });
 
   const ref = useRef<HTMLDivElement>(null);
   return (

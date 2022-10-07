@@ -8,7 +8,6 @@ export const useOnNetworkChange = (callback: () => void) => {
     if (!provider) return;
 
     provider.on('network', (_newNetwork: unknown, oldNetwork: unknown) => {
-      console.log(_newNetwork, oldNetwork);
       if (oldNetwork) {
         callback();
       }

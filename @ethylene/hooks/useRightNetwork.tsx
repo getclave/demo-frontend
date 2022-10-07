@@ -1,4 +1,3 @@
-import { getDefaultProvider } from '@ethylene/core/getDefaultProvider';
 import { resetProvider } from '@ethylene/core/resetProvider';
 import { useProvider } from '@ethylene/hooks/useProvider';
 import {
@@ -7,8 +6,7 @@ import {
   useWeb3AuthInstance,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { Web3Auth } from '@web3auth/web3auth';
-import { CONFIG } from 'config';
-import { ethers } from 'ethers';
+
 import { useEffect, useState } from 'react';
 import { EthyleneNetwork, Web3ProviderType } from '../types/app';
 
