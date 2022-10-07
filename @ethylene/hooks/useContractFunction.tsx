@@ -3,19 +3,19 @@ import { useSigner } from '@ethylene/hooks/useSigner';
 import { EthyleneSigner } from '@ethylene/types/app';
 import { __dev__ } from '@ethylene/utils';
 import { Contract, ContractInterface, ethers } from 'ethers';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 export const useContractFunction = <T,>({
   address,
   abi,
   method,
-  onError,
+  onFail,
   onSuccess,
 }: {
   address: string;
   abi: ContractInterface;
   method: string;
-  onError?: (err: unknown) => void;
+  onFail?: (err: unknown) => void;
   onSuccess?: (res: T) => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,26 +49,31 @@ export const useContractFunction = <T,>({
       } catch (err) {
         setIsFailed(true);
         setIsLoading(false);
-        onError?.(err);
+        onFail?.(err);
         if (__dev__) {
           console.error(err);
         }
       }
     },
-    [abi, address, method, onError, onSuccess, provider, signer],
+    [abi, address, method, onFail, onSuccess, provider, signer],
   );
 
-  useEffect(() => {
-    console.log('execute changes');
-  }, [execute]);
+  const write = useCallback(
+    <T extends Array<unknown>>(...args: T) => {
+      execute('write', ...args);
+    },
+    [execute],
+  );
 
-  const write = <T extends Array<unknown>>(...args: T) => {
-    execute('write', ...args);
-  };
+  const read = useCallback(
+    <T extends Array<unknown>>(...args: T) => {
+      execute('read', ...args);
+    },
+    [execute],
+  );
 
-  const read = <T extends Array<unknown>>(...args: T) => {
-    execute('read', ...args);
-  };
-
-  return { isFailed, isLoading, read, write };
+  return useMemo(
+    () => ({ isFailed, isLoading, read, write }),
+    [read, write, isLoading, isFailed],
+  );
 };

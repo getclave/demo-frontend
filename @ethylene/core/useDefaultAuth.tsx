@@ -3,6 +3,7 @@ import {
   useIsConnected,
   useSetIsConnected,
   useSetIsConnecting,
+  useSetProvider,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { EthyleneMetamaskConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
@@ -21,6 +22,7 @@ export const useDefaultAuth = ({
   const setIsConnected = useSetIsConnected();
   const setIsConnecting = useSetIsConnecting();
   const resetWeb3Connection = useResetWeb3Connection();
+  const setProvider = useSetProvider();
 
   const connect = async (): Promise<void> => {
     try {
@@ -30,6 +32,8 @@ export const useDefaultAuth = ({
         'any',
       );
       await provider.send('eth_requestAccounts', []);
+      setProvider(provider);
+
       setIsConnected(true);
       onConnect?.();
       setIsConnecting(false);

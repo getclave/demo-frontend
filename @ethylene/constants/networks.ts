@@ -17,7 +17,7 @@ export const AVAX_MAINNET: EthyleneNetwork = {
 };
 
 export const ETHEREUM_MAINNET: EthyleneNetwork = {
-  chainId: '0x01',
+  chainId: '0x1',
   name: 'Ethereum',
   nativeCurrency: { decimals: 18, name: 'Ether', symbol: 'ETH' },
   rpcUrls: ['https://api.mycryptoapi.com/eth'],
@@ -25,7 +25,7 @@ export const ETHEREUM_MAINNET: EthyleneNetwork = {
 };
 
 export const GEORLI: EthyleneNetwork = {
-  chainId: '0x05',
+  chainId: '0x5',
   name: 'Georli Testnet',
   nativeCurrency: { decimals: 18, name: 'Ether', symbol: 'ETH' },
   rpcUrls: ['https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
