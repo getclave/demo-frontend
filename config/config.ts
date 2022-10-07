@@ -7,7 +7,7 @@ const EXTRA_CONFIG = {};
 export const CONFIG: BaseConfig<ExtraConfig> = {
   APP: 'Ethylene',
   APP_DESCRIPTION: 'Customizable boilerplate dAPP project',
-  CONNECTION: 'injected',
+  CONNECTION: 'web3auth',
   FONT_FAMILY: '"Prompt", sans-serif',
   INITIAL_THEME: 'dark',
   MORALIS: {

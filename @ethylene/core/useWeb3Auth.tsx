@@ -33,6 +33,9 @@ export function useWeb3Auth({
     const _web3AuthInstance = new Web3Auth({
       chainConfig: CONFIG.WEB3AUTH_CHAIN_CONFIG,
       clientId: String(clientId),
+      uiConfig: {
+        theme: CONFIG.INITIAL_THEME,
+      },
     });
     return _web3AuthInstance;
   };

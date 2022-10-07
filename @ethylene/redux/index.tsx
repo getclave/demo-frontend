@@ -1,8 +1,14 @@
 import web3Slice from '@ethylene/redux/web3/Web3Reducer';
 import { MixedElement } from '@ethylene/types';
 import { configureStore } from '@reduxjs/toolkit';
-import React from 'react';
-import { TypedUseSelectorHook, useSelector, Provider } from 'react-redux';
+import React, { createContext } from 'react';
+import {
+  TypedUseSelectorHook,
+  useSelector,
+  Provider,
+  createDispatchHook,
+  createSelectorHook,
+} from 'react-redux';
 
 export const store = configureStore({
   middleware: (getDefaultMiddleware) => {
@@ -18,11 +24,25 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export const ethyleneStoreContext = createContext<any>(null);
+export const useEthyleneDispatch = createDispatchHook(
+  ethyleneStoreContext as any,
+);
+export const useEthyleneSelector = createSelectorHook(
+  ethyleneStoreContext as any,
+);
+export const useTypedEthyleneSelector: TypedUseSelectorHook<RootState> =
+  useEthyleneSelector;
 
 type EthyleneProviderProps = {
   children: MixedElement;
 };
+
 export const EthyleneProvider = ({ children }: EthyleneProviderProps) => {
-  return <Provider store={store}>{children}</Provider>;
+  return (
+    <Provider context={ethyleneStoreContext} store={store}>
+      {children}
+    </Provider>
+  );
 };

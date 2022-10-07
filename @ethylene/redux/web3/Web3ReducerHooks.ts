@@ -1,4 +1,4 @@
-import { useTypedSelector } from '@ethylene/redux';
+import { useEthyleneDispatch, useTypedEthyleneSelector } from '@ethylene/redux';
 import {
   setAddress,
   setIsConnected,
@@ -9,13 +9,12 @@ import {
 } from '@ethylene/redux/web3/Web3Reducer';
 import { EthyleneSigner, Web3ProviderType } from '@ethylene/types/app';
 import { Web3Auth } from '@web3auth/web3auth';
-import { useDispatch } from 'react-redux';
 import { useCallback } from 'react';
 
 export const useIsConnected = () =>
-  useTypedSelector((state) => state.web3.connected);
+  useTypedEthyleneSelector((state) => state.web3.connected);
 export const useSetIsConnected = () => {
-  const dispatch = useDispatch();
+  const dispatch = useEthyleneDispatch();
   return useCallback(
     (value: boolean) => dispatch(setIsConnected(value)),
     [dispatch],
@@ -23,9 +22,9 @@ export const useSetIsConnected = () => {
 };
 
 export const useWeb3AuthInstance = () =>
-  useTypedSelector((state) => state.web3.web3AuthInstance);
+  useTypedEthyleneSelector((state) => state.web3.web3AuthInstance);
 export const useSetWeb3AuthInstance = () => {
-  const dispatch = useDispatch();
+  const dispatch = useEthyleneDispatch();
   return useCallback(
     (value: Web3Auth | null) => dispatch(setWeb3AuthInstance(value)),
     [dispatch],
@@ -33,9 +32,9 @@ export const useSetWeb3AuthInstance = () => {
 };
 
 export const useIsConnecting = () =>
-  useTypedSelector((state) => state.web3.isConnecting);
+  useTypedEthyleneSelector((state) => state.web3.isConnecting);
 export const useSetIsConnecting = () => {
-  const dispatch = useDispatch();
+  const dispatch = useEthyleneDispatch();
   return useCallback(
     (value: boolean) => dispatch(setIsConnecting(value)),
     [dispatch],
@@ -43,9 +42,9 @@ export const useSetIsConnecting = () => {
 };
 
 export const useProvider = () =>
-  useTypedSelector((state) => state.web3.provider);
+  useTypedEthyleneSelector((state) => state.web3.provider);
 export const useSetProvider = () => {
-  const dispatch = useDispatch();
+  const dispatch = useEthyleneDispatch();
   return useCallback(
     (value: Web3ProviderType) => {
       dispatch(setProvider(value));
@@ -54,9 +53,10 @@ export const useSetProvider = () => {
   );
 };
 
-export const useSigner = () => useTypedSelector((state) => state.web3.signer);
+export const useSigner = () =>
+  useTypedEthyleneSelector((state) => state.web3.signer);
 export const useSetSigner = () => {
-  const dispatch = useDispatch();
+  const dispatch = useEthyleneDispatch();
   return useCallback(
     (signer: EthyleneSigner | null) => {
       dispatch(setSigner(signer));
@@ -65,9 +65,10 @@ export const useSetSigner = () => {
   );
 };
 
-export const useAddress = () => useTypedSelector((state) => state.web3.address);
+export const useAddress = () =>
+  useTypedEthyleneSelector((state) => state.web3.address);
 export const useSetAddress = () => {
-  const dispatch = useDispatch();
+  const dispatch = useEthyleneDispatch();
   return useCallback(
     (value: string | null) => dispatch(setAddress(value)),
     [dispatch],
