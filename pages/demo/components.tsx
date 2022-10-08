@@ -14,6 +14,7 @@ import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
 import { useEffect, useRef } from 'react';
 import { useRightNetwork } from '@ethylene/hooks/useRightNetwork';
+import { useMoralisBlock } from '@ethylene/hooks/moralis/block';
 
 const Components: NextPage = () => {
   const { connect, disconnect, isConnected } = useConnection();

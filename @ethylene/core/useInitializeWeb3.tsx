@@ -6,8 +6,16 @@ import {
   useSetProvider,
   useSetSigner,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
+import { CONFIG } from 'config';
 import { ethers } from 'ethers';
+import Moralis from 'moralis';
 import { useEffect } from 'react';
+
+if (CONFIG.MORALIS?.ENABLED) {
+  Moralis.start({
+    apiKey: CONFIG.MORALIS?.API_KEY,
+  });
+}
 
 export const useInitializeWeb3 = () => {
   const setProvider = useSetProvider();

@@ -1,10 +1,10 @@
+import themeSlice from '@ethylene/redux/theme/ThemeReducer';
 import web3Slice from '@ethylene/redux/web3/Web3Reducer';
 import { MixedElement } from '@ethylene/types';
 import { configureStore } from '@reduxjs/toolkit';
 import React, { createContext } from 'react';
 import {
   TypedUseSelectorHook,
-  useSelector,
   Provider,
   createDispatchHook,
   createSelectorHook,
@@ -18,6 +18,7 @@ export const store = configureStore({
     return customizedMiddleware;
   },
   reducer: {
+    theme: themeSlice,
     web3: web3Slice,
   },
 });
