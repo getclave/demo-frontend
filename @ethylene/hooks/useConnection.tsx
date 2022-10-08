@@ -1,4 +1,5 @@
 import { useDefaultAuth } from '@ethylene/core/useDefaultAuth';
+import { useWalletConnectAuth } from '@ethylene/core/useWalletConnectAuth';
 import { useWeb3Auth } from '@ethylene/core/useWeb3Auth';
 import {
   useIsConnected,
@@ -11,11 +12,16 @@ import { CONFIG } from 'config';
 export const useConnection = (
   props?: UseConnectionProps,
 ): EthyleneConnector => {
+  const mainConnector = props?.connector ?? CONFIG.CONNECTION;
+
   const { connect: connectMetamask, disconnect: disconnectMetamask } =
     useDefaultAuth(props);
 
   const { connect: connectWeb3Auth, disconnect: disconnectWeb3Auth } =
     useWeb3Auth(props);
+
+  const { connect: connectWalletConnect, disconnect: disconnectWalletConnect } =
+    useWalletConnectAuth(props);
 
   const isConnecting = useIsConnecting();
   const isConnected = useIsConnected();
@@ -23,20 +29,24 @@ export const useConnection = (
   const connect = async (): Promise<void> => {
     if (isConnected) return;
 
-    if (CONFIG.CONNECTION === 'web3auth') {
+    if (mainConnector === 'web3auth') {
       await connectWeb3Auth();
-    } else if (CONFIG.CONNECTION === 'injected') {
+    } else if (mainConnector === 'injected') {
       await connectMetamask();
+    } else if (mainConnector === 'walletconnect') {
+      await connectWalletConnect();
     } else {
       throw new Error('Invalid connection type');
     }
   };
 
   const disconnect = async (): Promise<void> => {
-    if (CONFIG.CONNECTION === 'web3auth') {
+    if (mainConnector === 'web3auth') {
       await disconnectWeb3Auth();
-    } else {
+    } else if (mainConnector === 'injected') {
       await disconnectMetamask();
+    } else if (mainConnector === 'walletconnect') {
+      await disconnectWalletConnect();
     }
   };
 
@@ -45,6 +55,6 @@ export const useConnection = (
     disconnect,
     isConnected,
     isConnecting,
-    type: CONFIG.CONNECTION,
+    type: mainConnector,
   };
 };

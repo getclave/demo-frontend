@@ -1,4 +1,4 @@
-import 'styles/global.scss';
+import '@ethylene/styles/global.scss';
 import type { AppProps } from 'next/app';
 import { EthyleneProvider } from '@ethylene/redux';
 import { useStyling } from 'hooks/useStyling';

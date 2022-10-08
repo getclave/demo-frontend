@@ -6,11 +6,12 @@ export type MixedElement = React.ReactElement | string;
 export type Web3ProviderType = ethers.providers.Web3Provider | null;
 
 export type EthyleneSigner = ethers.providers.JsonRpcSigner;
-export type EthyleneConnectionType = 'web3auth' | 'injected';
+export type EthyleneConnectionType = 'web3auth' | 'injected' | 'walletconnect';
 
 export type UseConnectionProps = {
   onError?: () => void;
   onConnect?: () => void;
+  connector?: EthyleneConnectionType;
 };
 
 interface IEthyleneConnector {

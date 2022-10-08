@@ -16,6 +16,9 @@ export type BaseConfig<TExtra> = {
         ENABLED: boolean;
       }
     | undefined;
+  WALLETCONNECT?: {
+    rpc: { [chainId: number]: string };
+  };
   WEB3AUTH_CLIENT_ID?: string;
   WEB3AUTH_CHAIN_CONFIG?: {
     chainId: string;
