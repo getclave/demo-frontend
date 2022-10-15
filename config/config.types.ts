@@ -8,6 +8,7 @@ export type BaseConfig<TExtra> = {
   APP: string;
   APP_DESCRIPTION: string;
   CONNECTION: EthyleneConnectionType;
+  FAVICON_PATH: string;
   FONT_FAMILY: string;
   INITIAL_THEME: 'dark' | 'light';
   MORALIS:
