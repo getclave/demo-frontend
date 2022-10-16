@@ -18,7 +18,7 @@ export const useTheme = () => {
       document.documentElement.classList.add('light');
 
       setTheme('light');
-      localStorage.setItem(CONFIG.APP, 'light');
+      localStorage.setItem(`${CONFIG.APP}Theme`, 'light');
     } else {
       document.body.classList.remove('light');
       document.body.classList.add('dark');
@@ -27,7 +27,7 @@ export const useTheme = () => {
       document.documentElement.classList.add('dark');
 
       setTheme('dark');
-      localStorage.setItem(CONFIG.APP, 'dark');
+      localStorage.setItem(`${CONFIG.APP}Theme`, 'dark');
     }
   }, [setTheme]);
 
@@ -38,7 +38,7 @@ export const useInitialTheme = () => {
   const setTheme = useSetTheme();
 
   useEffect(() => {
-    const localStorageTheme = localStorage.getItem('CashmereTheme');
+    const localStorageTheme = localStorage.getItem(`${CONFIG.APP}Theme`);
     if (localStorageTheme === 'dark') {
       setTheme('dark');
 
