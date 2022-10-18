@@ -34,6 +34,7 @@ export function useWeb3Auth({
       chainConfig: CONFIG.WEB3AUTH_CHAIN_CONFIG,
       clientId: String(clientId),
       uiConfig: {
+        appLogo: CONFIG.APP_LOGO_SM_DARK,
         theme: CONFIG.INITIAL_THEME,
       },
     });

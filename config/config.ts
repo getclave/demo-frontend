@@ -8,6 +8,10 @@ const EXTRA_CONFIG = {};
 export const CONFIG: BaseConfig<ExtraConfig> = {
   APP: 'Ethylene', // ! Do not use names with space, only use valid variable names !
   APP_DESCRIPTION: 'Customizable boilerplate dAPP project',
+  APP_LOGO: '',
+  APP_LOGO_DARK: '',
+  APP_LOGO_SM: '',
+  APP_LOGO_SM_DARK: '',
   CONNECTION: 'web3auth', // See EthyleneConnectionType for more options
   FAVICON_PATH: '/favicon.ico', // Root located at /public
   FONT_FAMILY: '"Prompt", sans-serif',

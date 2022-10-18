@@ -16,9 +16,7 @@ import { useEffect, useRef } from 'react';
 import { useRightNetwork } from '@ethylene/hooks/useRightNetwork';
 
 const Components: NextPage = () => {
-  const { connect, disconnect, isConnected } = useConnection({
-    connector: 'walletconnect',
-  });
+  const { connect, disconnect, isConnected } = useConnection();
 
   const provider = useProvider();
   const signer = useSigner();
@@ -45,6 +43,7 @@ const Components: NextPage = () => {
     if (address != null) {
       fn.read<[string | null]>(address);
     }
+    // eslint-disable-next-line
   }, [address]);
 
   const ref = useRef<HTMLDivElement>(null);

@@ -7,6 +7,10 @@ export type ExtraConfig = {};
 export type BaseConfig<TExtra> = {
   APP: string;
   APP_DESCRIPTION: string;
+  APP_LOGO: string;
+  APP_LOGO_DARK: string;
+  APP_LOGO_SM: string;
+  APP_LOGO_SM_DARK: string;
   CONNECTION: EthyleneConnectionType;
   FAVICON_PATH: string;
   FONT_FAMILY: string;
