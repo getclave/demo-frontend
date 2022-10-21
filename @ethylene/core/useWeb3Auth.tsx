@@ -14,11 +14,13 @@ import { EthyleneWeb3AuthConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
 import { ethers } from 'ethers';
 import { useResetWeb3Connection } from '@ethylene/core/useResetWeb3Connection';
+import { useState } from 'react';
 
 export function useWeb3Auth({
   onError,
   onConnect,
 }: UseConnectionProps | undefined = {}): EthyleneWeb3AuthConnector {
+  const [connecting, setConnecting] = useState(false);
   const isConnected = useIsConnected();
   const setIsConnected = useSetIsConnected();
   const setWeb3AuthInstance = useSetWeb3AuthInstance();
@@ -51,6 +53,8 @@ export function useWeb3Auth({
 
     try {
       setIsConnecting(true);
+      setConnecting(true);
+
       await web3AuthInstance.initModal();
       await web3AuthInstance.connect();
       batch(() => {
@@ -60,6 +64,8 @@ export function useWeb3Auth({
           web3AuthInstance.provider as ethers.providers.ExternalProvider,
         );
         setProvider(_provider);
+
+        setConnecting(false);
         setIsConnecting(false);
       });
       onConnect?.();
@@ -68,6 +74,7 @@ export function useWeb3Auth({
         console.error(err);
       }
 
+      setConnecting(false);
       setIsConnecting(false);
       onError?.();
     }
@@ -91,5 +98,5 @@ export function useWeb3Auth({
     }
   };
 
-  return { connect, disconnect };
+  return { connect, disconnect, isConnecting: connecting };
 }

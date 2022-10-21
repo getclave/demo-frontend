@@ -17,6 +17,7 @@ export type UseConnectionProps = {
 interface IEthyleneConnector {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
+  isConnecting: boolean;
 }
 
 export interface EthyleneMetamaskConnector extends IEthyleneConnector {}

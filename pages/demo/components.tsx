@@ -13,7 +13,6 @@ import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { NextPage } from 'next';
 import { useEffect, useRef } from 'react';
-import { useRightNetwork } from '@ethylene/hooks/useRightNetwork';
 
 const Components: NextPage = () => {
   const { connect, disconnect, isConnected } = useConnection();
@@ -25,7 +24,7 @@ const Components: NextPage = () => {
   const { balance } = useBalance();
 
   useOnAccountsChange(() => window.location.reload());
-  const { switchTo, isRightNetwork } = useRightNetwork(ETHEREUM_MAINNET);
+  // const { switchTo, isRightNetwork } = useRightNetwork(ETHEREUM_MAINNET);
 
   const fn = useContractFunction<BigNumber>({
     abi: ERC20,
@@ -58,7 +57,7 @@ const Components: NextPage = () => {
       </button>
       <button onClick={() => console.log(signer)}>Signer</button>
       <button onClick={() => console.log(address)}>Address</button>
-      <button onClick={switchTo}>Switch to right</button>
+      {/* <button onClick={switchTo}>Switch to right</button> */}
       <div>
         {isConnected && (
           <div>

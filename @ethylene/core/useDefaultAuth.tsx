@@ -9,6 +9,7 @@ import { EthyleneMetamaskConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
 import { __dev__ } from '@ethylene/utils';
 import { ethers } from 'ethers';
+import { useState } from 'react';
 
 declare let window: Window & {
   ethereum: ethers.providers.ExternalProvider;
@@ -18,6 +19,7 @@ export const useDefaultAuth = ({
   onError,
   onConnect,
 }: UseConnectionProps | undefined = {}): EthyleneMetamaskConnector => {
+  const [connecting, setConnecting] = useState(false);
   const isConnected = useIsConnected();
   const setIsConnected = useSetIsConnected();
   const setIsConnecting = useSetIsConnecting();
@@ -27,6 +29,8 @@ export const useDefaultAuth = ({
   const connect = async (): Promise<void> => {
     try {
       setIsConnecting(true);
+      setConnecting(true);
+
       const provider = new ethers.providers.Web3Provider(
         window.ethereum,
         'any',
@@ -35,13 +39,17 @@ export const useDefaultAuth = ({
       setProvider(provider);
       setIsConnected(true);
       onConnect?.();
+
       setIsConnecting(false);
+      setConnecting(false);
     } catch (err) {
       if (__dev__) {
         console.error(err);
       }
       onError?.();
+
       setIsConnecting(false);
+      setConnecting(false);
     }
   };
 
@@ -50,5 +58,5 @@ export const useDefaultAuth = ({
     resetWeb3Connection();
   };
 
-  return { connect, disconnect };
+  return { connect, disconnect, isConnecting: connecting };
 };
