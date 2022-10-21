@@ -4,6 +4,7 @@ import {
   useSetIsConnected,
   useSetIsConnecting,
   useSetProvider,
+  useSetWalletConnectInstance,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { EthyleneMetamaskConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
@@ -16,22 +17,24 @@ if (CONFIG.WALLETCONNECT == null) {
   throw new Error('Wallet Connect configuration is not provider');
 }
 
-const walletConnectProviderInstance = new WalletConnectProvider({
-  qrcode: true,
-  rpc: CONFIG.WALLETCONNECT?.rpc,
-});
-
 export const useWalletConnectAuth = ({
   onError,
   onConnect,
 }: UseConnectionProps | undefined = {}): EthyleneMetamaskConnector => {
   const isConnected = useIsConnected();
+  const walletConnectInstance = useWalletConnectAuth();
   const setIsConnected = useSetIsConnected();
   const setIsConnecting = useSetIsConnecting();
+  const setWalletConnectInstance = useSetWalletConnectInstance();
   const resetWeb3Connection = useResetWeb3Connection();
   const setProvider = useSetProvider();
 
   const connect = async (): Promise<void> => {
+    const walletConnectProviderInstance = new WalletConnectProvider({
+      qrcode: true,
+      rpc: CONFIG.WALLETCONNECT?.rpc,
+    });
+    setWalletConnectInstance(walletConnectProviderInstance);
     try {
       setIsConnecting(true);
       const provider = new ethers.providers.Web3Provider(
@@ -54,7 +57,7 @@ export const useWalletConnectAuth = ({
 
   const disconnect = async (): Promise<void> => {
     if (!isConnected) return;
-    walletConnectProviderInstance.disconnect();
+    walletConnectInstance?.disconnect();
     resetWeb3Connection();
   };
 
