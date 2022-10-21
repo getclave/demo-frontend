@@ -7,8 +7,13 @@ import {
   setSigner,
   setWeb3AuthInstance,
   setWalletConnectInstance,
+  setConnectionType,
 } from '@ethylene/redux/web3/Web3Reducer';
-import { EthyleneSigner, Web3ProviderType } from '@ethylene/types/app';
+import {
+  EthyleneConnectionType,
+  EthyleneSigner,
+  Web3ProviderType,
+} from '@ethylene/types/app';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { Web3Auth } from '@web3auth/web3auth';
 import { useCallback } from 'react';
@@ -84,6 +89,17 @@ export const useSetWalletConnectInstance = () => {
   return useCallback(
     (value: WalletConnectProvider | null) =>
       dispatch(setWalletConnectInstance(value)),
+    [dispatch],
+  );
+};
+
+export const useConnectionType = () =>
+  useTypedEthyleneSelector((state) => state.web3.connectionType);
+export const useSetConnectionType = () => {
+  const dispatch = useEthyleneDispatch();
+  return useCallback(
+    (value: EthyleneConnectionType | null) =>
+      dispatch(setConnectionType(value)),
     [dispatch],
   );
 };

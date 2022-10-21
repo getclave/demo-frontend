@@ -1,4 +1,8 @@
-import { EthyleneSigner, Web3ProviderType } from '@ethylene/types/app';
+import {
+  EthyleneConnectionType,
+  EthyleneSigner,
+  Web3ProviderType,
+} from '@ethylene/types/app';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { Web3Auth } from '@web3auth/web3auth';
@@ -12,11 +16,13 @@ export interface Web3State {
   signer: EthyleneSigner | null;
   web3AuthInstance: Web3Auth | null;
   walletConnectInstance: WalletConnectProvider | null;
+  connectionType: EthyleneConnectionType | null;
 }
 
 const initialState: Web3State = {
   address: null,
   connected: false,
+  connectionType: null,
   isConnecting: false,
   provider: null,
   signer: null,
@@ -30,6 +36,12 @@ export const web3Slice = createSlice({
   reducers: {
     setAddress: (state, action: PayloadAction<string | null>) => {
       state.address = action.payload;
+    },
+    setConnectionType: (
+      state,
+      action: PayloadAction<EthyleneConnectionType | null>,
+    ) => {
+      state.connectionType = action.payload;
     },
     setIsConnected: (state, action: PayloadAction<boolean>) => {
       state.connected = action.payload;
@@ -57,6 +69,7 @@ export const web3Slice = createSlice({
 
 export const {
   setAddress,
+  setConnectionType,
   setIsConnected,
   setWeb3AuthInstance,
   setIsConnecting,

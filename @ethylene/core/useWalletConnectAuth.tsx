@@ -19,11 +19,6 @@ if (CONFIG.WALLETCONNECT == null) {
   throw new Error('Wallet Connect configuration is not provider');
 }
 
-const walletConnectProviderInstance = new WalletConnectProvider({
-  qrcode: true,
-  rpc: CONFIG.WALLETCONNECT?.rpc,
-});
-
 export const useWalletConnectAuth = ({
   onError,
   onConnect,
@@ -39,10 +34,14 @@ export const useWalletConnectAuth = ({
   const setProvider = useSetProvider();
 
   const connect = async (): Promise<void> => {
+    const walletConnectProviderInstance = new WalletConnectProvider({
+      qrcode: true,
+      rpc: CONFIG.WALLETCONNECT?.rpc,
+    });
+
     try {
       setIsConnecting(true);
       setConnecting(true);
-
       const provider = new ethers.providers.Web3Provider(
         walletConnectProviderInstance,
         'any',
@@ -59,7 +58,7 @@ export const useWalletConnectAuth = ({
       if (__dev__) {
         console.error(err);
       }
-
+      setWalletConnectInstance(null);
       setIsConnecting(false);
       setConnecting(false);
 

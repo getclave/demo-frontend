@@ -1,7 +1,9 @@
 import { useDefaultAuth } from '@ethylene/core/useDefaultAuth';
 import { useWalletConnectAuth } from '@ethylene/core/useWalletConnectAuth';
 import { useWeb3Auth } from '@ethylene/core/useWeb3Auth';
+import { setConnectionType } from '@ethylene/redux/web3/Web3Reducer';
 import {
+  useConnectionType,
   useIsConnected,
   useIsConnecting,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
@@ -13,7 +15,9 @@ import { useMemo } from 'react';
 export const useConnection = (
   props?: UseConnectionProps,
 ): EthyleneConnector => {
-  const mainConnector = props?.connector ?? CONFIG.CONNECTION;
+  const connectionType = useConnectionType();
+
+  const mainConnector = props?.connector ?? connectionType ?? CONFIG.CONNECTION;
 
   const {
     connect: connectMetamask,
@@ -48,6 +52,7 @@ export const useConnection = (
     } else {
       throw new Error('Invalid connection type');
     }
+    setConnectionType(mainConnector);
   };
 
   const disconnect = async (): Promise<void> => {
@@ -58,6 +63,7 @@ export const useConnection = (
     } else if (mainConnector === 'walletconnect') {
       await disconnectWalletConnect();
     }
+    setConnectionType(null);
   };
 
   const isConnectingSpecificWallet = useMemo(() => {
