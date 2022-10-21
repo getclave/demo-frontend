@@ -27,6 +27,7 @@ type EthyleneConnectorExtra = {
   isConnecting: boolean;
   type: EthyleneConnectionType;
   isConnected: boolean;
+  isConnectingAnyWallet: boolean;
 };
 
 export type EthyleneConnector = (

@@ -8,20 +8,30 @@ import {
 import { EthyleneConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
 import { CONFIG } from 'config';
+import { useMemo } from 'react';
 
 export const useConnection = (
   props?: UseConnectionProps,
 ): EthyleneConnector => {
   const mainConnector = props?.connector ?? CONFIG.CONNECTION;
 
-  const { connect: connectMetamask, disconnect: disconnectMetamask } =
-    useDefaultAuth(props);
+  const {
+    connect: connectMetamask,
+    disconnect: disconnectMetamask,
+    isConnecting: isConnectingMetamask,
+  } = useDefaultAuth(props);
 
-  const { connect: connectWeb3Auth, disconnect: disconnectWeb3Auth } =
-    useWeb3Auth(props);
+  const {
+    connect: connectWeb3Auth,
+    disconnect: disconnectWeb3Auth,
+    isConnecting: isConnectingWeb3Auth,
+  } = useWeb3Auth(props);
 
-  const { connect: connectWalletConnect, disconnect: disconnectWalletConnect } =
-    useWalletConnectAuth(props);
+  const {
+    connect: connectWalletConnect,
+    disconnect: disconnectWalletConnect,
+    isConnecting: isConnectingWalletConnect,
+  } = useWalletConnectAuth(props);
 
   const isConnecting = useIsConnecting();
   const isConnected = useIsConnected();
@@ -50,11 +60,29 @@ export const useConnection = (
     }
   };
 
+  const isConnectingSpecificWallet = useMemo(() => {
+    if (mainConnector === 'injected') {
+      return isConnectingMetamask;
+    } else if (mainConnector === 'walletconnect') {
+      return isConnectingWalletConnect;
+    } else if (mainConnector === 'web3auth') {
+      return isConnectingWeb3Auth;
+    } else {
+      return false;
+    }
+  }, [
+    mainConnector,
+    isConnectingMetamask,
+    isConnectingWalletConnect,
+    isConnectingWeb3Auth,
+  ]);
+
   return {
     connect,
     disconnect,
     isConnected,
-    isConnecting,
+    isConnecting: isConnectingSpecificWallet,
+    isConnectingAnyWallet: isConnecting,
     type: mainConnector,
   };
 };
