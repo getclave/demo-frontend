@@ -1,11 +1,11 @@
 import { useDefaultAuth } from '@ethylene/core/useDefaultAuth';
 import { useWalletConnectAuth } from '@ethylene/core/useWalletConnectAuth';
 import { useWeb3Auth } from '@ethylene/core/useWeb3Auth';
-import { setConnectionType } from '@ethylene/redux/web3/Web3Reducer';
 import {
   useConnectionType,
   useIsConnected,
   useIsConnecting,
+  useSetConnectionType,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { EthyleneConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
@@ -16,6 +16,7 @@ export const useConnection = (
   props?: UseConnectionProps,
 ): EthyleneConnector => {
   const connectionType = useConnectionType();
+  const setConnectionType = useSetConnectionType();
 
   const mainConnector = props?.connector ?? connectionType ?? CONFIG.CONNECTION;
 
@@ -43,6 +44,7 @@ export const useConnection = (
   const connect = async (): Promise<void> => {
     if (isConnected) return;
 
+    setConnectionType(mainConnector);
     if (mainConnector === 'web3auth') {
       await connectWeb3Auth();
     } else if (mainConnector === 'injected') {
@@ -52,7 +54,6 @@ export const useConnection = (
     } else {
       throw new Error('Invalid connection type');
     }
-    setConnectionType(mainConnector);
   };
 
   const disconnect = async (): Promise<void> => {
