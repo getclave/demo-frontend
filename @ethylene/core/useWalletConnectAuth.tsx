@@ -52,6 +52,7 @@ export const useWalletConnectAuth = ({
       setWalletConnectInstance(walletConnectProviderInstance);
       onConnect?.();
 
+      localStorage.setItem(`${CONFIG.APP}ConnectionType`, 'walletconnect');
       setIsConnecting(false);
       setConnecting(false);
     } catch (err) {

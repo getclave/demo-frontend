@@ -1,4 +1,5 @@
 import { getDefaultProvider } from '@ethylene/core/getDefaultProvider';
+import { useConnection } from '@ethylene/hooks';
 import { useOnNetworkChange } from '@ethylene/hooks/useOnNetworkChange';
 import {
   useProvider,
@@ -22,6 +23,26 @@ export const useInitializeWeb3 = () => {
   const setSigner = useSetSigner();
   const setAddress = useSetAddress();
   const provider = useProvider();
+  const { connect } = useConnection();
+
+  useEffect(() => {
+    if (CONFIG.REMEMBER_ME !== true) {
+      return;
+    }
+
+    if (provider != null && connect != null) {
+      const previousConnectionType: string | null = localStorage.getItem(
+        `${CONFIG.APP}ConnectionType`,
+      );
+      if (
+        previousConnectionType === 'injected' ||
+        previousConnectionType === 'web3auth' ||
+        previousConnectionType === 'walletconnect'
+      ) {
+        connect(previousConnectionType);
+      }
+    }
+  }, [provider, connect]);
 
   useEffect(() => {
     const defaultExternalProvider = getDefaultProvider();

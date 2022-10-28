@@ -65,6 +65,7 @@ export function useWeb3Auth({
         );
         setProvider(_provider);
 
+        localStorage.setItem(`${CONFIG.APP}ConnectionType`, 'web3auth');
         setConnecting(false);
         setIsConnecting(false);
       });

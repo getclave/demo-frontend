@@ -8,7 +8,10 @@ import {
   useSetConnectionType,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { EthyleneConnector } from '@ethylene/types';
-import { UseConnectionProps } from '@ethylene/types/app';
+import {
+  EthyleneConnectionType,
+  UseConnectionProps,
+} from '@ethylene/types/app';
 import { CONFIG } from 'config';
 import { useMemo } from 'react';
 
@@ -17,8 +20,6 @@ export const useConnection = (
 ): EthyleneConnector => {
   const connectionType = useConnectionType();
   const setConnectionType = useSetConnectionType();
-
-  const mainConnector = props?.connector ?? connectionType ?? CONFIG.CONNECTION;
 
   const {
     connect: connectMetamask,
@@ -41,8 +42,12 @@ export const useConnection = (
   const isConnecting = useIsConnecting();
   const isConnected = useIsConnected();
 
-  const connect = async (): Promise<void> => {
+  const connect = async (
+    connectorAsProp?: EthyleneConnectionType,
+  ): Promise<void> => {
     if (isConnected) return;
+
+    const mainConnector = connectorAsProp ?? CONFIG.CONNECTION;
 
     setConnectionType(mainConnector);
     if (mainConnector === 'web3auth') {
@@ -57,6 +62,7 @@ export const useConnection = (
   };
 
   const disconnect = async (): Promise<void> => {
+    const mainConnector = connectionType;
     if (mainConnector === 'web3auth') {
       await disconnectWeb3Auth();
     } else if (mainConnector === 'injected') {
@@ -68,20 +74,20 @@ export const useConnection = (
   };
 
   const isConnectingSpecificWallet = useMemo(() => {
-    if (mainConnector === 'injected') {
+    if (connectionType === 'injected') {
       return isConnectingMetamask;
-    } else if (mainConnector === 'walletconnect') {
+    } else if (connectionType === 'walletconnect') {
       return isConnectingWalletConnect;
-    } else if (mainConnector === 'web3auth') {
+    } else if (connectionType === 'web3auth') {
       return isConnectingWeb3Auth;
     } else {
       return false;
     }
   }, [
-    mainConnector,
     isConnectingMetamask,
     isConnectingWalletConnect,
     isConnectingWeb3Auth,
+    connectionType,
   ]);
 
   return {
@@ -90,6 +96,6 @@ export const useConnection = (
     isConnected,
     isConnecting: isConnectingSpecificWallet,
     isConnectingAnyWallet: isConnecting,
-    type: mainConnector,
+    type: connectionType,
   };
 };

@@ -49,7 +49,7 @@ const Components: NextPage = () => {
   return (
     <Container forwardedRef={ref}>
       <div>Components</div>
-      <button onClick={connect}>Connect</button>
+      <button onClick={() => connect()}>Connect</button>
       <button onClick={disconnect}>disconnect</button>
       <button onClick={() => console.log(provider)}>Provider</button>
       <button onClick={async () => console.log(await provider?.getNetwork())}>

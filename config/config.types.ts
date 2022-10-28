@@ -15,6 +15,7 @@ export type BaseConfig<TExtra> = {
   FAVICON_PATH: string;
   FONT_FAMILY: string;
   INITIAL_THEME: 'dark' | 'light';
+  REMEMBER_ME: boolean;
   MORALIS:
     | {
         API_KEY?: string;

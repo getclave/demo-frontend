@@ -1,15 +1,14 @@
 import {
   useSetAddress,
   useSetIsConnected,
-  useSetProvider,
   useSetSigner,
   useSetWeb3AuthInstance,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
+import { CONFIG } from 'config';
 import { useCallback } from 'react';
 import { batch } from 'react-redux';
 
 export const useResetWeb3Connection = () => {
-  const setProvider = useSetProvider();
   const setSigner = useSetSigner();
   const setAddress = useSetAddress();
   const setIsConnected = useSetIsConnected();
@@ -17,13 +16,13 @@ export const useResetWeb3Connection = () => {
 
   const reset = useCallback(() => {
     batch(() => {
-      setProvider(null);
       setAddress(null);
       setSigner(null);
       setIsConnected(false);
       setWeb3AuthInstance(null);
+      localStorage.removeItem(`${CONFIG.APP}ConnectionType`);
     });
-  }, [setProvider, setSigner, setAddress, setIsConnected, setWeb3AuthInstance]);
+  }, [setSigner, setAddress, setIsConnected, setWeb3AuthInstance]);
 
   return reset;
 };

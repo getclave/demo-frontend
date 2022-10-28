@@ -8,6 +8,7 @@ import {
 import { EthyleneMetamaskConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
 import { __dev__ } from '@ethylene/utils';
+import { CONFIG } from 'config';
 import { ethers } from 'ethers';
 import { useState } from 'react';
 
@@ -40,6 +41,7 @@ export const useDefaultAuth = ({
       setIsConnected(true);
       onConnect?.();
 
+      localStorage.setItem(`${CONFIG.APP}ConnectionType`, 'injected');
       setIsConnecting(false);
       setConnecting(false);
     } catch (err) {

@@ -11,11 +11,10 @@ export type EthyleneConnectionType = 'web3auth' | 'injected' | 'walletconnect';
 export type UseConnectionProps = {
   onError?: () => void;
   onConnect?: () => void;
-  connector?: EthyleneConnectionType;
 };
 
 interface IEthyleneConnector {
-  connect: () => Promise<void>;
+  connect: (connectionType?: EthyleneConnectionType) => Promise<void>;
   disconnect: () => Promise<void>;
   isConnecting: boolean;
 }
@@ -25,7 +24,7 @@ export interface EthyleneWeb3AuthConnector extends IEthyleneConnector {}
 
 type EthyleneConnectorExtra = {
   isConnecting: boolean;
-  type: EthyleneConnectionType;
+  type: EthyleneConnectionType | null;
   isConnected: boolean;
   isConnectingAnyWallet: boolean;
 };
