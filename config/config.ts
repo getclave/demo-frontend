@@ -12,7 +12,7 @@ export const CONFIG: BaseConfig<ExtraConfig> = {
   APP_LOGO_DARK: '',
   APP_LOGO_SM: '',
   APP_LOGO_SM_DARK: '',
-  CONNECTION: 'web3auth', // See EthyleneConnectionType for more options
+  CONNECTION: 'injected', // See EthyleneConnectionType for more options
   FAVICON_PATH: '/favicon.ico', // Root located at /public
   FONT_FAMILY: '"Prompt", sans-serif',
   INITIAL_THEME: 'dark',

@@ -1,14 +1,11 @@
 import { getDefaultProvider } from '@ethylene/core/getDefaultProvider';
 import { useConnection } from '@ethylene/hooks';
 import { useOnNetworkChange } from '@ethylene/hooks/useOnNetworkChange';
-import { setIsConnected } from '@ethylene/redux/web3/Web3Reducer';
 import {
   useProvider,
-  useSetAddress,
   useSetProvider,
   useSetSigner,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
-import { __dev__ } from '@ethylene/utils';
 import { CONFIG } from 'config';
 import { ethers } from 'ethers';
 import Moralis from 'moralis';
@@ -23,7 +20,6 @@ if (CONFIG.MORALIS?.ENABLED) {
 export const useInitializeWeb3 = () => {
   const setProvider = useSetProvider();
   const setSigner = useSetSigner();
-  const setAddress = useSetAddress();
   const provider = useProvider();
   const { connect } = useConnection();
 
@@ -32,7 +28,7 @@ export const useInitializeWeb3 = () => {
       return;
     }
 
-    if (provider != null && connect != null) {
+    if (connect != null) {
       const previousConnectionType: string | null = localStorage.getItem(
         `${CONFIG.APP}ConnectionType`,
       );
@@ -44,7 +40,8 @@ export const useInitializeWeb3 = () => {
         connect(previousConnectionType);
       }
     }
-  }, [provider, connect]);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const defaultExternalProvider = getDefaultProvider();
@@ -55,24 +52,6 @@ export const useInitializeWeb3 = () => {
       setProvider(_provider);
     }
   }, [setProvider]);
-
-  useEffect(() => {
-    if (provider != null) {
-      try {
-        const _signer = provider.getSigner();
-        if (_signer == null) return;
-        setSigner(_signer);
-        _signer.getAddress().then((address) => {
-          setAddress(address);
-          setIsConnected(true);
-        });
-      } catch (err) {
-        if (__dev__) {
-          console.error(err);
-        }
-      }
-    }
-  }, [provider, setSigner, setAddress]);
 
   useOnNetworkChange(() => {
     const fetch = async () => {

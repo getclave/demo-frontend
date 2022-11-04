@@ -2,9 +2,11 @@ import { Web3Auth } from '@web3auth/web3auth';
 import { __dev__ } from '@ethylene/utils';
 import {
   useIsConnected,
+  useSetAddress,
   useSetIsConnected,
   useSetIsConnecting,
   useSetProvider,
+  useSetSigner,
   useSetWeb3AuthInstance,
   useWeb3AuthInstance,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
@@ -28,6 +30,8 @@ export function useWeb3Auth({
   const web3AuthInstance = useWeb3AuthInstance();
   const setProvider = useSetProvider();
   const resetWeb3Connection = useResetWeb3Connection();
+  const setSigner = useSetSigner();
+  const setAddress = useSetAddress();
 
   const getInstance = (): Web3Auth | null => {
     if (CONFIG.WEB3AUTH_CHAIN_CONFIG == null) return null;
@@ -52,18 +56,23 @@ export function useWeb3Auth({
     }
 
     try {
-      setIsConnecting(true);
-      setConnecting(true);
+      batch(async () => {
+        setIsConnecting(true);
+        setConnecting(true);
 
-      await web3AuthInstance.initModal();
-      await web3AuthInstance.connect();
-      batch(() => {
+        await web3AuthInstance.initModal();
+        await web3AuthInstance.connect();
         setIsConnected(true);
         setWeb3AuthInstance(web3AuthInstance);
         const _provider = new ethers.providers.Web3Provider(
           web3AuthInstance.provider as ethers.providers.ExternalProvider,
         );
         setProvider(_provider);
+
+        const _signer = _provider.getSigner();
+        setSigner(_signer);
+        const address = await _signer.getAddress();
+        setAddress(address);
 
         localStorage.setItem(`${CONFIG.APP}ConnectionType`, 'web3auth');
         setConnecting(false);

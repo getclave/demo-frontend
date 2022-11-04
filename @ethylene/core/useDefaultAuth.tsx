@@ -1,9 +1,11 @@
 import { useResetWeb3Connection } from '@ethylene/core/useResetWeb3Connection';
 import {
   useIsConnected,
+  useSetAddress,
   useSetIsConnected,
   useSetIsConnecting,
   useSetProvider,
+  useSetSigner,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
 import { EthyleneMetamaskConnector } from '@ethylene/types';
 import { UseConnectionProps } from '@ethylene/types/app';
@@ -26,6 +28,8 @@ export const useDefaultAuth = ({
   const setIsConnecting = useSetIsConnecting();
   const resetWeb3Connection = useResetWeb3Connection();
   const setProvider = useSetProvider();
+  const setSigner = useSetSigner();
+  const setAddress = useSetAddress();
 
   const connect = async (): Promise<void> => {
     try {
@@ -38,6 +42,12 @@ export const useDefaultAuth = ({
       );
       await provider.send('eth_requestAccounts', []);
       setProvider(provider);
+
+      const _signer = provider.getSigner();
+      setSigner(_signer);
+      const address = await _signer.getAddress();
+      setAddress(address);
+
       setIsConnected(true);
       onConnect?.();
 
