@@ -58,7 +58,6 @@ export const useInitializeWeb3 = () => {
     if (provider != null) {
       const _signer = provider.getSigner();
       setSigner(_signer);
-      _signer.getAddress().then((address) => setAddress(address));
     }
   }, [provider, setSigner, setAddress]);
 
