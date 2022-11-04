@@ -48,7 +48,6 @@ export function useWeb3Auth({
   };
 
   const connect = async (): Promise<void> => {
-    if (isConnected || CONFIG.CONNECTION !== 'web3auth') return;
     const web3AuthInstance = getInstance();
 
     if (web3AuthInstance == null) {
@@ -91,12 +90,7 @@ export function useWeb3Auth({
   };
 
   const disconnect = async (): Promise<void> => {
-    if (
-      web3AuthInstance == null ||
-      !isConnected ||
-      CONFIG.CONNECTION !== 'web3auth'
-    )
-      return;
+    if (web3AuthInstance == null || !isConnected) return;
     try {
       await web3AuthInstance.logout();
       web3AuthInstance.clearCache();

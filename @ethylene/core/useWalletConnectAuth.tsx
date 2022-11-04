@@ -44,8 +44,8 @@ export const useWalletConnectAuth = ({
       rpc: CONFIG.WALLETCONNECT?.rpc,
     });
 
-    try {
-      batch(async () => {
+    batch(async () => {
+      try {
         setIsConnecting(true);
         setConnecting(true);
         const provider = new ethers.providers.Web3Provider(
@@ -65,20 +65,20 @@ export const useWalletConnectAuth = ({
         localStorage.setItem(`${CONFIG.APP}ConnectionType`, 'walletconnect');
         setIsConnecting(false);
         setConnecting(false);
-      });
-    } catch (err) {
-      if (__dev__) {
-        console.error(err);
+      } catch (err) {
+        if (__dev__) {
+          console.error(err);
+        }
+
+        batch(() => {
+          setWalletConnectInstance(null);
+          setIsConnecting(false);
+          setConnecting(false);
+        });
+
+        onError?.();
       }
-
-      batch(() => {
-        setWalletConnectInstance(null);
-        setIsConnecting(false);
-        setConnecting(false);
-      });
-
-      onError?.();
-    }
+    });
   };
 
   const disconnect = async (): Promise<void> => {
