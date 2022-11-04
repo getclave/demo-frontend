@@ -1,12 +1,14 @@
 import { getDefaultProvider } from '@ethylene/core/getDefaultProvider';
 import { useConnection } from '@ethylene/hooks';
 import { useOnNetworkChange } from '@ethylene/hooks/useOnNetworkChange';
+import { setIsConnected } from '@ethylene/redux/web3/Web3Reducer';
 import {
   useProvider,
   useSetAddress,
   useSetProvider,
   useSetSigner,
 } from '@ethylene/redux/web3/Web3ReducerHooks';
+import { __dev__ } from '@ethylene/utils';
 import { CONFIG } from 'config';
 import { ethers } from 'ethers';
 import Moralis from 'moralis';
@@ -56,8 +58,19 @@ export const useInitializeWeb3 = () => {
 
   useEffect(() => {
     if (provider != null) {
-      const _signer = provider.getSigner();
-      setSigner(_signer);
+      try {
+        const _signer = provider.getSigner();
+        if (_signer == null) return;
+        setSigner(_signer);
+        _signer.getAddress().then((address) => {
+          setAddress(address);
+          setIsConnected(true);
+        });
+      } catch (err) {
+        if (__dev__) {
+          console.error(err);
+        }
+      }
     }
   }, [provider, setSigner, setAddress]);
 
