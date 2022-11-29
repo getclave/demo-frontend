@@ -17,7 +17,7 @@ export const useOnAccountsChange = (callback: () => void, interval = 1000) => {
             callback?.();
           }
         } catch (err) {
-          console.error(err);
+          //console.error(err);
         }
       };
       fn();
