@@ -11,9 +11,13 @@ export const useOnAccountsChange = (callback: () => void, interval = 1000) => {
 
     const timer = setInterval(() => {
       const fn = async () => {
-        const val = await signer.getAddress();
-        if (val !== address) {
-          callback?.();
+        try {
+          const val = await signer.getAddress();
+          if (val !== address) {
+            callback?.();
+          }
+        } catch (err) {
+          console.error(err);
         }
       };
       fn();
