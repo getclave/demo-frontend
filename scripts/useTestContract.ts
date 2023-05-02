@@ -1,5 +1,5 @@
 import { useAddress } from '@ethylene/hooks'
 
-export function useTestContract(): EthyleneContract {
+// export function useTestContract(): EthyleneContract {
 
-}
+// }
