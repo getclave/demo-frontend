@@ -1,5 +1,5 @@
 import { Container } from '@ethylene/components';
-import { ERC20, ETHEREUM_MAINNET } from '@ethylene/constants';
+import { ERC20 } from '@ethylene/constants';
 import {
   useAddress,
   useConnection,

@@ -1,5 +1,5 @@
 import styles from './Header.module.scss';
-import BG from 'assets/bg.png';
+
 export function Header() {
   return (
     <div className={styles.wrapper}>
