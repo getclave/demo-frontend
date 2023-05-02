@@ -1,0 +1,46 @@
+.wrapper {
+    height: 100vh;
+    background: linear-gradient(65.04deg, #7617a4 2.97%, #270550 64.73%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1;
+
+
+    .bg {
+        position: fixed;
+        height: 100%;
+        right: 0px;
+        top: 0px;
+        opacity: 0.4;
+    }
+
+    .galaxy {
+        position: fixed;
+        width: 600px;
+        left: -150px;
+        bottom: -150px;
+        animation: turning 60s infinite linear;
+        opacity: 0.4;
+        border-radius: 50%;
+        box-shadow: 0 0 55px #d8d8d863;
+        z-index: 1;
+
+        @media(max-width: 1200px){
+            width: 400px;
+            bottom: -70px;
+        }
+    }
+}
+
+@keyframes turning {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
