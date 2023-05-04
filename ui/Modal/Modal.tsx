@@ -1,7 +1,7 @@
 import { useOnClickOutside } from '@ethylene/ui-hooks';
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { clsnm } from '@ethylene/utils';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
@@ -25,7 +25,7 @@ const Modal = ({
     className,
     bodyProps = {},
     width,
-}: ModalProps): ReactNode => {
+}: ModalProps): JSX.Element => {
     const { isOpen, close } = modalController;
 
     useEffect(() => {
@@ -78,7 +78,9 @@ const Modal = ({
                 {children}
             </div>
         </div>
-    ) : null;
+    ) : (
+        <Fragment></Fragment>
+    );
 };
 
 export { Modal };
