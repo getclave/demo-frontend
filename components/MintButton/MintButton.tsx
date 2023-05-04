@@ -1,4 +1,5 @@
 import styles from './MintButton.module.scss';
-export function MintButton() {
-  return <div className={styles.wrapper}>Mint</div>;
+
+export function MintButton(): JSX.Element {
+    return <div className={styles.wrapper}>Mint</div>;
 }
