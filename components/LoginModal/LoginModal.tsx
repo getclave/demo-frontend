@@ -11,6 +11,7 @@ export function LoginModal({
     modalController: ModalController;
 }): JSX.Element {
     const [isLogin, setIsLogin] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
         if (isLogin) return;
@@ -34,7 +35,11 @@ export function LoginModal({
                 </span>
             </div>
             <div className={styles.nickname}>
-                <Input placeholder="Username" height="40px" />
+                <Input
+                    placeholder="Username"
+                    height="40px"
+                    error={errorMessage}
+                />
             </div>
             <div className={styles.button}>
                 <Button
@@ -56,7 +61,7 @@ export function LoginModal({
                     fontSize="fs12"
                     fontWeight="fw400"
                 >
-                    {isLogin ? 'Create Account' : 'Connect Account'}
+                    {isLogin ? 'Create' : 'Connect'} Account
                 </Button>
             </div>
         </Modal>
