@@ -38,13 +38,16 @@ export function ConnectModal(): JSX.Element {
         ConnectionOptions.UNKNOWN,
     );
 
-    const [display, setDisplay] = useState('');
+    const [display, setDisplay] = useState<string | null>(null);
     const [challenge, setChallenge] = useState<string>(
         '0x94E9b636d0f3BDc08019B450F7f2F4Ef5b4eb2Ca',
     );
 
     const [registrationResponse, setRegistrationResponse] =
         useState<RegistrationEncoded | null>(null);
+    const [authenticationResponse, setAuthenticationResponse] =
+        useState<AuthenticationEncoded | null>(null);
+
     return (
         <div className={styles.wrapper}>
             <div
@@ -115,21 +118,46 @@ export function ConnectModal(): JSX.Element {
                             Register, and then authorize this device
                         </div>
                     </div>
-                    <Button
-                        width="150px"
-                        height="50px"
-                        color="purple"
-                        onClick={async (): Promise<void> => {
-                            const registrationResponse = await register(
-                                encodeChallenge(challenge),
-                            );
-                            console.log(registrationResponse);
-                            setRegistrationResponse(registrationResponse);
-                            setDisplay(JSON.stringify(registrationResponse));
-                        }}
-                    >
-                        Register
-                    </Button>
+                    {!display ? (
+                        <Button
+                            width="150px"
+                            height="50px"
+                            color="purple"
+                            onClick={async (): Promise<void> => {
+                                const registrationResponse = await register(
+                                    encodeChallenge(challenge),
+                                );
+                                console.log(registrationResponse);
+                                setRegistrationResponse(registrationResponse);
+                                setDisplay(
+                                    JSON.stringify(registrationResponse),
+                                );
+                            }}
+                        >
+                            Register
+                        </Button>
+                    ) : (
+                        <Button
+                            width="150px"
+                            height="50px"
+                            color="purple"
+                            onClick={async () => {
+                                if (registrationResponse == null) {
+                                    alert('Invalid registration');
+                                    return;
+                                }
+                                const res = await authenticate(
+                                    registrationResponse.credential.id,
+                                    encodeChallenge(challenge),
+                                );
+
+                                setAuthenticationResponse(res);
+                                setDisplay(JSON.stringify(res));
+                            }}
+                        >
+                            Authenticate
+                        </Button>
+                    )}
                     <div className={styles.display}>{display}</div>
                 </div>
             )}
