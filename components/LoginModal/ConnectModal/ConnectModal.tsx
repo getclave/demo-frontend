@@ -115,7 +115,9 @@ export function ConnectModal(): JSX.Element {
                     <div className={styles.fingerprint}>
                         <img src={FINGERPRINT.src}></img>
                         <div className={styles.description}>
-                            Register, and then authorize this device
+                            {!authenticationResponse
+                                ? 'Register, and then authorize this device'
+                                : 'Scan QR code with your authenticator app to authorize this device'}
                         </div>
                     </div>
                     {!display ? (
@@ -136,7 +138,7 @@ export function ConnectModal(): JSX.Element {
                         >
                             Register
                         </Button>
-                    ) : (
+                    ) : !authenticationResponse ? (
                         <Button
                             width="150px"
                             height="50px"
@@ -157,8 +159,24 @@ export function ConnectModal(): JSX.Element {
                         >
                             Authenticate
                         </Button>
+                    ) : (
+                        <QRCodeSVG
+                            value={account as string}
+                            size={150}
+                            imageSettings={{
+                                src: QRLOGO.src,
+                                x: undefined,
+                                y: undefined,
+                                height: 32,
+                                width: 32,
+                                excavate: true,
+                            }}
+                        />
                     )}
-                    <div className={styles.display}>{display}</div>
+
+                    {!authenticationResponse && (
+                        <div className={styles.display}>{display}</div>
+                    )}
                 </div>
             )}
         </div>
