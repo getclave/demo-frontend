@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@floating-ui/react-dom": "^1.0.0",
-    "@reduxjs/toolkit": "^1.8.5",
+    "@passwordless-id/webauthn": "^1.2.4",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@tanstack/react-query": "^4.29.5",
     "@walletconnect/web3-provider": "^1.8.0",
     "@web3auth/web3auth": "^2.1.2",
     "axios": "0.27.2",
@@ -24,11 +26,15 @@
     "moralis": "^2.6.4",
     "next": "12.3.1",
     "prompt-sync": "^4.2.0",
+    "qrcode-with-logos": "^1.0.3",
+    "qrcode.react": "^3.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
-    "react-redux": "^8.0.4",
+    "react-qrcode-logo": "^2.9.0",
+    "react-redux": "^8.0.5",
     "react-responsive": "^9.0.2",
+    "redux": "^4.2.1",
     "web3": "^1.8.0"
   },
   "devDependencies": {

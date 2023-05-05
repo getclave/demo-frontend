@@ -1,3 +1,4 @@
+export { ConnectModal } from './LoginModal/ConnectModal/ConnectModal';
 export { LoginModal } from './LoginModal/LoginModal';
 export { MintButton } from './MintButton/MintButton';
 export { Intro } from './Intro/Intro';

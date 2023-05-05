@@ -17,7 +17,7 @@ export const axios = Axios.create({
 
 export const apiGetUser = async (
     nickname: string,
-): Promise<UserResponseDto> => {
+): Promise<AxiosResponse<UserResponseDto>> => {
     return await axios.get(API.getUserRouteByNickname(nickname));
 };
 
