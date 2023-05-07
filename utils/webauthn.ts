@@ -47,7 +47,7 @@ export const register = async (
     challenge: string,
 ): Promise<RegistrationEncoded> => {
     const registration = await client.register(
-        'Ethylene',
+        'A16Z Pompalayan',
         challenge,
         WebauthnOptions.registerOptions,
     );
