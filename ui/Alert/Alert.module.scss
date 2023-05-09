@@ -1,21 +1,35 @@
 .wrapper {
     display: flex;
     align-items: center;
-    color: #F2AE15;
+    // color: #F2AE15;
 }
 
 .icon {
     background-color: var(--alert-color);
-    color: #F2AE15;
+    // color: #F2AE15;
     width: 24px;
     height: 24px;
     display: flex;
     flex-shrink: 0;
     border-radius: 50% !important;
+
+
 }
 
 .text {
     margin-left: 8px;
-    color: var(--alert-color);
+    // color: var(--alert-color);
     font-weight: 600;
+}
+
+.error {
+    color: #F2AE15;
+}
+
+.success {
+    color: #49f215;
+}
+
+.regular {
+    color: #ffffff;
 }

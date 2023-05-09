@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useStyling } from 'hooks/useStyling';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { store } from 'store';
 
 const queryClient = new QueryClient();
@@ -21,6 +23,7 @@ function EthyleneApp({ Component, pageProps }: AppProps): JSX.Element {
                     </>
                 </EthyleneProvider>
             </Provider>
+            <ToastContainer draggable />
         </QueryClientProvider>
     );
 }

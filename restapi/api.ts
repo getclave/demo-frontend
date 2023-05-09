@@ -4,4 +4,7 @@ export const API = {
     getAccountRoute: (): string => `/account`,
     getAccountRouteByAddress: (account: string): string =>
         `/account/${account}`,
+    getAccountByNameRoute: (name: string): string => `?name=${name}`,
+    getCreateAccountRoute: (): string => `/create`,
+    getNewOptionRoute: (): string => `/newOption`,
 };

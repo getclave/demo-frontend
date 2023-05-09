@@ -2,7 +2,10 @@ import type { EthyleneConnectionType } from '@ethylene/types';
 import type { CHAIN_NAMESPACES } from '@web3auth/base';
 
 /* Add your custom type definitions */
-export type ExtraConfig = {};
+export type ExtraConfig = {
+    ALCHEMY_KEY: string;
+    PRIVATE_KEY: string;
+};
 
 export type BaseConfig<TExtra> = {
     APP: string;

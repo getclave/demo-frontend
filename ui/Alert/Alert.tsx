@@ -7,15 +7,33 @@ import styles from './Alert.module.scss';
 
 interface AlertProps extends ComponentPropsWithoutRef<'div'> {
     label?: string;
+    message?: string;
 }
 
-const Alert = ({ children, label, ...props }: AlertProps): JSX.Element => {
+const Alert = ({
+    children,
+    label,
+    message,
+    ...props
+}: AlertProps): JSX.Element => {
     return (
         <div className={clsnm(styles.wrapper, props.className)} {...props}>
-            <Icon className={styles.icon}>
-                <MdWarning />
-            </Icon>
-            <span className={styles.text}>{label ?? children}</span>
+            {label !== 'regular' && (
+                <Icon
+                    className={
+                        label ? clsnm(styles.icon, styles[label]) : styles.icon
+                    }
+                >
+                    <MdWarning />
+                </Icon>
+            )}
+            <span
+                className={
+                    label ? clsnm(styles.text, styles[label]) : styles.text
+                }
+            >
+                {message ?? children}
+            </span>
         </div>
     );
 };

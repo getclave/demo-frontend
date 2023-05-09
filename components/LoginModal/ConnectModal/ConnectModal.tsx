@@ -7,6 +7,7 @@ import FINGERPRINT from 'assets/fingerprint.png';
 import QRLOGO from 'assets/qr-seal.png';
 import { useDebounce } from 'hooks/useDebounce';
 import { QRCodeSVG } from 'qrcode.react';
+import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 // import { useGetAccountQuery } from 'queries/useGetAccountQuery';
 import { useGetUserQuery } from 'queries/useGetUserQuery';
 import { useEffect, useState } from 'react';
@@ -53,7 +54,7 @@ export function ConnectModal(): JSX.Element {
             <div
                 className={styles.back}
                 onClick={(): void => {
-                    dispatch(setAccount(null));
+                    dispatch(setAccount(undefined));
                 }}
             >
                 <IoIosArrowBack size={20} />

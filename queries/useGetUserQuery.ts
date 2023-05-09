@@ -22,7 +22,6 @@ export function useGetUserQuery(
                         return err as AxiosError;
                         return err.response.data.message;
                     });
-                console.log('ben a: ', typeof a);
                 return a;
             },
             {
@@ -34,10 +33,5 @@ export function useGetUserQuery(
     useEffect(() => {
         refetch();
     }, [nickname, refetch]);
-    console.log(
-        'inside of query, last line, first data then error: ',
-        isSuccess,
-        isError,
-    );
     return { data, error, isError, isLoading, isSuccess, ...rest };
 }

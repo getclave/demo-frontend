@@ -1,15 +1,17 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import type { AxiosResponse } from 'axios';
 import { API } from 'restapi/api';
 import type {
     AccountCreateDto,
     AccountResponseDto,
+    AccountV2,
+    CreateAccountDto,
+    NewOptionDto,
     UserCreateDto,
     UserResponseDto,
 } from 'restapi/types';
 
-const baseURL =
-    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
 
 export const axios = Axios.create({
     baseURL,
@@ -36,5 +38,23 @@ export const apiCreateUser = async (
 export const apiCreateAccount = async (
     params: AccountCreateDto,
 ): Promise<AxiosResponse<AccountResponseDto>> => {
+    return await axios.post(API.getUserRoute(), params);
+};
+
+export const apiGetAccount2 = async (
+    name: string,
+): Promise<AxiosResponse<AccountV2>> => {
+    return await axios.get(API.getAccountByNameRoute(name));
+};
+
+export const apiCreateAccountV2 = async (
+    params: CreateAccountDto,
+): Promise<AxiosResponse<AccountV2>> => {
+    return await axios.post(API.getUserRoute(), params);
+};
+
+export const apiCreateNewOption = async (
+    params: NewOptionDto,
+): Promise<AxiosResponse<AccountV2>> => {
     return await axios.post(API.getUserRoute(), params);
 };

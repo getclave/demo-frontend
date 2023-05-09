@@ -3,11 +3,14 @@ import { GEORLI } from '@ethylene/constants/networks';
 import { CHAIN_NAMESPACES } from '@web3auth/base';
 import type { BaseConfig, ExtraConfig } from 'config/config.types';
 
-const EXTRA_CONFIG = {};
+const EXTRA_CONFIG = {
+    ALCHEMY_KEY: process.env.ALCHEMY_KEY ? process.env.ALCHEMY_KEY : '',
+    PRIVATE_KEY: process.env.PRIVATE_KEY ? process.env.PRIVATE_KEY : '',
+};
 
 export const CONFIG: BaseConfig<ExtraConfig> = {
-    APP: 'Ethylene', // ! Do not use names with space, only use valid variable names !
-    APP_DESCRIPTION: 'Customizable boilerplate dAPP project',
+    APP: 'SealDemoFrontend', // ! Do not use names with space, only use valid variable names !
+    APP_DESCRIPTION: 'SealDemoFrontend',
     APP_LOGO: '',
     APP_LOGO_DARK: '',
     APP_LOGO_SM: '',

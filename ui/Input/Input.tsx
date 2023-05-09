@@ -18,6 +18,8 @@ interface InputProps extends ComponentPropsWithoutRef<'input'> {
     rightElClassName?: string;
     leftElClassName?: string;
     error?: string;
+    success?: string;
+    regularMessage?: string;
     absoluteError?: boolean;
     inputRef?: React.RefObject<HTMLInputElement>;
 }
@@ -40,6 +42,8 @@ const Input = ({
     className,
     style,
     error,
+    success,
+    regularMessage,
     absoluteError,
     inputRef,
     ...props
@@ -75,7 +79,32 @@ const Input = ({
                         position: absoluteError ? 'absolute' : 'relative',
                         bottom: absoluteError ? '-48px' : undefined,
                     }}
-                    label={error}
+                    label={'error'}
+                    message={error}
+                />
+            )}
+            {success && (
+                <Alert
+                    style={{
+                        marginBottom: '16px',
+                        marginTop: '8px',
+                        position: absoluteError ? 'absolute' : 'relative',
+                        bottom: absoluteError ? '-48px' : undefined,
+                    }}
+                    label={'success'}
+                    message={success}
+                />
+            )}
+            {regularMessage && (
+                <Alert
+                    style={{
+                        marginBottom: '16px',
+                        marginTop: '8px',
+                        position: absoluteError ? 'absolute' : 'relative',
+                        bottom: absoluteError ? '-48px' : undefined,
+                    }}
+                    label={'regular'}
+                    message={regularMessage}
                 />
             )}
             {rightEl && (
