@@ -28,7 +28,10 @@ export function LoginModal({
         ConnectionOptions.CONNECT,
     );
 
-    const account = useSelector((state: RootState) => state.account.account);
+    useEffect(() => {
+        if (modalController.isOpen === true) return;
+        setConnectionOption(ConnectionOptions.CONNECT);
+    }, [modalController.isOpen]);
 
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
@@ -51,6 +54,7 @@ export function LoginModal({
                     />
                 ) : (
                     <CreateAccount
+                        modalController={modalController}
                         connectionOption={connectionOption}
                         setConnection={(): void =>
                             setConnectionOption(ConnectionOptions.CONNECT)

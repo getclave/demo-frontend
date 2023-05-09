@@ -6,3 +6,4 @@ export { Intro } from './Intro/Intro';
 export { Header } from './Header/Header';
 export { NFT } from './NFT/NFT';
 export { ConnectAccount } from './LoginModal/ConnectAccount/ConnectAccount';
+export { User } from './User/User';

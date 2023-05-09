@@ -12,6 +12,7 @@ import type {
 } from 'restapi/types';
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
+console.log(baseURL);
 
 export const axios = Axios.create({
     baseURL,
@@ -50,11 +51,11 @@ export const apiGetAccount2 = async (
 export const apiCreateAccountV2 = async (
     params: CreateAccountDto,
 ): Promise<AxiosResponse<AccountV2>> => {
-    return await axios.post(API.getUserRoute(), params);
+    return await axios.post(API.getCreateAccountRoute(), params);
 };
 
 export const apiCreateNewOption = async (
     params: NewOptionDto,
 ): Promise<AxiosResponse<AccountV2>> => {
-    return await axios.post(API.getUserRoute(), params);
+    return await axios.post(API.getNewOptionRoute(), params);
 };

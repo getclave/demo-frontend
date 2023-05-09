@@ -5,6 +5,7 @@ import type { CHAIN_NAMESPACES } from '@web3auth/base';
 export type ExtraConfig = {
     ALCHEMY_KEY: string;
     PRIVATE_KEY: string;
+    RPC: string;
 };
 
 export type BaseConfig<TExtra> = {

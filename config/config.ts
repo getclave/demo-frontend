@@ -4,8 +4,11 @@ import { CHAIN_NAMESPACES } from '@web3auth/base';
 import type { BaseConfig, ExtraConfig } from 'config/config.types';
 
 const EXTRA_CONFIG = {
-    ALCHEMY_KEY: process.env.ALCHEMY_KEY ? process.env.ALCHEMY_KEY : '',
+    ALCHEMY_KEY: process.env.NEXT_ALCHEMY_KEY
+        ? process.env.NEXT_ALCHEMY_KEY
+        : '',
     PRIVATE_KEY: process.env.PRIVATE_KEY ? process.env.PRIVATE_KEY : '',
+    RPC: `https://opt-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
 };
 
 export const CONFIG: BaseConfig<ExtraConfig> = {

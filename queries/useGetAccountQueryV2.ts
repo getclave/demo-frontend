@@ -41,14 +41,3 @@ export function useGetAccountQueryV2(
     }, [name, refetch]);
     return { data, isError, error, isLoading, ...rest };
 }
-
-// const { mutate: getAccount } = useMutation({
-//     mutationFn: async (name: string): Promise<AccountV2> =>
-//         apiGetAccount2(name),
-//     onError: (err: AxiosError<DefaultAxiosErrorResponse>) => {
-//         notify.error(err.response?.data.message);
-//     },
-//     onSuccess: () => {
-//         notify.success(`Update this text`);
-//     },
-// });
