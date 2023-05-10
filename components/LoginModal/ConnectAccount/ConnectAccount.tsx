@@ -1,22 +1,24 @@
 import FINGERPRINT from 'assets/fingerprint.png';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from 'store';
 import { setAccount } from 'store/slicers/account';
-import type { ConnectAccountProps } from 'types/connection';
+import { setConnectionOption } from 'store/slicers/connection';
+import { ConnectionOptions } from 'types/connection';
 import { Button, Input } from 'ui';
 
 import styles from './ConnectAccount.module.scss';
 
-export function ConnectAccount({
-    connectionOption,
-    setConnection,
-}: ConnectAccountProps): JSX.Element {
+export function ConnectAccount(): JSX.Element {
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
     const [username, setUsername] = useState<string | null>(null);
     const { data, isError, error, isLoading } = useGetAccountQueryV2(username);
+    const connectionOption = useSelector(
+        (state: RootState) => state.connection.connectionOption,
+    );
 
     useEffect(() => {
         if (isError) {
@@ -79,7 +81,9 @@ export function ConnectAccount({
                     color="purple"
                     fontSize="fs12"
                     fontWeight="fw400"
-                    onClick={(): void => setConnection()}
+                    onClick={() =>
+                        dispatch(setConnectionOption(ConnectionOptions.CREATE))
+                    }
                 >
                     Create Account
                 </Button>

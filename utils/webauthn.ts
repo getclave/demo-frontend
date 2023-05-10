@@ -156,7 +156,7 @@ export function bufferToHex(buffer: ArrayBufferLike): string {
 }
 
 function derToRS(der: Buffer): Array<Buffer> {
-    let offset: number = 3;
+    let offset = 3;
     let dataOffset;
 
     if (der[offset] == 0x21) {

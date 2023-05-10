@@ -6,15 +6,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { AccountV2 } from 'restapi/types';
 
-export interface ThemeState {
+export interface AccountState {
     account: AccountV2 | undefined;
+    selectedAccount: number;
     registrationResponse: RegistrationEncoded | null;
     authenticationResponse: AuthenticationEncoded | null;
     deployedContractAddress: string | null;
 }
 
-const initialState: ThemeState = {
+const initialState: AccountState = {
     account: undefined,
+    selectedAccount: 0,
     registrationResponse: null,
     authenticationResponse: null,
     deployedContractAddress: null,
@@ -26,6 +28,9 @@ export const accountSlice = createSlice({
     reducers: {
         setAccount: (state, action: PayloadAction<AccountV2 | undefined>) => {
             state.account = action.payload;
+        },
+        setSelectedAccount: (state, action: PayloadAction<number>) => {
+            state.selectedAccount = action.payload;
         },
         setRegistrationResponse: (
             state,
@@ -50,6 +55,7 @@ export const accountSlice = createSlice({
 
 export const {
     setAccount,
+    setSelectedAccount,
     setAuthenticationResponse,
     setRegistrationResponse,
     setDeployedContractAddress,

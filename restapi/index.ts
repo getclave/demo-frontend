@@ -12,7 +12,6 @@ import type {
 } from 'restapi/types';
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
-console.log(baseURL);
 
 export const axios = Axios.create({
     baseURL,

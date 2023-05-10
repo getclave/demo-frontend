@@ -3,9 +3,9 @@ import type {
     AuthenticationEncoded,
     RegistrationEncoded,
 } from '@passwordless-id/webauthn/dist/esm/types';
+import { CONFIG } from 'config';
 import { ABIs } from 'constants/abi';
 import { ADDRESSES } from 'constants/address';
-// import 'dotenv/config';
 import { Contract, ethers } from 'ethers';
 import {
     WebauthnOptions,
@@ -16,16 +16,27 @@ import type { UserOperationWithSignature } from 'module/webauthnUtils';
 
 // const ALCHEMY_KEY = process.env.ALCHEMY_KEY || '';
 
-export const getEntrypointContract = async (
-    alchemy_key = '',
-): Promise<Contract> => {
-    const provider: ethers.providers.AlchemyProvider =
-        new ethers.providers.AlchemyProvider(alchemy_key);
-
+export const getEntrypointContract = async (): Promise<Contract> => {
+    const provider = new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
     const contract: Contract = new Contract(
         ADDRESSES.entryPoint,
         ABIs.entrypointContract,
         provider,
+    );
+
+    return contract;
+};
+
+export const getEntrypointContractWithSigner = async (): Promise<Contract> => {
+    const provider = new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
+    const wallet: ethers.Wallet = new ethers.Wallet(
+        CONFIG.PRIVATE_KEY,
+        provider,
+    );
+    const contract: Contract = new Contract(
+        ADDRESSES.entryPoint,
+        ABIs.entrypointContract,
+        wallet,
     );
 
     return contract;
@@ -63,8 +74,10 @@ export const authenticate = async (
     credentialId: string,
     challenge: string,
 ): Promise<AuthenticationEncoded> => {
+    const credential =
+        credentialId === '' || !credentialId ? [] : [credentialId];
     const login = await client.authenticate(
-        [credentialId],
+        credential,
         challenge,
         WebauthnOptions.authOptions,
     );
@@ -73,15 +86,15 @@ export const authenticate = async (
 };
 
 export const sendUserOpToEntrypoint = async (
-    _senderAddress = '',
-    _signature = '0x',
-    _beneficiary = '0x114B242D931B47D5cDcEe7AF065856f70ee278C4',
     _challenge: string,
     _webauthnPublicKey: string,
     _encodedChallenge: string,
     _signatureBase64: string,
     _authenticatorData: string,
     _clientData: string,
+    _senderAddress = '',
+    _signature = '0x',
+    _beneficiary = '0x114B242D931B47D5cDcEe7AF065856f70ee278C4',
 ) => {
     const signature: string = await getSignatureVerifyParamEncoded(
         _authenticatorData,
@@ -91,7 +104,7 @@ export const sendUserOpToEntrypoint = async (
         _signatureBase64,
     );
 
-    const contract: Contract = await getEntrypointContract();
+    const contract: Contract = await getEntrypointContractWithSigner();
 
     const userOp: UserOperationWithSignature = getDefaultUserOp(
         _senderAddress,

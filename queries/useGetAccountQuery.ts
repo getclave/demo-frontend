@@ -22,8 +22,6 @@ export function useGetAccountQuery(
         async (): Promise<AxiosResponse<AccountResponseDto>> =>
             apiGetAccount(nickname)
                 .then((res) => {
-                    console.log('useGetAccountQuery res: ', res);
-
                     return res;
                 })
                 .catch((err) => {

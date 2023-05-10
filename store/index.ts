@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 
 import accountSlice from './slicers/account';
+import connectionSlice from './slicers/connection';
 
 export const store = configureStore({
     reducer: {
         account: accountSlice,
+        connection: connectionSlice,
     },
     middleware: (getDefaultMiddleware) => {
         const customizedMiddleware = getDefaultMiddleware({

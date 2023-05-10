@@ -1,14 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
-import type { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import { ABIs } from 'constants/abi';
 import { BYTECODES } from 'constants/bytecode';
-import { Contract } from 'ethers';
+import type { Contract } from 'ethers';
 import { useDebounce } from 'hooks';
 import { useNotify } from 'hooks';
 import { useDeployContract } from 'hooks/useDeployContract';
-import { useRegister } from 'hooks/useRegister';
-import { authenticate, register } from 'module/webauthn';
+import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
@@ -19,34 +18,34 @@ import type { AccountV2, CreateAccountDto } from 'restapi/types';
 import type { RootState } from 'store';
 import {
     setAccount,
-    setAuthenticationResponse,
     setDeployedContractAddress,
     setRegistrationResponse,
 } from 'store/slicers/account';
-import type { ConnectAccountProps } from 'types/connection';
+import { setConnectionOption } from 'store/slicers/connection';
+import { ConnectionOptions } from 'types/connection';
 import { Button, Input } from 'ui';
 
 import styles from './CreateAccount.module.scss';
 
-export function CreateAccount({
-    connectionOption,
-    setConnection,
-}: ConnectAccountProps): JSX.Element {
+export function CreateAccount(): JSX.Element {
     const notify = useNotify();
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
     const [username, setUsername] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const connectionOption = useSelector(
+        (state: RootState) => state.connection.connectionOption,
+    );
 
     const debounced = useDebounce(nickname, 500);
-    const { data, isError, error, isLoading } = useGetAccountQueryV2(debounced);
+    const { data, isLoading } = useGetAccountQueryV2(debounced);
 
     const { mutate: postAccount } = useMutation({
         mutationFn: async (
             params: CreateAccountDto,
         ): Promise<AxiosResponse<AccountV2>> => apiCreateAccountV2(params),
-        onError: (err) => {
+        onError: () => {
             setLoading(false);
             notify.error('Account could not be created!');
         },
@@ -104,7 +103,12 @@ export function CreateAccount({
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.back} onClick={(): void => setConnection()}>
+            <div
+                className={styles.back}
+                onClick={() =>
+                    dispatch(setConnectionOption(ConnectionOptions.CONNECT))
+                }
+            >
                 <IoIosArrowBack size={20} />
             </div>
             <div className={styles.title}>

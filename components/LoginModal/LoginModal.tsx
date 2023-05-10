@@ -1,20 +1,13 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
-import QRLOGO from 'assets/qr-seal.png';
-import { ConnectModal, CreateAccount } from 'components';
+import { CreateAccount, SelectAccount } from 'components';
 import { ConnectAccount } from 'components';
-import { useDebounce } from 'hooks/useDebounce';
-import { QRCodeSVG } from 'qrcode.react';
-// import { useGetAccountQuery } from 'queries/useGetAccountQuery';
-import { useGetUserQuery } from 'queries/useGetUserQuery';
-import { useEffect, useState } from 'react';
-import { IoIosArrowBack } from 'react-icons/io';
-import type { QRCode } from 'react-qrcode-logo';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { setAccount } from 'store/slicers/account';
+import { setConnectionOption } from 'store/slicers/connection';
 import { ConnectionOptions } from 'types/connection';
-import { Button, Input, Modal } from 'ui';
+import { Modal } from 'ui';
 
 import styles from './LoginModal.module.scss';
 
@@ -24,14 +17,25 @@ export function LoginModal({
     modalController: ModalController;
 }): JSX.Element {
     const dispatch = useDispatch();
-    const [connectionOption, setConnectionOption] = useState<ConnectionOptions>(
-        ConnectionOptions.CONNECT,
+    const account = useSelector((state: RootState) => state.account.account);
+    const connectionOption = useSelector(
+        (state: RootState) => state.connection.connectionOption,
     );
 
     useEffect(() => {
         if (modalController.isOpen === true) return;
-        setConnectionOption(ConnectionOptions.CONNECT);
+        dispatch(setConnectionOption(ConnectionOptions.CONNECT));
     }, [modalController.isOpen]);
+
+    useEffect(() => {
+        if (!account) {
+            return;
+        } else if (connectionOption === ConnectionOptions.CONNECT) {
+            dispatch(setConnectionOption(ConnectionOptions.SELECT));
+        } else {
+            modalController.close();
+        }
+    }, [account]);
 
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
@@ -41,27 +45,13 @@ export function LoginModal({
                 </div>
                 <span className={styles.text}>Seal Kit</span>
             </div>
-            {
-                // account ? (
-                //     <ConnectModal />
-                // ) :
-                connectionOption === ConnectionOptions.CONNECT ? (
-                    <ConnectAccount
-                        connectionOption={connectionOption}
-                        setConnection={(): void =>
-                            setConnectionOption(ConnectionOptions.CREATE)
-                        }
-                    />
-                ) : (
-                    <CreateAccount
-                        modalController={modalController}
-                        connectionOption={connectionOption}
-                        setConnection={(): void =>
-                            setConnectionOption(ConnectionOptions.CONNECT)
-                        }
-                    />
-                )
-            }
+            {connectionOption === ConnectionOptions.CONNECT ? (
+                <ConnectAccount />
+            ) : connectionOption === ConnectionOptions.SELECT ? (
+                <SelectAccount modalController={modalController} />
+            ) : (
+                <CreateAccount />
+            )}
         </Modal>
     );
 }

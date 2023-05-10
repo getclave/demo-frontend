@@ -2,25 +2,25 @@ import { useModal } from '@ethylene/ui-hooks';
 import BG from 'assets/bg.png';
 import GALAXY from 'assets/galaxy.png';
 import { Header, LoginModal, MintButton, NFT, User } from 'components';
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { ConnectionOptions } from 'types/connection';
 
 import styles from './Intro.module.scss';
 
 export function Intro(): JSX.Element {
     const loginModal = useModal();
-    const deployedContractAddress = useSelector(
-        (state: RootState) => state.account.deployedContractAddress,
+    const connectionOption = useSelector(
+        (state: RootState) => state.connection.connectionOption,
     );
+
     const account = useSelector((state: RootState) => state.account.account);
-    useEffect(() => {
-        if (!account) return;
-        loginModal.close();
-    }, [account]);
+
     return (
         <div className={styles.wrapper}>
-            {account && <User />}
+            {account && connectionOption !== ConnectionOptions.SELECT && (
+                <User />
+            )}
             <LoginModal modalController={loginModal} />
             <Header />
             <NFT />

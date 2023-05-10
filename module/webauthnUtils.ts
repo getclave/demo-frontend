@@ -167,3 +167,16 @@ async function getKey(pubkey: ArrayBufferLike): Promise<CryptoKey> {
         'verify',
     ]);
 }
+
+const base64toBase64Url = (txt: string): string => {
+    return txt.replaceAll('+', '-').replaceAll('/', '_');
+};
+
+export const encodeChallenge = (challenge: string): string => {
+    const sliced = challenge.slice(2);
+    const split = base64toBase64Url(
+        Buffer.from(sliced, 'hex').toString('base64'),
+    ).replaceAll('=', 'A');
+
+    return split;
+};
