@@ -3,54 +3,47 @@ import type {
     AuthenticationEncoded,
     RegistrationEncoded,
 } from '@passwordless-id/webauthn/dist/esm/types';
-import { CONFIG } from 'config';
-import { ABIs } from 'constants/abi';
-import { ADDRESSES } from 'constants/address';
-import { Contract, ethers } from 'ethers';
+import type { Contract, Transaction } from 'ethers';
+import {
+    useGetEntrypointContract,
+    useGetEntrypointContractWithSigner,
+} from 'hooks/useGetEntrypointContract';
 import {
     WebauthnOptions,
     getSignatureVerifyParamEncoded,
 } from 'module/webauthnHelper';
-import { getDefaultUserOp } from 'module/webauthnUtils';
+import {
+    getDefaultUserOp,
+    getInitUserOp,
+    getPublicKey,
+} from 'module/webauthnUtils';
 import type { UserOperationWithSignature } from 'module/webauthnUtils';
-
-// const ALCHEMY_KEY = process.env.ALCHEMY_KEY || '';
-
-export const getEntrypointContract = async (): Promise<Contract> => {
-    const provider = new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
-    const contract: Contract = new Contract(
-        ADDRESSES.entryPoint,
-        ABIs.entrypointContract,
-        provider,
-    );
-
-    return contract;
-};
-
-export const getEntrypointContractWithSigner = async (): Promise<Contract> => {
-    const provider = new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
-    const wallet: ethers.Wallet = new ethers.Wallet(
-        CONFIG.PRIVATE_KEY,
-        provider,
-    );
-    const contract: Contract = new Contract(
-        ADDRESSES.entryPoint,
-        ABIs.entrypointContract,
-        wallet,
-    );
-
-    return contract;
-};
 
 export const getChallange = async (
     _senderAddress = '',
     _signature = '0x',
+    _calldata = '0x',
 ): Promise<string> => {
-    const contract = await getEntrypointContract();
+    const contract = await useGetEntrypointContract();
 
-    const userOp: UserOperationWithSignature = getDefaultUserOp(
+    const userOp: UserOperationWithSignature = await getDefaultUserOp(
         _senderAddress,
         _signature,
+        _calldata,
+    );
+
+    const response = await contract.getUserOpHash(userOp);
+    return response;
+};
+
+export const getInitChallange = async (
+    _senderAddress = '',
+    _publicKey = '0x',
+): Promise<string> => {
+    const contract = await useGetEntrypointContract();
+    const userOp: UserOperationWithSignature = await getInitUserOp(
+        _senderAddress,
+        _publicKey,
     );
 
     const response = await contract.getUserOpHash(userOp);
@@ -93,9 +86,9 @@ export const sendUserOpToEntrypoint = async (
     _authenticatorData: string,
     _clientData: string,
     _senderAddress = '',
-    _signature = '0x',
+    _calldata = '0x',
     _beneficiary = '0x114B242D931B47D5cDcEe7AF065856f70ee278C4',
-) => {
+): Promise<Transaction> => {
     const signature: string = await getSignatureVerifyParamEncoded(
         _authenticatorData,
         _clientData,
@@ -103,17 +96,50 @@ export const sendUserOpToEntrypoint = async (
         _webauthnPublicKey,
         _signatureBase64,
     );
+    const contract: Contract = await useGetEntrypointContractWithSigner();
 
-    const contract: Contract = await getEntrypointContractWithSigner();
-
-    const userOp: UserOperationWithSignature = getDefaultUserOp(
+    const userOp: UserOperationWithSignature = await getDefaultUserOp(
         _senderAddress,
         signature,
+        _calldata,
     );
 
     const response = await contract.handleOps([userOp], _beneficiary, {
         gasLimit: 5000000,
     });
+    await response.wait();
+    return response;
+};
 
+export const sendInitUserOp = async (
+    _challenge: string,
+    _webauthnPublicKey: string,
+    _encodedChallenge: string,
+    _signatureBase64: string,
+    _authenticatorData: string,
+    _clientData: string,
+    _senderAddress = '',
+    _beneficiary = '0x114B242D931B47D5cDcEe7AF065856f70ee278C4',
+): Promise<Transaction> => {
+    const signature: string = await getSignatureVerifyParamEncoded(
+        _authenticatorData,
+        _clientData,
+        _challenge,
+        _webauthnPublicKey,
+        _signatureBase64,
+    );
+    const contract: Contract = await useGetEntrypointContractWithSigner();
+
+    const publicKey: string = await getPublicKey(_webauthnPublicKey);
+
+    const userOp: UserOperationWithSignature = await getInitUserOp(
+        _senderAddress,
+        publicKey,
+        signature,
+    );
+    const response = await contract.handleOps([userOp], _beneficiary, {
+        gasLimit: 20000000,
+    });
+    await response.wait();
     return response;
 };

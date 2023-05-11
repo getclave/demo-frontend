@@ -1,4 +1,4 @@
-import Axios, { AxiosError } from 'axios';
+import Axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import { API } from 'restapi/api';
 import type {
@@ -11,7 +11,8 @@ import type {
     UserResponseDto,
 } from 'restapi/types';
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
+const baseURL =
+    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/account';
 
 export const axios = Axios.create({
     baseURL,

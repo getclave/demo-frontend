@@ -1,14 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
 import type { AxiosResponse } from 'axios';
-import { ABIs } from 'constants/abi';
-import { BYTECODES } from 'constants/bytecode';
-import type { Contract } from 'ethers';
 import { useDebounce } from 'hooks';
 import { useNotify } from 'hooks';
-import { useDeployContract } from 'hooks/useDeployContract';
-import { register } from 'module/webauthn';
-import { getPublicKey } from 'module/webauthnUtils';
+import { useGetCreate2Address } from 'hooks/useGetCreate2Address';
+import { authenticate, register } from 'module/webauthn';
+import { getInitChallange, sendInitUserOp } from 'module/webauthn';
+import { encodeChallenge, getPublicKey } from 'module/webauthnUtils';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -45,9 +43,10 @@ export function CreateAccount(): JSX.Element {
         mutationFn: async (
             params: CreateAccountDto,
         ): Promise<AxiosResponse<AccountV2>> => apiCreateAccountV2(params),
-        onError: () => {
+        onError: (e) => {
             setLoading(false);
             notify.error('Account could not be created!');
+            console.log(e);
         },
         onSuccess: (data) => {
             setLoading(false);
@@ -64,21 +63,41 @@ export function CreateAccount(): JSX.Element {
             const publicKey: string = await getPublicKey(
                 registrationResponse?.credential.publicKey,
             );
-            const deployedContract: Contract = await useDeployContract(
-                ABIs.sealAccountContract,
-                BYTECODES.sealAccount,
-                '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
-                Buffer.from(publicKey, 'hex'),
+
+            const create2Address: string = await useGetCreate2Address(
+                publicKey,
             );
-            console.log(deployedContract.address, 'deploylandi');
-            dispatch(setDeployedContractAddress(deployedContract.address));
-            postAccount({
-                name: nickname,
-                address: deployedContract.address,
-                authName: 'desktop',
-                authPublic: publicKey,
-                authType: 1,
-            } as CreateAccountDto);
+            console.log('create2Address', create2Address);
+            const challenge = await getInitChallange(create2Address, publicKey);
+            const encodedChallenge = encodeChallenge(challenge);
+            const authenticationResponse = await authenticate(
+                registrationResponse.credential.id,
+                encodedChallenge,
+            );
+            if (authenticationResponse) {
+                const res = await sendInitUserOp(
+                    challenge,
+                    registrationResponse?.credential.publicKey,
+                    encodedChallenge,
+                    authenticationResponse.signature,
+                    authenticationResponse.authenticatorData,
+                    authenticationResponse.clientData,
+                    create2Address,
+                );
+
+                if (res) {
+                    setLoading(false);
+                    dispatch(setDeployedContractAddress(create2Address));
+                    postAccount({
+                        name: nickname,
+                        address: create2Address,
+                        authName: 'desktop 1',
+                        authPublic: registrationResponse.credential.publicKey,
+                        authType: 1,
+                        authHexPublic: publicKey,
+                    } as CreateAccountDto);
+                }
+            }
         }
     };
 
@@ -105,9 +124,9 @@ export function CreateAccount(): JSX.Element {
         <div className={styles.wrapper}>
             <div
                 className={styles.back}
-                onClick={() =>
-                    dispatch(setConnectionOption(ConnectionOptions.CONNECT))
-                }
+                onClick={(): void => {
+                    dispatch(setConnectionOption(ConnectionOptions.CONNECT));
+                }}
             >
                 <IoIosArrowBack size={20} />
             </div>

@@ -30,6 +30,9 @@ export function SelectAccount({
     const [selectOrCreate, setSelectOrCreate] = useState<boolean>(false);
     const [nickname, setNickname] = useState<string>('');
     const account = useSelector((state: RootState) => state.account.account);
+    const collectionOption = useSelector(
+        (state: RootState) => state.account.account,
+    );
 
     const { mutate: postAccount } = useMutation({
         mutationFn: async (
@@ -51,19 +54,22 @@ export function SelectAccount({
             const publicKey: string = await getPublicKey(
                 registrationResponse?.credential.publicKey,
             );
+            if (account) {
+                dispatch(setSelectedAccount(account?.options.length + 1));
+            }
             postAccount({
                 name: account?.name,
                 authName: nickname,
-                authPublic: publicKey,
+                authPublic: registrationResponse?.credential.publicKey,
                 authType: 1,
+                authHexPublic: publicKey,
             } as NewOptionDto);
         }
     };
 
-    // useEffect(() => {
-    //     setNickname('');
-    //     setUsername(null);
-    // }, [connectionOption]);
+    useEffect(() => {
+        setNickname('');
+    }, [collectionOption]);
 
     useEffect(() => {
         setNickname('');

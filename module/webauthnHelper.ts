@@ -2,6 +2,8 @@ import type {
     AuthenticateOptions,
     RegisterOptions,
 } from '@passwordless-id/webauthn/dist/esm/types';
+import { ADDRESSES } from 'constants/address';
+import { initializationCodeStart } from 'constants/initCode';
 import { ethers } from 'ethers';
 import {
     bufferFromBase64,
@@ -9,17 +11,18 @@ import {
     getCoordinates,
     getRS,
 } from 'module/webauthnUtils';
+import { looksLikeHex } from 'utils/looksLikeHex';
 
 export const WebauthnOptions = {
     registerOptions: {
-        authenticatorType: 'auto',
+        authenticatorType: 'auto', // extern => remove browser
         userVerification: 'required',
         timeout: 60000,
         attestation: false,
         debug: false,
     } as RegisterOptions,
     authOptions: {
-        authenticatorType: 'auto',
+        authenticatorType: 'auto', // extern => remove browser
         userVerification: 'required',
         timeout: 60000,
     } as AuthenticateOptions,
@@ -41,7 +44,6 @@ export const getSignatureVerifyParamEncoded = async (
     const coordinates: Array<ethers.BigNumber> = await getCoordinates(
         _webauthnPublicKey,
     );
-
     const abiCoder: ethers.utils.AbiCoder = new ethers.utils.AbiCoder();
     const signature: string = abiCoder.encode(
         [
@@ -65,4 +67,34 @@ export const getSignatureVerifyParamEncoded = async (
     );
 
     return signature;
+};
+
+export type HexString = `0x${string}`;
+
+export const abiEncoder = (
+    types: Array<string | ethers.utils.ParamType>,
+    values: Array<unknown>,
+): HexString => {
+    const abiCoder = new ethers.utils.AbiCoder();
+    const signature = abiCoder.encode(types, values) as HexString;
+    return signature;
+};
+
+const initializationCode = (publicKey: string): string =>
+    `${initializationCodeStart}${publicKey.slice(2)}`;
+
+export const getInitializationCode = (publicKey: string): HexString => {
+    return initializationCode(publicKey) as HexString;
+};
+
+export const getInitCode = (_publicKey: string): HexString => {
+    const publicKey = looksLikeHex(_publicKey);
+    const SELECTOR = 'fd7230d6';
+    const initializationCode = getInitializationCode(publicKey);
+    const initCode =
+        ADDRESSES.factory +
+        SELECTOR +
+        abiEncoder(['uint256', 'bytes'], [0, initializationCode]).slice(2);
+
+    return initCode as HexString;
 };

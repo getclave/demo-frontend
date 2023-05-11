@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import { useGetNonce } from 'hooks/useGetNonce';
+import { getInitCode } from 'module/webauthnHelper';
 
 export type UserOperationWithSignature = {
     sender: string;
@@ -14,15 +16,18 @@ export type UserOperationWithSignature = {
     signature: string;
 };
 
-export const getDefaultUserOp = (
+export const getDefaultUserOp = async (
     _senderAddress = '',
     _signature = '0x',
-): UserOperationWithSignature => {
+    _calldata = '0x',
+): Promise<UserOperationWithSignature> => {
+    const nonce = await useGetNonce(_senderAddress);
+
     const defaultUserOp: UserOperationWithSignature = {
         sender: _senderAddress,
-        nonce: 0,
+        nonce: nonce,
         initCode: '0x',
-        callData: '0x',
+        callData: _calldata,
         callGasLimit: 500000,
         verificationGasLimit: 500000,
         preVerificationGas: 500000,
@@ -34,6 +39,31 @@ export const getDefaultUserOp = (
 
     return defaultUserOp;
 };
+
+export const getInitUserOp = async (
+    _senderAddress = '',
+    _publicKey = '0x',
+    _signature = '0x',
+): Promise<UserOperationWithSignature> => {
+    const initCode = getInitCode(_publicKey);
+    const initUserOp: UserOperationWithSignature = {
+        sender: _senderAddress,
+        nonce: 0,
+        initCode: initCode,
+        callData: '0x',
+        callGasLimit: 5000000,
+        verificationGasLimit: 5000000,
+        preVerificationGas: 5000000,
+        maxFeePerGas: 0,
+        maxPriorityFeePerGas: 0,
+        paymasterAndData: '0x',
+        signature: _signature,
+    };
+
+    return initUserOp;
+};
+
+// export function
 
 export function bufferFromBase64(base64url: string): Buffer {
     function padString(input: string): string {
@@ -163,9 +193,18 @@ async function getKey(pubkey: ArrayBufferLike): Promise<CryptoKey> {
         namedCurve: 'P-256',
         hash: 'SHA-256',
     };
-    return await crypto.subtle.importKey('spki', pubkey, algoParams, true, [
-        'verify',
-    ]);
+
+    console.log(window.crypto.subtle.importKey);
+
+    const response = await crypto.subtle.importKey(
+        'spki',
+        pubkey,
+        algoParams,
+        true,
+        ['verify'],
+    );
+    console.log('response', response);
+    return response;
 }
 
 const base64toBase64Url = (txt: string): string => {

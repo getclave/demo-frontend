@@ -2204,4 +2204,54 @@ export const ABIs = {
             type: 'receive',
         },
     ],
+    factoryContract: [
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'salt',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'bytes',
+                    name: 'initializationCode',
+                    type: 'bytes',
+                },
+            ],
+            name: 'create',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: 'deploymentAddress',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'salt',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'bytes',
+                    name: 'initCode',
+                    type: 'bytes',
+                },
+            ],
+            name: 'findCreate2Address',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: 'deploymentAddress',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+    ],
 };

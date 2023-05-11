@@ -8,6 +8,7 @@ import type { AccountV2 } from 'restapi/types';
 
 export interface AccountState {
     account: AccountV2 | undefined;
+    balance: number;
     selectedAccount: number;
     registrationResponse: RegistrationEncoded | null;
     authenticationResponse: AuthenticationEncoded | null;
@@ -16,6 +17,7 @@ export interface AccountState {
 
 const initialState: AccountState = {
     account: undefined,
+    balance: 0,
     selectedAccount: 0,
     registrationResponse: null,
     authenticationResponse: null,
@@ -28,6 +30,9 @@ export const accountSlice = createSlice({
     reducers: {
         setAccount: (state, action: PayloadAction<AccountV2 | undefined>) => {
             state.account = action.payload;
+        },
+        setBalance: (state, action: PayloadAction<number>) => {
+            state.balance = action.payload;
         },
         setSelectedAccount: (state, action: PayloadAction<number>) => {
             state.selectedAccount = action.payload;
@@ -55,6 +60,7 @@ export const accountSlice = createSlice({
 
 export const {
     setAccount,
+    setBalance,
     setSelectedAccount,
     setAuthenticationResponse,
     setRegistrationResponse,

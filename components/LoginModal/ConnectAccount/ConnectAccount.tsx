@@ -81,9 +81,9 @@ export function ConnectAccount(): JSX.Element {
                     color="purple"
                     fontSize="fs12"
                     fontWeight="fw400"
-                    onClick={() =>
-                        dispatch(setConnectionOption(ConnectionOptions.CREATE))
-                    }
+                    onClick={(): void => {
+                        dispatch(setConnectionOption(ConnectionOptions.CREATE));
+                    }}
                 >
                     Create Account
                 </Button>
