@@ -1,10 +1,12 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
+import QRLOGO from 'assets/qr-seal.png';
 import type { AxiosResponse } from 'axios';
 import { useNotify } from 'hooks';
 import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
+import { QRCodeSVG } from 'qrcode.react';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,6 +32,7 @@ export function SelectAccount({
     const dispatch = useDispatch();
     const [selectOrCreate, setSelectOrCreate] = useState<boolean>(false);
     const [nickname, setNickname] = useState<string>('');
+    const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
     const collectionOption = useSelector(
         (state: RootState) => state.account.account,
@@ -49,22 +52,21 @@ export function SelectAccount({
     });
 
     const handleRegister = async (): Promise<void> => {
-        const registrationResponse = await register(nickname);
-        if (registrationResponse) {
-            dispatch(setRegistrationResponse(registrationResponse));
-            const publicKey: string = await getPublicKey(
-                registrationResponse?.credential.publicKey,
-            );
-            if (account) {
-                dispatch(setSelectedAccount(account?.options.length + 1));
+        try {
+            const registrationResponse = await register(nickname);
+            if (registrationResponse) {
+                dispatch(setRegistrationResponse(registrationResponse));
+                const publicKey: string = await getPublicKey(
+                    registrationResponse?.credential.publicKey,
+                );
+                setPublicKey(publicKey);
+                if (account) {
+                    dispatch(setSelectedAccount(account?.options.length + 1));
+                }
             }
-            postAccount({
-                name: account?.name,
-                authName: nickname,
-                authPublic: registrationResponse?.credential.publicKey,
-                authType: 1,
-                authHexPublic: publicKey,
-            } as NewOptionDto);
+        } catch (e) {
+            console.log(e);
+            notify.error(e as string);
         }
     };
 
@@ -85,36 +87,15 @@ export function SelectAccount({
                 <div className={styles.fingerprint}>
                     <img src={FINGERPRINT.src}></img>
                 </div>
-                <span className={styles.text}>Select Account</span>
+                <span className={styles.text}>
+                    {!selectOrCreate
+                        ? 'Select Account'
+                        : publicKey
+                        ? 'Scan QR Code'
+                        : 'Set Account Name'}
+                </span>
             </div>
-            {selectOrCreate ? (
-                <div className={styles.create}>
-                    <div className={styles.nickname}>
-                        <Input
-                            placeholder="Nickname"
-                            height="40px"
-                            value={nickname}
-                            onChange={(e): void => {
-                                setNickname(e.target.value);
-                            }}
-                        />
-                    </div>
-                    <div className={styles.button}>
-                        <Button
-                            disabled={nickname === ''}
-                            width="120px"
-                            height="40px"
-                            color="purple"
-                            onClick={async (): Promise<void> => {
-                                if (nickname === '') return;
-                                await handleRegister();
-                            }}
-                        >
-                            Register
-                        </Button>
-                    </div>
-                </div>
-            ) : (
+            {!selectOrCreate ? (
                 <div className={styles.accounts}>
                     {account &&
                         account.options.map((option: Option, i: number) => {
@@ -153,6 +134,48 @@ export function SelectAccount({
                                 </Button>
                             </div>
                         )}
+                </div>
+            ) : !publicKey ? (
+                <div className={styles.create}>
+                    <div className={styles.nickname}>
+                        <Input
+                            placeholder="Nickname"
+                            height="40px"
+                            value={nickname}
+                            onChange={(e): void => {
+                                setNickname(e.target.value);
+                            }}
+                        />
+                    </div>
+                    <div className={styles.button}>
+                        <Button
+                            disabled={nickname === ''}
+                            width="120px"
+                            height="40px"
+                            color="purple"
+                            onClick={async (): Promise<void> => {
+                                if (nickname === '') return;
+                                await handleRegister();
+                            }}
+                        >
+                            Register
+                        </Button>
+                    </div>
+                </div>
+            ) : (
+                <div className={styles.qrCode}>
+                    <QRCodeSVG
+                        value={publicKey}
+                        size={250}
+                        imageSettings={{
+                            src: QRLOGO.src,
+                            x: undefined,
+                            y: undefined,
+                            height: 42,
+                            width: 42,
+                            excavate: true,
+                        }}
+                    />
                 </div>
             )}
         </div>
