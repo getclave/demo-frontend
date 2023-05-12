@@ -18,9 +18,6 @@ export function InfoModal({
     modalController: ModalController;
     info: string;
 }): JSX.Element {
-    const dispatch = useDispatch();
-    const account = useSelector((state: RootState) => state.account.account);
-
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
             <div className={styles.message}>{MESSAGES[info]}</div>

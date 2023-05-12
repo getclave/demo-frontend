@@ -1,6 +1,5 @@
 export { InfoModal } from 'components/InfoModal/InfoModal';
 export { CreateAccount } from './LoginModal/CreateAccount/CreateAccount';
-export { ConnectModal } from './LoginModal/ConnectModal/ConnectModal';
 export { LoginModal } from './LoginModal/LoginModal';
 export { MintButton } from './MintButton/MintButton';
 export { Intro } from './Intro/Intro';

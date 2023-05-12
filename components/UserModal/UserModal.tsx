@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { BsImages } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
 import { VscDebugDisconnect } from 'react-icons/vsc';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { Modal } from 'ui';
 import { parseAddress } from 'utils/parseAddress';
@@ -17,7 +17,6 @@ export function UserModal({
 }: {
     modalController: ModalController;
 }): JSX.Element {
-    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
     const [copy, setCopy] = useState<string>('Copy Address');
     const { resetAllStore } = useResetAllStore();

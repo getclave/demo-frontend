@@ -1,8 +1,6 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
-import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
 import QRLOGO from 'assets/qr-seal.png';
-import type { AxiosResponse } from 'axios';
 import { useNotify } from 'hooks';
 import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
@@ -10,12 +8,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiCreateNewOption } from 'restapi';
-import type { AccountV2, NewOptionDto, Option } from 'restapi/types';
+import type { Option } from 'restapi/types';
 import { Authenticator } from 'restapi/types';
 import type { RootState } from 'store';
 import {
-    setAccount,
     setRegistrationResponse,
     setSelectedAccount,
 } from 'store/slicers/account';
@@ -37,19 +33,6 @@ export function SelectAccount({
     const collectionOption = useSelector(
         (state: RootState) => state.account.account,
     );
-
-    const { mutate: postAccount } = useMutation({
-        mutationFn: async (
-            params: NewOptionDto,
-        ): Promise<AxiosResponse<AccountV2>> => apiCreateNewOption(params),
-        onError: () => {
-            notify.error('Account could not be created!');
-        },
-        onSuccess: (data) => {
-            notify.success(`Account added successfully <3`);
-            dispatch(setAccount(data.data));
-        },
-    });
 
     const handleRegister = async (): Promise<void> => {
         try {
