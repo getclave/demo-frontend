@@ -11,8 +11,8 @@ const EXTRA_CONFIG = {
 };
 
 export const CONFIG: BaseConfig<ExtraConfig> = {
-    APP: 'SealDemoFrontend', // ! Do not use names with space, only use valid variable names !
-    APP_DESCRIPTION: 'SealDemoFrontend',
+    APP: 'ClaveKit', // ! Do not use names with space, only use valid variable names !
+    APP_DESCRIPTION: 'ClaveKit',
     APP_LOGO: '',
     APP_LOGO_DARK: '',
     APP_LOGO_SM: '',

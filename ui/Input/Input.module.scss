@@ -12,16 +12,25 @@
     height: 100%;
     border: none;
     border-radius: 8px;
-    background-color: #15153e;
     outline: none;
-    border: 1px solid #070723;
-    color: #b0adad;
     padding: 12px;
     font-size: 16px;
 
     @media (max-width: 540px) {
         font-size: 14px;
     }
+}
+
+.dark {
+    background-color: #15153e;
+    border: 1px solid #070723;
+    color: #b0adad;
+}
+
+.light {
+    background-color: #ffffff;
+    border: 1px solid #cfcfcf;
+    color: #545454;
 }
 
 .hideRightBorder {

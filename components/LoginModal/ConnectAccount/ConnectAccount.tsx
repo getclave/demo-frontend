@@ -46,6 +46,7 @@ export function ConnectAccount(): JSX.Element {
             </div>
             <div className={styles.nickname}>
                 <Input
+                    color="dark"
                     placeholder="Username"
                     height="40px"
                     regularMessage={errorMessage}

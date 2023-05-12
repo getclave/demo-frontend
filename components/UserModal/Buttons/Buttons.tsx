@@ -34,8 +34,7 @@ export function Buttons({
                 className={styles.button}
                 onClick={(): void => {
                     if (!account) return;
-                    navigator.clipboard.writeText(account?.address);
-                    setCopy('Copied');
+                    setPage('transfer');
                 }}
             >
                 <BiTransfer size={16} />

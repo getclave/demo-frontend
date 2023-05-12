@@ -122,8 +122,9 @@ export function SelectAccount({
                 <div className={styles.create}>
                     <div className={styles.nickname}>
                         <Input
-                            placeholder="Nickname"
+                            placeholder="Authenticator Name"
                             height="40px"
+                            color="dark"
                             value={nickname}
                             onChange={(e): void => {
                                 setNickname(e.target.value);
@@ -148,7 +149,10 @@ export function SelectAccount({
             ) : (
                 <div className={styles.qrCode}>
                     <QRCodeSVG
-                        value={publicKey}
+                        value={JSON.stringify({
+                            publicKey: publicKey,
+                            authName: nickname,
+                        })}
                         size={250}
                         imageSettings={{
                             src: QRLOGO.src,

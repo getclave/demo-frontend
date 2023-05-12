@@ -163,6 +163,7 @@ export function CreateAccount({
             </div>
             <div className={styles.nickname}>
                 <Input
+                    color="dark"
                     placeholder="Username"
                     height="40px"
                     error={errorMessage}

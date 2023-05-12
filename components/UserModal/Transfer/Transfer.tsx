@@ -1,12 +1,9 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { useResetAllStore } from 'hooks/useResetStore';
 import { useEffect, useState } from 'react';
-import { BiTransfer } from 'react-icons/bi';
-import { BsImages } from 'react-icons/bs';
-import { FiCopy } from 'react-icons/fi';
-import { VscDebugDisconnect } from 'react-icons/vsc';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { Input } from 'ui';
 
 import styles from './Transfer.module.scss';
 
@@ -30,45 +27,23 @@ export function Transfer({
 
     return (
         <div className={styles.wrapper}>
-            <div
-                className={styles.button}
-                onClick={(): void => {
-                    if (!account) return;
-                    navigator.clipboard.writeText(account?.address);
-                    setCopy('Copied');
-                }}
-            >
-                <BiTransfer size={16} />
-                <div className={styles.text}>Transfer</div>
+            <div className={styles.input}>
+                <div> Recipient Address</div>
+                <Input
+                    // rightEl={<div>Hello</div>}
+                    placeholder="Recipient Address"
+                    height="35px"
+                    color="light"
+                ></Input>
             </div>
-            <a
-                className={styles.button}
-                href={`https://testnets.opensea.io/${account?.address}`}
-                target="_blank"
-            >
-                <BsImages size={16} />
-                <div className={styles.text}>My NFTs</div>
-            </a>
-            <div
-                className={styles.button}
-                onClick={(): void => {
-                    if (!account) return;
-                    navigator.clipboard.writeText(account?.address);
-                    setCopy('Copied');
-                }}
-            >
-                <FiCopy size={16} />
-                <div className={styles.text}>{copy}</div>
-            </div>
-            <div
-                className={styles.button}
-                onClick={(): void => {
-                    resetAllStore();
-                    modalController.close();
-                }}
-            >
-                <VscDebugDisconnect size={16} />
-                <div className={styles.text}>Disconnect</div>
+            <div className={styles.input}>
+                <div>Amount</div>
+                <Input
+                    // rightEl={<div>Hello</div>}
+                    placeholder="Amount"
+                    height="35px"
+                    color="light"
+                ></Input>
             </div>
         </div>
     );
