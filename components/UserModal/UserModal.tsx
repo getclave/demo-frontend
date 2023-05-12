@@ -42,9 +42,9 @@ export function UserModal({
                 {ethers.utils.formatEther(balance)} ETH
             </div>
             {page === 'buttons' ? (
-                <Buttons modalController={modalController} />
+                <Buttons modalController={modalController} setPage={setPage} />
             ) : (
-                <Transfer modalController={modalController} />
+                <Transfer modalController={modalController} setPage={setPage} />
             )}
         </Modal>
     );

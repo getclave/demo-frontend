@@ -12,8 +12,10 @@ import styles from './Buttons.module.scss';
 
 export function Buttons({
     modalController,
+    setPage,
 }: {
     modalController: ModalController;
+    setPage: (page: 'buttons' | 'transfer') => void;
 }): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
     const [copy, setCopy] = useState<string>('Copy Address');

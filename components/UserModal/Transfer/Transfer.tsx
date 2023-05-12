@@ -8,12 +8,14 @@ import { VscDebugDisconnect } from 'react-icons/vsc';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 
-import styles from './Buttons.module.scss';
+import styles from './Transfer.module.scss';
 
 export function Transfer({
     modalController,
+    setPage,
 }: {
     modalController: ModalController;
+    setPage: (page: 'buttons' | 'transfer') => void;
 }): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
     const [copy, setCopy] = useState<string>('Copy Address');
