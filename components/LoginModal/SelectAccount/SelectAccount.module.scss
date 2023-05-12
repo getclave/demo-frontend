@@ -1,7 +1,21 @@
 .wrapper {
+    position: relative;
 
     .back {
-        display: none;
+        position: absolute;
+        top: -25px;
+        background-color: #1a1a46;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #0f0f33;
+        }
     }
 
     .title {

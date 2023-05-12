@@ -1,5 +1,5 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
-import { useResetAllStore } from 'hooks/useResetStore';
+import { TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
@@ -15,8 +15,9 @@ export function Transfer({
     setPage: (page: 'buttons' | 'transfer') => void;
 }): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
+    const [recipient, setRecipient] = useState<string>('');
+    const [amount, setAmount] = useState<string>('');
     const [copy, setCopy] = useState<string>('Copy Address');
-    const { resetAllStore } = useResetAllStore();
 
     useEffect(() => {
         if (copy === 'Copy Address') return;
@@ -28,22 +29,32 @@ export function Transfer({
     return (
         <div className={styles.wrapper}>
             <div className={styles.input}>
-                <div> Recipient Address</div>
-                <Input
-                    // rightEl={<div>Hello</div>}
-                    placeholder="Recipient Address"
-                    height="35px"
-                    color="light"
-                ></Input>
+                <TextField
+                    id="outlined-basic"
+                    label="Recipient Address"
+                    variant="outlined"
+                    color="secondary"
+                    className={styles.inputField}
+                    size="small"
+                    value={recipient}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setRecipient(event.target.value);
+                    }}
+                />
             </div>
             <div className={styles.input}>
-                <div>Amount</div>
-                <Input
-                    // rightEl={<div>Hello</div>}
-                    placeholder="Amount"
-                    height="35px"
-                    color="light"
-                ></Input>
+                <TextField
+                    id="outlined-basic"
+                    label="Amount"
+                    variant="outlined"
+                    color="secondary"
+                    className={styles.inputField}
+                    size="small"
+                    value={amount}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setAmount(event.target.value);
+                    }}
+                />
             </div>
         </div>
     );

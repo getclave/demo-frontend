@@ -2,7 +2,8 @@ import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
 import { CreateAccount, SelectAccount } from 'components';
 import { ConnectAccount } from 'components';
-import { useEffect } from 'react';
+import { set } from 'cypress/types/lodash';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { setConnectionOption } from 'store/slicers/connection';
@@ -22,11 +23,13 @@ export function LoginModal({
 }): JSX.Element {
     const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
+    const [accountName, setAccountName] = useState<string>('');
     const connectionOption = useSelector(
         (state: RootState) => state.connection.connectionOption,
     );
 
     useEffect(() => {
+        setAccountName('');
         if (loginModal.isOpen === true) return;
         dispatch(setConnectionOption(ConnectionOptions.CONNECT));
     }, [loginModal.isOpen]);
@@ -41,6 +44,12 @@ export function LoginModal({
         }
     }, [account]);
 
+    useEffect(() => {
+        if (connectionOption === ConnectionOptions.SELECT) {
+            setAccountName('');
+        }
+    }, [connectionOption]);
+
     return (
         <Modal className={styles.wrapper} modalController={loginModal}>
             <div className={styles.header}>
@@ -50,11 +59,19 @@ export function LoginModal({
                 <span className={styles.text}>Clave Kit</span>
             </div>
             {connectionOption === ConnectionOptions.CONNECT ? (
-                <ConnectAccount />
+                <ConnectAccount
+                    accountName={accountName}
+                    setAccountName={setAccountName}
+                />
             ) : connectionOption === ConnectionOptions.SELECT ? (
                 <SelectAccount modalController={loginModal} />
             ) : (
-                <CreateAccount infoModal={infoModal} setInfo={setInfoMessage} />
+                <CreateAccount
+                    infoModal={infoModal}
+                    setInfo={setInfoMessage}
+                    accountName={accountName}
+                    setAccountName={setAccountName}
+                />
             )}
         </Modal>
     );

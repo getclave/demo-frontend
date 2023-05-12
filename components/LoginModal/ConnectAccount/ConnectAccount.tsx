@@ -11,11 +11,16 @@ import { Button, Input } from 'ui';
 
 import styles from './ConnectAccount.module.scss';
 
-export function ConnectAccount(): JSX.Element {
+export function ConnectAccount({
+    accountName,
+    setAccountName,
+}: {
+    accountName: string;
+    setAccountName: (accountName: string) => void;
+}): JSX.Element {
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [nickname, setNickname] = useState<string>('');
-    const debounced = useDebounce(nickname, 500);
+    const debounced = useDebounce(accountName, 500);
     const [disabled, setDisabled] = useState<boolean>(true);
     const { data, isError, error } = useGetAccountQueryV2(debounced);
     const connectionOption = useSelector(
@@ -23,17 +28,19 @@ export function ConnectAccount(): JSX.Element {
     );
 
     useEffect(() => {
-        if (isError && nickname !== '') {
+        if (isError && accountName !== '') {
             setErrorMessage(error?.response?.data.message || '');
             setDisabled(true);
-        } else if (nickname !== '' && !isError) {
+        } else if (accountName !== '' && !isError) {
             setDisabled(false);
         }
     }, [error]);
 
     useEffect(() => {
         setErrorMessage('');
-        setNickname('');
+        if (connectionOption === ConnectionOptions.SELECT) {
+            setAccountName('');
+        }
     }, [connectionOption]);
 
     return (
@@ -50,14 +57,14 @@ export function ConnectAccount(): JSX.Element {
                     placeholder="Username"
                     height="40px"
                     regularMessage={errorMessage}
-                    value={nickname}
+                    value={accountName}
                     onChange={(e): void => {
-                        setNickname(e.target.value);
+                        setAccountName(e.target.value);
                         setErrorMessage('');
                         setDisabled(true);
                     }}
                     onKeyPress={(e): void => {
-                        if (nickname === '') return;
+                        if (accountName === '') return;
                         if (
                             e.key === 'enter' ||
                             e.key === 'Enter' ||
@@ -78,7 +85,7 @@ export function ConnectAccount(): JSX.Element {
                     color="purple"
                     // loading={isLoading}
                     onClick={(): void => {
-                        if (data && nickname !== '') {
+                        if (data && accountName !== '') {
                             dispatch(setAccount(data?.data));
                         }
                     }}
@@ -95,18 +102,6 @@ export function ConnectAccount(): JSX.Element {
                 >
                     Need a account?
                 </div>
-                {/* <Button
-                    width="145px"
-                    height="30px"
-                    color="purple"
-                    fontSize="fs12"
-                    fontWeight="fw400"
-                    onClick={(): void => {
-                        dispatch(setConnectionOption(ConnectionOptions.CREATE));
-                    }}
-                >
-                    Need a account?
-                </Button> */}
             </div>
         </div>
     );

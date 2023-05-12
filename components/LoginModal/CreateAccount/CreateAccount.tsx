@@ -10,6 +10,7 @@ import { getInitChallange, sendInitUserOp } from 'module/webauthn';
 import { encodeChallenge, getPublicKey } from 'module/webauthnUtils';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
+import { browserName } from 'react-device-detect';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiCreateAccountV2 } from 'restapi';
@@ -30,21 +31,23 @@ import styles from './CreateAccount.module.scss';
 export function CreateAccount({
     infoModal,
     setInfo,
+    accountName,
+    setAccountName,
 }: {
     infoModal: ModalController;
     setInfo: (value: string) => void;
+    accountName: string;
+    setAccountName: (accountName: string) => void;
 }): JSX.Element {
     const notify = useNotify();
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [nickname, setNickname] = useState<string>('');
-    const [username, setUsername] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const connectionOption = useSelector(
         (state: RootState) => state.connection.connectionOption,
     );
 
-    const debounced = useDebounce(nickname, 500);
+    const debounced = useDebounce(accountName, 500);
     const { data, isLoading } = useGetAccountQueryV2(debounced);
 
     const { mutate: postAccount } = useMutation({
@@ -66,12 +69,12 @@ export function CreateAccount({
     });
 
     const handleRegister = async (): Promise<void> => {
-        if (nickname === '') return;
+        if (accountName === '') return;
         if (errorMessage !== '') return;
         try {
             setInfo('CREATEREGISTER');
             infoModal.open();
-            const registrationResponse = await register(nickname);
+            const registrationResponse = await register(accountName);
             if (registrationResponse) {
                 setInfo('CREATEAUTH');
                 setLoading(true);
@@ -111,9 +114,11 @@ export function CreateAccount({
                         setLoading(false);
                         dispatch(setDeployedContractAddress(create2Address));
                         postAccount({
-                            name: nickname,
+                            name: accountName,
                             address: create2Address,
-                            authName: 'desktop 1',
+                            authName: browserName
+                                ? (browserName as string)
+                                : 'desktop',
                             authPublic: publicKey,
                             authType: 1,
                         } as CreateAccountDto);
@@ -134,14 +139,10 @@ export function CreateAccount({
 
     useEffect(() => {
         setErrorMessage('');
-        setNickname('');
-        setUsername(null);
     }, [connectionOption]);
 
     useEffect(() => {
-        setUsername(null);
         setLoading(false);
-        setNickname('');
         setErrorMessage('');
     }, []);
 
@@ -167,9 +168,9 @@ export function CreateAccount({
                     placeholder="Username"
                     height="40px"
                     error={errorMessage}
-                    value={nickname}
+                    value={accountName}
                     onChange={(e): void => {
-                        setNickname(e.target.value);
+                        setAccountName(e.target.value);
                         setErrorMessage('');
                     }}
                     onKeyPress={async (e): Promise<void> => {
@@ -186,12 +187,14 @@ export function CreateAccount({
             <div className={styles.button}>
                 <Button
                     disabled={
-                        nickname === '' || isLoading || errorMessage !== ''
+                        accountName === '' || isLoading || errorMessage !== ''
                     }
                     width="120px"
                     height="40px"
                     color="purple"
-                    loading={!username === null ? isLoading : false || loading}
+                    loading={
+                        !accountName === null ? isLoading : false || loading
+                    }
                     onClick={async (): Promise<void> => {
                         await handleRegister();
                     }}

@@ -2,6 +2,7 @@ import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
 import QRLOGO from 'assets/qr-seal.png';
 import { useNotify } from 'hooks';
+import { useResetAllStore } from 'hooks/useResetStore';
 import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
 import { QRCodeSVG } from 'qrcode.react';
@@ -15,6 +16,8 @@ import {
     setRegistrationResponse,
     setSelectedAccount,
 } from 'store/slicers/account';
+import { setConnectionOption } from 'store/slicers/connection';
+import { ConnectionOptions } from 'types/connection';
 import { Button, Input } from 'ui';
 
 import styles from './SelectAccount.module.scss';
@@ -30,6 +33,7 @@ export function SelectAccount({
     const [nickname, setNickname] = useState<string>('');
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
+    const { resetAllStore } = useResetAllStore();
     const collectionOption = useSelector(
         (state: RootState) => state.account.account,
     );
@@ -63,7 +67,18 @@ export function SelectAccount({
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.back}>
+            <div
+                className={styles.back}
+                onClick={(): void => {
+                    if (publicKey) {
+                        setPublicKey(null);
+                    } else if (selectOrCreate) {
+                        setSelectOrCreate(false);
+                    } else {
+                        resetAllStore();
+                    }
+                }}
+            >
                 <IoIosArrowBack size={20} />
             </div>
             <div className={styles.title}>
@@ -109,9 +124,9 @@ export function SelectAccount({
                                     color="purple"
                                     fontSize="fs14"
                                     fontWeight="fw400"
-                                    onClick={(): void =>
-                                        setSelectOrCreate(true)
-                                    }
+                                    onClick={(): void => {
+                                        setSelectOrCreate(true);
+                                    }}
                                 >
                                     Create New PublicKey
                                 </Button>
@@ -150,18 +165,19 @@ export function SelectAccount({
                 <div className={styles.qrCode}>
                     <QRCodeSVG
                         value={JSON.stringify({
+                            name: account?.name,
                             publicKey: publicKey,
                             authName: nickname,
                         })}
                         size={250}
-                        imageSettings={{
-                            src: QRLOGO.src,
-                            x: undefined,
-                            y: undefined,
-                            height: 42,
-                            width: 42,
-                            excavate: true,
-                        }}
+                        // imageSettings={{
+                        //     src: QRLOGO.src,
+                        //     x: undefined,
+                        //     y: undefined,
+                        //     height: 42,
+                        //     width: 42,
+                        //     excavate: true,
+                        // }}
                     />
                 </div>
             )}
