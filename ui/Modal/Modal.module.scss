@@ -16,11 +16,11 @@
 .body {
     position: relative;
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 20px;
     animation: mainWithSlide 0.2s linear;
 
     @media (max-width: 768px) {
-        padding: 1rem;
+        padding: 15px;
         max-width: 95vw !important;
     }
 }

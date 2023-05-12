@@ -12,9 +12,13 @@ import { Modal } from 'ui';
 import styles from './LoginModal.module.scss';
 
 export function LoginModal({
-    modalController,
+    loginModal,
+    infoModal,
+    setInfoMessage,
 }: {
-    modalController: ModalController;
+    loginModal: ModalController;
+    infoModal: ModalController;
+    setInfoMessage: (message: string) => void;
 }): JSX.Element {
     const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
@@ -23,9 +27,9 @@ export function LoginModal({
     );
 
     useEffect(() => {
-        if (modalController.isOpen === true) return;
+        if (loginModal.isOpen === true) return;
         dispatch(setConnectionOption(ConnectionOptions.CONNECT));
-    }, [modalController.isOpen]);
+    }, [loginModal.isOpen]);
 
     useEffect(() => {
         if (!account) {
@@ -33,12 +37,12 @@ export function LoginModal({
         } else if (connectionOption === ConnectionOptions.CONNECT) {
             dispatch(setConnectionOption(ConnectionOptions.SELECT));
         } else {
-            modalController.close();
+            loginModal.close();
         }
     }, [account]);
 
     return (
-        <Modal className={styles.wrapper} modalController={modalController}>
+        <Modal className={styles.wrapper} modalController={loginModal}>
             <div className={styles.header}>
                 <div className={styles.fingerprint}>
                     <img src={FINGERPRINT.src}></img>
@@ -48,9 +52,9 @@ export function LoginModal({
             {connectionOption === ConnectionOptions.CONNECT ? (
                 <ConnectAccount />
             ) : connectionOption === ConnectionOptions.SELECT ? (
-                <SelectAccount modalController={modalController} />
+                <SelectAccount modalController={loginModal} />
             ) : (
-                <CreateAccount />
+                <CreateAccount infoModal={infoModal} setInfo={setInfoMessage} />
             )}
         </Modal>
     );

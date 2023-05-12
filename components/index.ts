@@ -1,3 +1,4 @@
+export { InfoModal } from 'components/InfoModal/InfoModal';
 export { CreateAccount } from './LoginModal/CreateAccount/CreateAccount';
 export { ConnectModal } from './LoginModal/ConnectModal/ConnectModal';
 export { LoginModal } from './LoginModal/LoginModal';
@@ -8,3 +9,4 @@ export { NFT } from './NFT/NFT';
 export { ConnectAccount } from './LoginModal/ConnectAccount/ConnectAccount';
 export { User } from './User/User';
 export { SelectAccount } from './LoginModal/SelectAccount/SelectAccount';
+export { UserModal } from './UserModal/UserModal';

@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { useGetNonce } from 'hooks/useGetNonce';
 import { getInitCode } from 'module/webauthnHelper';
+import { looksLikeHex } from 'utils/looksLikeHex';
 
 export type UserOperationWithSignature = {
     sender: string;
@@ -133,6 +134,24 @@ export async function getCoordinates(
     const pubkeyUintArray = [
         ethers.BigNumber.from(bufferToHex(bufferFromBase64(x as string))),
         ethers.BigNumber.from(bufferToHex(bufferFromBase64(y as string))),
+    ];
+
+    return pubkeyUintArray;
+}
+
+export function getCoordinatesFromHexPublicKey(
+    pubkey: string,
+): Array<ethers.BigNumber> {
+    if (pubkey.length !== 128) {
+        throw new Error('Invalid public key');
+    }
+
+    const x = pubkey.slice(0, 64);
+    const y = pubkey.slice(64, 128);
+
+    const pubkeyUintArray = [
+        ethers.BigNumber.from(looksLikeHex(x) as string),
+        ethers.BigNumber.from(looksLikeHex(y) as string),
     ];
 
     return pubkeyUintArray;

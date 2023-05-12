@@ -10,6 +10,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiCreateNewOption } from 'restapi';
 import type { AccountV2, NewOptionDto, Option } from 'restapi/types';
+import { Authenticator } from 'restapi/types';
 import type { RootState } from 'store';
 import {
     setAccount,
@@ -135,19 +136,23 @@ export function SelectAccount({
                                 </div>
                             );
                         })}
-
-                    <div className={styles.newAccount}>
-                        <Button
-                            width="195px"
-                            height="30px"
-                            color="purple"
-                            fontSize="fs14"
-                            fontWeight="fw400"
-                            onClick={(): void => setSelectOrCreate(true)}
-                        >
-                            Create New PublicKey
-                        </Button>
-                    </div>
+                    {account &&
+                        account.options[0].type === Authenticator.MOBILE && (
+                            <div className={styles.newAccount}>
+                                <Button
+                                    width="195px"
+                                    height="30px"
+                                    color="purple"
+                                    fontSize="fs14"
+                                    fontWeight="fw400"
+                                    onClick={(): void =>
+                                        setSelectOrCreate(true)
+                                    }
+                                >
+                                    Create New PublicKey
+                                </Button>
+                            </div>
+                        )}
                 </div>
             )}
         </div>

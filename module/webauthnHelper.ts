@@ -8,7 +8,7 @@ import { ethers } from 'ethers';
 import {
     bufferFromBase64,
     getClientChallengeOffset,
-    getCoordinates,
+    getCoordinatesFromHexPublicKey,
     getRS,
 } from 'module/webauthnUtils';
 import { looksLikeHex } from 'utils/looksLikeHex';
@@ -33,7 +33,7 @@ export const getSignatureVerifyParamEncoded = async (
     _authenticatorData: string,
     _clientData: string,
     _challenge: string,
-    _webauthnPublicKey: string,
+    _publicKey: string,
     _signatureBase64: string,
 ): Promise<string> => {
     const authenticatorData: Buffer = bufferFromBase64(_authenticatorData);
@@ -41,9 +41,8 @@ export const getSignatureVerifyParamEncoded = async (
     const clientChallengeDataOffset: number =
         getClientChallengeOffset(_clientData);
     const rs: Array<ethers.BigNumber> = getRS(_signatureBase64);
-    const coordinates: Array<ethers.BigNumber> = await getCoordinates(
-        _webauthnPublicKey,
-    );
+    const coordinates: Array<ethers.BigNumber> =
+        getCoordinatesFromHexPublicKey(_publicKey);
     const abiCoder: ethers.utils.AbiCoder = new ethers.utils.AbiCoder();
     const signature: string = abiCoder.encode(
         [

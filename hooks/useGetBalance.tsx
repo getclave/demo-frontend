@@ -3,11 +3,9 @@ import { ethers } from 'ethers';
 import { useDispatch } from 'react-redux';
 import { setBalance } from 'store/slicers/account';
 
-interface trial {
+export const useGetBalance = (): {
     getBalance: (_address: string) => Promise<number>;
-}
-
-export const useGetBalance = (): trial => {
+} => {
     const dispatch = useDispatch();
     const provider: ethers.providers.JsonRpcProvider =
         new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);

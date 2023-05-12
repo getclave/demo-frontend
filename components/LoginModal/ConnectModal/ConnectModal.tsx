@@ -99,7 +99,9 @@ export function ConnectModal(): JSX.Element {
                         </div>
                     </div>
                     <QRCodeSVG
-                        value={account as string}
+                        value={
+                            '2b043ef7149d8f4865170defd32a8cd57ca1a434dc093866bc5f439014e059cf9bed6eacd6938ecfdeb3fa0d6a516a2fab612d3d335987ca0ba0fbab13e31864'
+                        }
                         size={150}
                         imageSettings={{
                             src: QRLOGO.src,
@@ -162,7 +164,7 @@ export function ConnectModal(): JSX.Element {
                         </Button>
                     ) : (
                         <QRCodeSVG
-                            value={account as string}
+                            value={account?.address as string}
                             size={150}
                             imageSettings={{
                                 src: QRLOGO.src,

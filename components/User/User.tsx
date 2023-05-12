@@ -1,3 +1,4 @@
+import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import SEAL from 'assets/nft.png';
 import OPTIMISMLOGO from 'assets/optimism.png';
 import { ethers } from 'ethers';
@@ -9,7 +10,11 @@ import { parseAddress } from 'utils/parseAddress';
 
 import styles from './User.module.scss';
 
-export function User(): JSX.Element {
+export function User({
+    userModal,
+}: {
+    userModal: ModalController;
+}): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
     const balance = useSelector((state: RootState) => state.account.balance);
     const { getBalance } = useGetBalance();
@@ -27,7 +32,7 @@ export function User(): JSX.Element {
                 </div>
                 <div className={styles.text}>Optimism Goerli</div>
             </div>
-            <div className={styles.user}>
+            <div className={styles.user} onClick={(): void => userModal.open()}>
                 <div className={styles.balance}>
                     {ethers.utils.formatEther(balance)} ETH
                 </div>

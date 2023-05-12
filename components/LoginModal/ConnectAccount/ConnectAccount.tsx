@@ -56,6 +56,16 @@ export function ConnectAccount(): JSX.Element {
                         setNickname(e.target.value);
                         setErrorMessage('');
                     }}
+                    onKeyPress={(e): void => {
+                        if (nickname === '') return;
+                        if (
+                            e.key === 'enter' ||
+                            e.key === 'Enter' ||
+                            e.key === 'NumpadEnter'
+                        ) {
+                            setUsername(nickname);
+                        }
+                    }}
                 />
             </div>
             <div className={styles.button}>

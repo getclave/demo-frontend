@@ -1,0 +1,22 @@
+.wrapper {
+    width: 350px;
+    background-color: rgb(33, 28, 83);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    padding: 40px;
+    margin-top: 150px;
+
+    .message {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .toDo {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+}

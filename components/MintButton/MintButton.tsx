@@ -1,3 +1,4 @@
+import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { BYTECODES } from 'constants/bytecode';
 import { useNotify } from 'hooks';
 import {
@@ -14,7 +15,15 @@ import { Button } from 'ui';
 
 import styles from './MintButton.module.scss';
 
-export function MintButton({ open }: { open: () => void }): JSX.Element {
+export function MintButton({
+    open,
+    setInfoMessage,
+    infoModal,
+}: {
+    open: () => void;
+    setInfoMessage: (message: string) => void;
+    infoModal: ModalController;
+}): JSX.Element {
     const dispatch = useDispatch();
     const notify = useNotify();
     const account = useSelector((state: RootState) => state.account.account);
@@ -30,6 +39,8 @@ export function MintButton({ open }: { open: () => void }): JSX.Element {
         if (!account) return;
         try {
             setLoading(true);
+            setInfoMessage('MINTAUTH');
+            infoModal.open();
 
             const challange: string = await getChallange(
                 account?.address,
@@ -56,14 +67,19 @@ export function MintButton({ open }: { open: () => void }): JSX.Element {
             console.log(res, 'res');
             if (res) {
                 setLoading(false);
-                notify.success('Minted successfully <3');
+                infoModal.close();
+                notify.success(
+                    'Minted successfully, you can see your NFT in account bar',
+                );
             } else {
                 setLoading(false);
-                notify.error('something went wrong!');
+                infoModal.close();
+                notify.error('Something went wrong!');
             }
         } catch (e) {
             console.log(e);
             setLoading(false);
+            infoModal.close();
         }
     };
     return (

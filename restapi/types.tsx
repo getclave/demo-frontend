@@ -52,7 +52,6 @@ export type CreateAccountDto = {
     authName: string;
     authPublic: string;
     authType: number;
-    authHexPublic?: string;
 };
 
 export type NewOptionDto = {
@@ -60,7 +59,6 @@ export type NewOptionDto = {
     authName: string;
     authPublic: string;
     authType: number;
-    authHexPublic?: string;
 };
 
 export enum Authenticator {

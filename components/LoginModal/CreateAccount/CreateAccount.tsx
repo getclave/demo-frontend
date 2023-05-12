@@ -1,3 +1,4 @@
+import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
 import type { AxiosResponse } from 'axios';
@@ -25,7 +26,13 @@ import { Button, Input } from 'ui';
 
 import styles from './CreateAccount.module.scss';
 
-export function CreateAccount(): JSX.Element {
+export function CreateAccount({
+    infoModal,
+    setInfo,
+}: {
+    infoModal: ModalController;
+    setInfo: (value: string) => void;
+}): JSX.Element {
     const notify = useNotify();
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -45,59 +52,74 @@ export function CreateAccount(): JSX.Element {
         ): Promise<AxiosResponse<AccountV2>> => apiCreateAccountV2(params),
         onError: (e) => {
             setLoading(false);
+            infoModal.close();
             notify.error('Account could not be created!');
             console.log(e);
         },
         onSuccess: (data) => {
             setLoading(false);
+            infoModal.close();
             notify.success(`Account created successfully <3`);
             dispatch(setAccount(data.data));
         },
     });
 
     const handleRegister = async (): Promise<void> => {
-        const registrationResponse = await register(nickname);
-        if (registrationResponse) {
-            setLoading(true);
-            dispatch(setRegistrationResponse(registrationResponse));
-            const publicKey: string = await getPublicKey(
-                registrationResponse?.credential.publicKey,
-            );
-
-            const create2Address: string = await useGetCreate2Address(
-                publicKey,
-            );
-            console.log('create2Address', create2Address);
-            const challenge = await getInitChallange(create2Address, publicKey);
-            const encodedChallenge = encodeChallenge(challenge);
-            const authenticationResponse = await authenticate(
-                registrationResponse.credential.id,
-                encodedChallenge,
-            );
-            if (authenticationResponse) {
-                const res = await sendInitUserOp(
-                    challenge,
+        if (nickname === '') return;
+        if (errorMessage !== '') return;
+        try {
+            setInfo('CREATEREGISTER');
+            infoModal.open();
+            const registrationResponse = await register(nickname);
+            if (registrationResponse) {
+                setInfo('CREATEAUTH');
+                setLoading(true);
+                dispatch(setRegistrationResponse(registrationResponse));
+                const publicKey: string = await getPublicKey(
                     registrationResponse?.credential.publicKey,
-                    encodedChallenge,
-                    authenticationResponse.signature,
-                    authenticationResponse.authenticatorData,
-                    authenticationResponse.clientData,
-                    create2Address,
                 );
 
-                if (res) {
-                    setLoading(false);
-                    dispatch(setDeployedContractAddress(create2Address));
-                    postAccount({
-                        name: nickname,
-                        address: create2Address,
-                        authName: 'desktop 1',
-                        authPublic: registrationResponse.credential.publicKey,
-                        authType: 1,
-                        authHexPublic: publicKey,
-                    } as CreateAccountDto);
+                const create2Address: string = await useGetCreate2Address(
+                    publicKey,
+                );
+                console.log('create2Address', create2Address);
+                const challenge = await getInitChallange(
+                    create2Address,
+                    publicKey,
+                );
+                const encodedChallenge = encodeChallenge(challenge);
+                const authenticationResponse = await authenticate(
+                    registrationResponse.credential.id,
+                    encodedChallenge,
+                );
+                console.log('authenticationResponse', authenticationResponse);
+                if (authenticationResponse) {
+                    const res = await sendInitUserOp(
+                        challenge,
+                        publicKey,
+                        encodedChallenge,
+                        authenticationResponse.signature,
+                        authenticationResponse.authenticatorData,
+                        authenticationResponse.clientData,
+                        create2Address,
+                    );
+
+                    if (res) {
+                        setLoading(false);
+                        dispatch(setDeployedContractAddress(create2Address));
+                        postAccount({
+                            name: nickname,
+                            address: create2Address,
+                            authName: 'desktop 1',
+                            authPublic: publicKey,
+                            authType: 1,
+                        } as CreateAccountDto);
+                    }
                 }
             }
+        } catch (e) {
+            infoModal.close();
+            setLoading(false);
         }
     };
 
@@ -146,12 +168,20 @@ export function CreateAccount(): JSX.Element {
                         setNickname(e.target.value);
                         setErrorMessage('');
                     }}
+                    onKeyPress={async (e): Promise<void> => {
+                        if (
+                            e.key === 'enter' ||
+                            e.key === 'Enter' ||
+                            e.key === 'NumpadEnter'
+                        ) {
+                            await handleRegister();
+                        }
+                    }}
                 />
             </div>
             <div className={styles.button}>
                 <Button
                     disabled={
-                        // errorMessage !== ''
                         nickname === '' || isLoading || errorMessage !== ''
                     }
                     width="120px"
@@ -159,8 +189,6 @@ export function CreateAccount(): JSX.Element {
                     color="purple"
                     loading={!username === null ? isLoading : false || loading}
                     onClick={async (): Promise<void> => {
-                        if (nickname === '') return;
-                        if (errorMessage !== '') return;
                         await handleRegister();
                     }}
                 >
