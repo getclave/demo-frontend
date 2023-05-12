@@ -10,6 +10,7 @@ const MESSAGES: { [key: string]: string } = {
         'Create a new key pair with your fingerprint on your device',
     CREATEAUTH: 'Sign the transaction to create a new contract',
     MINTAUTH: 'Sign the transaction to mint NFT',
+    TXSENT: 'The transaction has been sent. Please wait for confirmation',
 };
 export function InfoModal({
     modalController,
@@ -21,9 +22,11 @@ export function InfoModal({
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
             <div className={styles.message}>{MESSAGES[info]}</div>
-            <div className={styles.toDo}>
-                Touch ID or etner your password to allow this.
-            </div>
+            {info !== 'TXSENT' && (
+                <div className={styles.toDo}>
+                    Touch ID or enter your password to allow this.
+                </div>
+            )}
             <div>
                 <Spinner size={20} />
             </div>

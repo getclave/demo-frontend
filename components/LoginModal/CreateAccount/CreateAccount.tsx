@@ -17,6 +17,7 @@ import type { AccountV2, CreateAccountDto } from 'restapi/types';
 import type { RootState } from 'store';
 import {
     setAccount,
+    setAuthenticationResponse,
     setDeployedContractAddress,
     setRegistrationResponse,
 } from 'store/slicers/account';
@@ -92,8 +93,10 @@ export function CreateAccount({
                     registrationResponse.credential.id,
                     encodedChallenge,
                 );
+                dispatch(setAuthenticationResponse(authenticationResponse));
                 console.log('authenticationResponse', authenticationResponse);
                 if (authenticationResponse) {
+                    setInfo('TXSENT');
                     const res = await sendInitUserOp(
                         challenge,
                         publicKey,

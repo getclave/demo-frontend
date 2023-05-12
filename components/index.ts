@@ -9,3 +9,4 @@ export { ConnectAccount } from './LoginModal/ConnectAccount/ConnectAccount';
 export { User } from './User/User';
 export { SelectAccount } from './LoginModal/SelectAccount/SelectAccount';
 export { UserModal } from './UserModal/UserModal';
+export { RemoveThis } from './RemoveThis/RemoveThis';

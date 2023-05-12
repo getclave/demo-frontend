@@ -53,6 +53,7 @@ export function MintButton({
                 encodedChallenge,
             );
 
+            setInfoMessage('TXSENT');
             dispatch(setAuthenticationResponse(authenticationResponse));
             const res = await sendUserOpToEntrypoint(
                 challange,
@@ -68,9 +69,7 @@ export function MintButton({
             if (res) {
                 setLoading(false);
                 infoModal.close();
-                notify.success(
-                    'Minted successfully, you can see your NFT in account bar',
-                );
+                notify.success('Minted successfully!');
             } else {
                 setLoading(false);
                 infoModal.close();
