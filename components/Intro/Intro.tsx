@@ -22,7 +22,6 @@ export function Intro(): JSX.Element {
     const loginModal = useModal();
     const infoModal = useModal();
     const userModal = useModal();
-    const removeThisModal = useModal();
     const [infoMessage, setInfoMessage] = useState<string>('CREATEREGISTER');
     const connectionOption = useSelector(
         (state: RootState) => state.connection.connectionOption,
@@ -32,12 +31,7 @@ export function Intro(): JSX.Element {
     const auth = useSelector(
         (state: RootState) => state.account.authenticationResponse,
     );
-    useEffect(() => {
-        if (account && auth) {
-            removeThisModal.open();
-            setTimeout(() => removeThisModal.close(), 5000);
-        }
-    }, [account]);
+
     return (
         <div className={styles.wrapper}>
             {account && <User userModal={userModal} />}
@@ -57,7 +51,6 @@ export function Intro(): JSX.Element {
             <img src={GALAXY.src} className={styles.galaxy}></img>
             <InfoModal modalController={infoModal} info={infoMessage} />
             <UserModal modalController={userModal} />
-            <RemoveThis modalController={removeThisModal} />
         </div>
     );
 }
