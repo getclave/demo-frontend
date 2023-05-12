@@ -1,6 +1,5 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import SEAL from 'assets/nft.png';
-import OPTIMISMLOGO from 'assets/optimism.png';
 import { ethers } from 'ethers';
 import { useGetBalance } from 'hooks/useGetBalance';
 import { useEffect } from 'react';
@@ -26,12 +25,6 @@ export function User({
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.network}>
-                <div className={styles.icon}>
-                    <img src={OPTIMISMLOGO.src} alt="network logo"></img>
-                </div>
-                <div className={styles.text}>Optimism Goerli</div>
-            </div>
             <div className={styles.user} onClick={(): void => userModal.open()}>
                 <div className={styles.balance}>
                     {ethers.utils.formatEther(balance)} ETH

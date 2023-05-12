@@ -30,6 +30,7 @@ export function useGetAccountQueryV2(
         {
             retry: false,
             enabled: name != null,
+            keepPreviousData: false,
         },
     );
 

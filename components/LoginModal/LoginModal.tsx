@@ -47,7 +47,7 @@ export function LoginModal({
                 <div className={styles.fingerprint}>
                     <img src={FINGERPRINT.src}></img>
                 </div>
-                <span className={styles.text}>Seal Kit</span>
+                <span className={styles.text}>Clave Kit</span>
             </div>
             {connectionOption === ConnectionOptions.CONNECT ? (
                 <ConnectAccount />

@@ -1,15 +1,14 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
+import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-import { BsImages } from 'react-icons/bs';
-import { FiCopy } from 'react-icons/fi';
-import { VscDebugDisconnect } from 'react-icons/vsc';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { Modal } from 'ui';
 import { parseAddress } from 'utils/parseAddress';
 
-import { useResetAllStore } from '../../hooks/useResetStore';
+import { Buttons } from './Buttons/Buttons';
+import { Transfer } from './Transfer/Transfer';
 import styles from './UserModal.module.scss';
 
 export function UserModal({
@@ -18,8 +17,9 @@ export function UserModal({
     modalController: ModalController;
 }): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
+    const balance = useSelector((state: RootState) => state.account.balance);
     const [copy, setCopy] = useState<string>('Copy Address');
-    const { resetAllStore } = useResetAllStore();
+    const [page, setPage] = useState<'buttons' | 'transfer'>('buttons');
 
     useEffect(() => {
         if (copy === 'Copy Address') return;
@@ -38,41 +38,14 @@ export function UserModal({
                     account?.address ? account.address : '0xCla...ve',
                 )}
             </div>
-            <div className={styles.balance}>12 ETH</div>
-
-            <div className={styles.nfts}></div>
-            <div className={styles.buttons}>
-                <div
-                    className={styles.button}
-                    onClick={(): void => {
-                        if (!account) return;
-                        navigator.clipboard.writeText(account?.address);
-                        setCopy('Copied');
-                    }}
-                >
-                    <FiCopy size={16} />
-                    <div className={styles.text}>{copy}</div>
-                </div>
-                <a
-                    className={styles.button}
-                    href={`https://testnets.opensea.io/${account?.address}`}
-                    target="_blank"
-                >
-                    <BsImages size={16} />
-                    <div className={styles.text}>My NFTs</div>
-                </a>
-
-                <div
-                    className={styles.button}
-                    onClick={(): void => {
-                        resetAllStore();
-                        modalController.close();
-                    }}
-                >
-                    <VscDebugDisconnect size={16} />
-                    <div className={styles.text}>Disconnect</div>
-                </div>
+            <div className={styles.balance}>
+                {ethers.utils.formatEther(balance)} ETH
             </div>
+            {page === 'buttons' ? (
+                <Buttons modalController={modalController} />
+            ) : (
+                <Transfer modalController={modalController} />
+            )}
         </Modal>
     );
 }

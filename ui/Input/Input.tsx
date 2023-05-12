@@ -102,6 +102,8 @@ const Input = ({
                         marginTop: '8px',
                         position: absoluteError ? 'absolute' : 'relative',
                         bottom: absoluteError ? '-48px' : undefined,
+                        fontSize: '14px',
+                        opacity: 0.8,
                     }}
                     label={'regular'}
                     message={regularMessage}

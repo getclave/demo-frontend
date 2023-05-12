@@ -34,7 +34,9 @@ export function Intro(): JSX.Element {
 
     return (
         <div className={styles.wrapper}>
-            {account && <User userModal={userModal} />}
+            {account && connectionOption !== ConnectionOptions.SELECT && (
+                <User userModal={userModal} />
+            )}
             <LoginModal
                 loginModal={loginModal}
                 infoModal={infoModal}

@@ -1,5 +1,4 @@
 .wrapper {
-    min-width: 360px;
     height: 40px;
     position: absolute;
     top: 40px;
@@ -8,32 +7,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    .network {
-        background-color: white;
-        width: 153px;
-        height: 100%;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0px 5px;
-        margin-right: 5px;
-
-        .icon {
-            display: flex;
-            align-items: center;
-
-            img {
-                width: 30px;
-                border-radius: 50%;
-            }
-        }
-
-        .text {
-            font-size: 14px;
-        }
-    }
 
     .user {
         background-color: white;

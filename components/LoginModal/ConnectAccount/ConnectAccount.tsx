@@ -1,4 +1,5 @@
 import FINGERPRINT from 'assets/fingerprint.png';
+import { useDebounce } from 'hooks';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,28 +15,25 @@ export function ConnectAccount(): JSX.Element {
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [nickname, setNickname] = useState<string>('');
-    const [username, setUsername] = useState<string | null>(null);
-    const { data, isError, error, isLoading } = useGetAccountQueryV2(username);
+    const debounced = useDebounce(nickname, 500);
+    const [disabled, setDisabled] = useState<boolean>(true);
+    const { data, isError, error } = useGetAccountQueryV2(debounced);
     const connectionOption = useSelector(
         (state: RootState) => state.connection.connectionOption,
     );
 
     useEffect(() => {
-        if (isError) {
+        if (isError && nickname !== '') {
             setErrorMessage(error?.response?.data.message || '');
+            setDisabled(true);
+        } else if (nickname !== '' && !isError) {
+            setDisabled(false);
         }
-    }, [isError]);
-
-    useEffect(() => {
-        if (data) {
-            dispatch(setAccount(data?.data));
-        }
-    }, [data]);
+    }, [error]);
 
     useEffect(() => {
         setErrorMessage('');
         setNickname('');
-        setUsername(null);
     }, [connectionOption]);
 
     return (
@@ -55,6 +53,7 @@ export function ConnectAccount(): JSX.Element {
                     onChange={(e): void => {
                         setNickname(e.target.value);
                         setErrorMessage('');
+                        setDisabled(true);
                     }}
                     onKeyPress={(e): void => {
                         if (nickname === '') return;
@@ -63,29 +62,39 @@ export function ConnectAccount(): JSX.Element {
                             e.key === 'Enter' ||
                             e.key === 'NumpadEnter'
                         ) {
-                            setUsername(nickname);
+                            if (data && !disabled) {
+                                dispatch(setAccount(data?.data));
+                            }
                         }
                     }}
                 />
             </div>
             <div className={styles.button}>
                 <Button
-                    disabled={errorMessage !== ''}
+                    disabled={disabled}
                     width="120px"
                     height="40px"
                     color="purple"
-                    loading={!username === null ? isLoading : false}
+                    // loading={isLoading}
                     onClick={(): void => {
-                        if (nickname === '') return;
-                        setUsername(nickname);
+                        if (data && nickname !== '') {
+                            dispatch(setAccount(data?.data));
+                        }
                     }}
                 >
                     Connect
                 </Button>
             </div>
             <div className={styles.create}>
-                <div className={styles.text}>Need a account?</div>
-                <Button
+                <div
+                    className={styles.text}
+                    onClick={(): void => {
+                        dispatch(setConnectionOption(ConnectionOptions.CREATE));
+                    }}
+                >
+                    Need a account?
+                </div>
+                {/* <Button
                     width="145px"
                     height="30px"
                     color="purple"
@@ -95,8 +104,8 @@ export function ConnectAccount(): JSX.Element {
                         dispatch(setConnectionOption(ConnectionOptions.CREATE));
                     }}
                 >
-                    Create Account
-                </Button>
+                    Need a account?
+                </Button> */}
             </div>
         </div>
     );

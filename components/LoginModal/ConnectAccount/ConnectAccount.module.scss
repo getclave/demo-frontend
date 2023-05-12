@@ -41,8 +41,10 @@
         margin-bottom: 100px;
 
         .text {
-            margin-right: 10px;
+            // margin-right: 10px;
             font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
         }
     }
 }
