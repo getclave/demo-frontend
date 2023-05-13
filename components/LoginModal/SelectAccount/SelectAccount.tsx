@@ -132,8 +132,13 @@ export function SelectAccount({
                                     className={styles.account}
                                     key={i}
                                     onClick={(): void => {
-                                        dispatch(setSelectedAccount(i));
-                                        modalController.close();
+                                        if (
+                                            option.type ===
+                                            Authenticator.DESKTOP
+                                        ) {
+                                            dispatch(setSelectedAccount(i));
+                                            modalController.close();
+                                        }
                                     }}
                                 >
                                     <div className={styles.icon}>
