@@ -1,4 +1,4 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
+import type { ModalController } from 'hooks/useModal';
 
 export enum ConnectionOptions {
     CONNECT = 'connect',

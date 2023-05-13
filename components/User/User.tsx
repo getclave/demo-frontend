@@ -1,7 +1,7 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import SEAL from 'assets/nft.png';
 import { ethers } from 'ethers';
 import { useGetBalance } from 'hooks/useGetBalance';
+import type { ModalController } from 'hooks/useModal';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';

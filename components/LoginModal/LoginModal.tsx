@@ -1,8 +1,7 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
 import { CreateAccount, SelectAccount } from 'components';
 import { ConnectAccount } from 'components';
-import { set } from 'cypress/types/lodash';
+import type { ModalController } from 'hooks/useModal';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';

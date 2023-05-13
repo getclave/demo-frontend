@@ -1,3 +1,4 @@
+export { Layout } from 'components/Layout/Layout';
 export { InfoModal } from 'components/InfoModal/InfoModal';
 export { CreateAccount } from './LoginModal/CreateAccount/CreateAccount';
 export { LoginModal } from './LoginModal/LoginModal';

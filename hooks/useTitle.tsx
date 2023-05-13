@@ -5,7 +5,7 @@ export const useTitle = (title: string): void => {
     useEffect(() => {
         document.title = `${CONFIG.APP} | ${title}`;
 
-        return () => {
+        return (): void => {
             document.title = `${CONFIG.APP}`;
         };
     }, [title]);

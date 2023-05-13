@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 import { MS_IN_SEC } from 'constants/numbers';
 import { QUERIES } from 'constants/queries';
 import { useEffect } from 'react';

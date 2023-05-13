@@ -1,4 +1,4 @@
-import { Transaction, ethers } from 'ethers';
+import type { Transaction, ethers } from 'ethers';
 import { useNotify } from 'hooks/useNotify';
 import {
     authenticate,

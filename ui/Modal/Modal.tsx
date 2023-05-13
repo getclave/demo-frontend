@@ -1,9 +1,9 @@
-import { useOnClickOutside } from '@ethylene/ui-hooks';
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
-import { clsnm } from '@ethylene/utils';
+import type { ModalController } from 'hooks/useModal';
+import { useOnClickOutside } from 'hooks/useOnClickOutside';
 import { Fragment, useEffect } from 'react';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { clsnm } from 'utils/clsnm';
 
 import styles from './Modal.module.scss';
 

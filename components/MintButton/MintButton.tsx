@@ -1,6 +1,6 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { BYTECODES } from 'constants/bytecode';
 import { useNotify } from 'hooks';
+import type { ModalController } from 'hooks/useModal';
 import {
     authenticate,
     getChallange,

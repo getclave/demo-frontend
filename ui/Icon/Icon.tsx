@@ -1,5 +1,5 @@
-import { clsnm } from '@ethylene/utils';
 import type { ComponentPropsWithoutRef } from 'react';
+import { clsnm } from 'utils/clsnm';
 
 import styles from './Icon.module.scss';
 

@@ -1,6 +1,6 @@
-import { clsnm } from '@ethylene/utils';
 import type { ComponentPropsWithoutRef } from 'react';
 import { Spinner } from 'ui/Spinner/Spinner';
+import { clsnm } from 'utils/clsnm';
 
 import styles from './Button.module.scss';
 

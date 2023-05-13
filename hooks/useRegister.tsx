@@ -1,5 +1,3 @@
-import { CONFIG } from 'config';
-import { ContractFactory, ethers } from 'ethers';
 import type { Contract, ContractInterface } from 'ethers';
 import { useDeployContract } from 'hooks/useDeployContract';
 import { register } from 'module/webauthn';
@@ -10,7 +8,13 @@ import {
     setRegistrationResponse,
 } from 'store/slicers/account';
 
-export const useRegister = async () => {
+export const useRegister = (): {
+    registerAndDeploy: (
+        _username: string,
+        _ABI: ContractInterface,
+        _bytecode: string,
+    ) => Promise<void>;
+} => {
     const dispatch = useDispatch();
 
     const registerAndDeploy = async (

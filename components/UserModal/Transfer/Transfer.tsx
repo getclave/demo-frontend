@@ -1,6 +1,6 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { TextField } from '@mui/material';
 import { ethers } from 'ethers';
+import type { ModalController } from 'hooks/useModal';
 import { useSetTransferTx } from 'hooks/useSetTransferTX';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';

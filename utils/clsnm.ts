@@ -1,7 +1,7 @@
 export function clsnm(
-    ...classes: (string | boolean | null | undefined)[]
+    ...classes: Array<string | boolean | null | undefined>
 ): string {
-    const mainClassArr: string[] = [];
+    const mainClassArr: Array<string> = [];
     const clsArray = [...classes];
 
     for (const cls of clsArray) {

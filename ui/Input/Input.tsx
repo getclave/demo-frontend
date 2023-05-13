@@ -1,6 +1,6 @@
-import { clsnm } from '@ethylene/utils';
 import type { ComponentPropsWithoutRef } from 'react';
 import { Alert } from 'ui';
+import { clsnm } from 'utils/clsnm';
 
 import styles from './Input.module.scss';
 

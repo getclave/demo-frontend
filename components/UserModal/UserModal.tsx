@@ -1,6 +1,6 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
 import { ethers } from 'ethers';
+import type { ModalController } from 'hooks/useModal';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';

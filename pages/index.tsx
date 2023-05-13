@@ -1,4 +1,4 @@
-import { Layout } from '@ethylene/components';
+import { Layout } from 'components';
 import { Intro } from 'components';
 import type { NextPage } from 'next';
 

@@ -1,4 +1,4 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
+import type { ModalController } from 'hooks/useModal';
 import { useResetAllStore } from 'hooks/useResetStore';
 import { useEffect, useState } from 'react';
 import { BiTransfer } from 'react-icons/bi';

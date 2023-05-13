@@ -1,4 +1,4 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
+import type { ModalController } from 'hooks/useModal';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { Modal, Spinner } from 'ui';

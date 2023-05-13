@@ -1,10 +1,10 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
 import type { AxiosResponse } from 'axios';
 import { useDebounce } from 'hooks';
 import { useNotify } from 'hooks';
 import { useGetCreate2Address } from 'hooks/useGetCreate2Address';
+import type { ModalController } from 'hooks/useModal';
 import { authenticate, register } from 'module/webauthn';
 import { getInitChallange, sendInitUserOp } from 'module/webauthn';
 import { encodeChallenge, getPublicKey } from 'module/webauthnUtils';

@@ -1,4 +1,3 @@
-import { useModal } from '@ethylene/ui-hooks';
 import BG from 'assets/bg.png';
 import GALAXY from 'assets/galaxy.png';
 import {
@@ -11,6 +10,7 @@ import {
     User,
     UserModal,
 } from 'components';
+import { useModal } from 'hooks/useModal';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';

@@ -1,6 +1,6 @@
-import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
 import { useNotify } from 'hooks';
+import type { ModalController } from 'hooks/useModal';
 import { useResetAllStore } from 'hooks/useResetStore';
 import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
@@ -15,6 +15,7 @@ import type { Option } from 'restapi/types';
 import { Authenticator } from 'restapi/types';
 import type { RootState } from 'store';
 import {
+    setAccount,
     setRegistrationResponse,
     setSelectedAccount,
 } from 'store/slicers/account';
@@ -50,6 +51,7 @@ export function SelectAccount({
                     setPreviousOptions(data.data.options);
                     for (let i = 0; i < data.data.options.length; i++) {
                         if (data.data.options[i]?.method_name === nickname) {
+                            dispatch(setAccount(data.data));
                             dispatch(setSelectedAccount(i));
                             modalController.close();
                         }
