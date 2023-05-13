@@ -49,30 +49,16 @@ export function SelectAccount({
             if (data) {
                 if (data.data.options.length > previousOptions.length) {
                     setPreviousOptions(data.data.options);
-                    for (let i = 0; i < data.data.options.length; i++) {
-                        if (
-                            data.data.options[i]?.method_name ===
-                            `${account?.name}-${browserName}-${
-                                previousOptions
-                                    ? previousOptions.length + 1
-                                    : '9'
-                            }`
-                        ) {
-                            dispatch(setAccount(data.data));
-                            dispatch(setSelectedAccount(i));
-                            modalController.close();
-                        }
-                    }
+
+                    dispatch(setAccount(data.data));
+                    dispatch(setSelectedAccount(data.data.options.length - 1));
+                    modalController.close();
                 }
             }
         }
     }, [data]);
 
     const { resetAllStore } = useResetAllStore();
-    const collectionOption = useSelector(
-        (state: RootState) => state.account.account,
-    );
-
     const handleRegister = async (): Promise<void> => {
         try {
             const registrationResponse = await register(

@@ -32,7 +32,7 @@ export function useGetAccountQueryV2(
             retry: false,
             enabled: name != null,
             keepPreviousData: false,
-            refetchInterval: interval ? 5000 : false,
+            refetchInterval: interval ? 2000 : false,
         },
     );
 

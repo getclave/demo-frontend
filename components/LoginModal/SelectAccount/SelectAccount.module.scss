@@ -40,6 +40,8 @@
     .accounts {
         margin-top: 10px;
         margin-bottom: 45px;
+        max-height: 300px;
+        overflow-y: auto;
 
         .account {
             display: flex;
@@ -59,7 +61,7 @@
             &.off {
                 &:hover {
                     background-color: #191945;
-                    cursor: none;
+                    cursor: not-allowed;
                 }
             }
 
