@@ -69,8 +69,8 @@ export function MintButton({
             console.log(res, 'res');
             if (res) {
                 setLoading(false);
-                infoModal.close();
                 notify.success('Minted successfully!');
+                infoModal.close();
             } else {
                 setLoading(false);
                 infoModal.close();

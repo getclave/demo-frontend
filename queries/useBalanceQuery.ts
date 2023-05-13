@@ -14,7 +14,7 @@ export const useBalanceQuery = (
             }),
         retry: true,
         refetchOnWindowFocus: true,
-        refetchInterval: 15000,
+        refetchInterval: 10000,
     });
 
     return { balance: data ?? BigNumber.from(0), refetch };

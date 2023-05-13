@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import { ethers } from 'ethers';
 import type { ModalController } from 'hooks/useModal';
 import { useSetTransferTx } from 'hooks/useSetTransferTX';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
@@ -13,9 +13,13 @@ import styles from './Transfer.module.scss';
 export function Transfer({
     modalController,
     setPage,
+    setInfoMessage,
+    infoModal,
 }: {
     modalController: ModalController;
     setPage: (page: 'buttons' | 'transfer') => void;
+    setInfoMessage: (message: string) => void;
+    infoModal: ModalController;
 }): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
     const balance = useSelector((state: RootState) => state.account.balance);
@@ -32,10 +36,19 @@ export function Transfer({
         ) {
             return;
         } else {
+            const reset = (): void => {
+                setRecipient('');
+                setAmount('');
+                setPage('buttons');
+                modalController.close();
+            };
             await transfer(
                 account?.address,
                 recipient,
                 ethers.utils.parseEther(amount),
+                reset,
+                setInfoMessage,
+                infoModal,
             );
         }
     };
@@ -82,9 +95,7 @@ export function Transfer({
                 />
             </div>
             <Button
-                // disabled={
-                //     accountName === '' || isLoading || errorMessage !== ''
-                // }
+                disabled={recipient === '' || amount === ''}
                 width="120px"
                 height="40px"
                 color="purple"

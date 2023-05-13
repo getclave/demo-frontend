@@ -6,12 +6,11 @@ import {
     LoginModal,
     MintButton,
     NFT,
-    RemoveThis,
     User,
     UserModal,
 } from 'components';
 import { useModal } from 'hooks/useModal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { ConnectionOptions } from 'types/connection';
@@ -28,9 +27,6 @@ export function Intro(): JSX.Element {
     );
 
     const account = useSelector((state: RootState) => state.account.account);
-    const auth = useSelector(
-        (state: RootState) => state.account.authenticationResponse,
-    );
 
     return (
         <div className={styles.wrapper}>
@@ -51,8 +47,12 @@ export function Intro(): JSX.Element {
             />
             <img src={BG.src} className={styles.bg}></img>
             <img src={GALAXY.src} className={styles.galaxy}></img>
+            <UserModal
+                modalController={userModal}
+                setInfoMessage={setInfoMessage}
+                infoModal={infoModal}
+            />
             <InfoModal modalController={infoModal} info={infoMessage} />
-            <UserModal modalController={userModal} />
         </div>
     );
 }

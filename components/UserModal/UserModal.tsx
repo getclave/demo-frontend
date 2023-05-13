@@ -13,11 +13,18 @@ import styles from './UserModal.module.scss';
 
 export function UserModal({
     modalController,
+    setInfoMessage,
+    infoModal,
 }: {
     modalController: ModalController;
+    setInfoMessage: (message: string) => void;
+    infoModal: ModalController;
 }): JSX.Element {
     const account = useSelector((state: RootState) => state.account.account);
     const balance = useSelector((state: RootState) => state.account.balance);
+    const selectedAccount = useSelector(
+        (state: RootState) => state.account.selectedAccount,
+    );
     const [copy, setCopy] = useState<string>('Copy Address');
     const [page, setPage] = useState<'buttons' | 'transfer'>('buttons');
 
@@ -30,6 +37,9 @@ export function UserModal({
 
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
+            <div className={styles.header}>
+                {account?.options[selectedAccount].method_name}
+            </div>
             <div className={styles.icon}>
                 <img src={FINGERPRINT.src} alt="seal"></img>
             </div>
@@ -44,7 +54,12 @@ export function UserModal({
             {page === 'buttons' ? (
                 <Buttons modalController={modalController} setPage={setPage} />
             ) : (
-                <Transfer modalController={modalController} setPage={setPage} />
+                <Transfer
+                    modalController={modalController}
+                    setPage={setPage}
+                    setInfoMessage={setInfoMessage}
+                    infoModal={infoModal}
+                />
             )}
         </Modal>
     );

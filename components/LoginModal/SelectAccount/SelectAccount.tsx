@@ -7,6 +7,7 @@ import { getPublicKey } from 'module/webauthnUtils';
 import { QRCodeSVG } from 'qrcode.react';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
+import { browserName } from 'react-device-detect';
 import { AiOutlineLaptop } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
 import { TbDeviceMobile } from 'react-icons/tb';
@@ -35,8 +36,8 @@ export function SelectAccount({
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
     const [previousOptions, setPreviousOptions] = useState<Array<Option>>([]);
-    const { data, error } = useGetAccountQueryV2(
-        account?.name ? account?.name : '',
+    const { data } = useGetAccountQueryV2(
+        account ? account?.name : '',
         !publicKey ? false : true,
     );
     useEffect(() => {
@@ -204,7 +205,11 @@ export function SelectAccount({
                         value={JSON.stringify({
                             name: account?.name,
                             publicKey: publicKey,
-                            authName: nickname,
+                            authName: `${account?.name}-${browserName}-${
+                                account?.options
+                                    ? account?.options.length + 1
+                                    : publicKey.slice(2, 4)
+                            }`,
                         })}
                         size={250}
                     />

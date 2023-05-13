@@ -1,12 +1,17 @@
 .wrapper {
     height: 40px;
     position: absolute;
-    top: 40px;
-    right: 8%;
+    top: 35px;
+    left: 80%;
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media(max-width: 768px) {
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
     .user {
         background-color: white;

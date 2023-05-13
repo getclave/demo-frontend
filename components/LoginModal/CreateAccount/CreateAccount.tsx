@@ -62,9 +62,12 @@ export function CreateAccount({
         },
         onSuccess: (data) => {
             setLoading(false);
-            infoModal.close();
             notify.success(`Account created successfully <3`);
             dispatch(setAccount(data.data));
+            setInfo('CREATEDWALLET');
+            setTimeout(() => {
+                infoModal.close();
+            }, 5000);
         },
     });
 
@@ -116,9 +119,7 @@ export function CreateAccount({
                         postAccount({
                             name: accountName,
                             address: create2Address,
-                            authName: browserName
-                                ? (browserName as string)
-                                : 'desktop',
+                            authName: `${accountName}-${browserName}-1`,
                             authPublic: publicKey,
                             authType: 1,
                         } as CreateAccountDto);
