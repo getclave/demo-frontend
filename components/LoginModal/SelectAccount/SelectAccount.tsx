@@ -69,7 +69,11 @@ export function SelectAccount({
 
     const handleRegister = async (): Promise<void> => {
         try {
-            const registrationResponse = await register(nickname);
+            const registrationResponse = await register(
+                `${account?.name}-${browserName}-${
+                    account?.options ? account?.options.length + 1 : '9'
+                }`,
+            );
             if (registrationResponse) {
                 dispatch(setRegistrationResponse(registrationResponse));
                 const publicKey: string = await getPublicKey(
@@ -178,7 +182,7 @@ export function SelectAccount({
                 </div>
             ) : !publicKey ? (
                 <div className={styles.create}>
-                    <div className={styles.nickname}>
+                    {/* <div className={styles.nickname}>
                         <Input
                             placeholder="Authenticator Name"
                             height="40px"
@@ -188,15 +192,15 @@ export function SelectAccount({
                                 setNickname(e.target.value);
                             }}
                         />
-                    </div>
+                    </div> */}
                     <div className={styles.button}>
                         <Button
-                            disabled={nickname === ''}
+                            // disabled={nickname === ''}
                             width="120px"
                             height="40px"
                             color="purple"
                             onClick={async (): Promise<void> => {
-                                if (nickname === '') return;
+                                // if (nickname === '') return;
                                 await handleRegister();
                             }}
                         >
