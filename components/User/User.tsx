@@ -1,10 +1,11 @@
 import SEAL from 'assets/nft.png';
 import { ethers } from 'ethers';
-import { useGetBalance } from 'hooks/useGetBalance';
 import type { ModalController } from 'hooks/useModal';
+import { useBalanceQuery } from 'queries';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { setBalance } from 'store/slicers/account';
 import { parseAddress } from 'utils/parseAddress';
 
 import styles from './User.module.scss';
@@ -14,14 +15,16 @@ export function User({
 }: {
     userModal: ModalController;
 }): JSX.Element {
+    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
-    const balance = useSelector((state: RootState) => state.account.balance);
-    const { getBalance } = useGetBalance();
+    const { balance } = useBalanceQuery(
+        account?.address ? account.address : '',
+    );
 
     useEffect(() => {
         if (!account) return;
-        getBalance(account.address);
-    }, [account]);
+        dispatch(setBalance(Number(balance.toString())));
+    }, [balance]);
 
     return (
         <div className={styles.wrapper}>

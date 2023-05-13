@@ -1,13 +1,13 @@
 import { CONFIG } from 'config';
 import { ContractFactory, ethers } from 'ethers';
 import type { Contract, ContractInterface } from 'ethers';
+import { provider } from 'restapi/index';
 
 export const useDeployContract = async (
     _abi: ContractInterface,
     _bytecode: string,
     ...params: Array<unknown>
 ): Promise<Contract> => {
-    const provider = new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
     const wallet: ethers.Wallet = new ethers.Wallet(
         CONFIG.PRIVATE_KEY,
         provider,

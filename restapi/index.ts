@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import type { AxiosResponse } from 'axios';
+import { CONFIG } from 'config/config';
+import { ethers } from 'ethers';
 import { API } from 'restapi/api';
 import type {
     AccountCreateDto,
@@ -13,6 +15,9 @@ import type {
 
 const baseURL =
     process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/account';
+
+export const provider: ethers.providers.JsonRpcProvider =
+    new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
 
 export const axios = Axios.create({
     baseURL,

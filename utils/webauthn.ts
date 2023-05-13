@@ -10,6 +10,7 @@ import { parseBase64url } from '@passwordless-id/webauthn/dist/esm/utils';
 import { ABIs } from 'constants/abi';
 import { ADDRESSES } from 'constants/address';
 import { Contract, ethers } from 'ethers';
+import { provider } from 'restapi/index';
 
 const DEFAULTS = {
     origin: 'http://localhost:3000',
@@ -99,11 +100,7 @@ export const verifySignatureOnChain = async (
         _clientData,
     );
 
-    const contract = new Contract(
-        ADDRESSES.webauthn,
-        ABIs.webauthn,
-        new ethers.providers.Web3Provider((window as any).ethereum),
-    );
+    const contract = new Contract(ADDRESSES.webauthn, ABIs.webauthn, provider);
 
     console.log(signature);
 
