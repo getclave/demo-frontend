@@ -15,14 +15,14 @@ import { looksLikeHex } from 'utils/looksLikeHex';
 
 export const WebauthnOptions = {
     registerOptions: {
-        authenticatorType: 'auto', // extern => remove browser
+        authenticatorType: 'both', // extern => remove browser
         userVerification: 'required',
         timeout: 60000,
         attestation: false,
         debug: false,
     } as RegisterOptions,
     authOptions: {
-        authenticatorType: 'auto', // extern => remove browser
+        authenticatorType: 'both', // extern => remove browser
         userVerification: 'required',
         timeout: 60000,
     } as AuthenticateOptions,
