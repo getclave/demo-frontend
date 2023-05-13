@@ -7,16 +7,32 @@
     justify-content: center;
     flex-direction: column;
 
-    .header{
+    .header {
         font-size: 18px;
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 3px 5px;
+        min-width: 150px;
+        border-radius: 12px;
+        z-index: 1;
+
+        &:hover {
+            background-color: white;
+        }
+
+        svg {
+            margin-top: -10px;
+        }
     }
 
     .icon {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background-color: rgb(208, 156, 232);
+        // background-color: rgb(208, 156, 232);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -28,6 +44,7 @@
     }
 
     .address {
+        margin-top: -5px;
         font-size: 20px;
         font-weight: 500;
     }
@@ -48,7 +65,7 @@
 
         .button {
             width: 140px;
-            margin:  5px;
+            margin: 5px;
             background-color: white;
             height: 60px;
             border-radius: 12px;

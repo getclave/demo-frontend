@@ -56,6 +56,13 @@
                 background-color: #30305d;
             }
 
+            &.off {
+                &:hover {
+                    background-color: #191945;
+                    cursor: none;
+                }
+            }
+
             .icon {
                 width: 25px;
                 height: 25px;

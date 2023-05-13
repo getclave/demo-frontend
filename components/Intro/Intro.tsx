@@ -51,6 +51,7 @@ export function Intro(): JSX.Element {
                 modalController={userModal}
                 setInfoMessage={setInfoMessage}
                 infoModal={infoModal}
+                loginModal={loginModal}
             />
             <InfoModal modalController={infoModal} info={infoMessage} />
         </div>

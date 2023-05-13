@@ -20,7 +20,8 @@ import {
     setRegistrationResponse,
     setSelectedAccount,
 } from 'store/slicers/account';
-import { Button, Input } from 'ui';
+import { Button } from 'ui';
+import { clsnm } from 'utils/clsnm';
 
 import styles from './SelectAccount.module.scss';
 
@@ -32,7 +33,6 @@ export function SelectAccount({
     const notify = useNotify();
     const dispatch = useDispatch();
     const [selectOrCreate, setSelectOrCreate] = useState<boolean>(false);
-    const [nickname, setNickname] = useState<string>('');
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
     const [previousOptions, setPreviousOptions] = useState<Array<Option>>([]);
@@ -41,7 +41,6 @@ export function SelectAccount({
         !publicKey ? false : true,
     );
     useEffect(() => {
-        console.log(data?.data.options, previousOptions);
         if (previousOptions.length === 0) {
             if (data) {
                 setPreviousOptions(data.data.options);
@@ -97,14 +96,6 @@ export function SelectAccount({
         }
     };
 
-    useEffect(() => {
-        setNickname('');
-    }, [collectionOption]);
-
-    useEffect(() => {
-        setNickname('');
-    }, []);
-
     return (
         <div className={styles.wrapper}>
             <div
@@ -140,7 +131,11 @@ export function SelectAccount({
                         account.options.map((option: Option, i: number) => {
                             return (
                                 <div
-                                    className={styles.account}
+                                    className={
+                                        option.type === Authenticator.DESKTOP
+                                            ? styles.account
+                                            : clsnm(styles.account, styles.off)
+                                    }
                                     key={i}
                                     onClick={(): void => {
                                         if (
@@ -195,9 +190,6 @@ export function SelectAccount({
                             height="40px"
                             color="dark"
                             value={nickname}
-                            onChange={(e): void => {
-                                setNickname(e.target.value);
-                            }}
                         />
                     </div> */}
                     <div className={styles.button}>

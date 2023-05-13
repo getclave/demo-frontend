@@ -1,9 +1,13 @@
-import FINGERPRINT from 'assets/fingerprint.png';
+import face from 'assets/lottie/face.json';
 import { ethers } from 'ethers';
 import type { ModalController } from 'hooks/useModal';
+import Lottie from 'lottie-react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { CgArrowsExchange } from 'react-icons/cg';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { setConnectionOption } from 'store/slicers/connection';
+import { ConnectionOptions } from 'types/connection';
 import { Modal } from 'ui';
 import { parseAddress } from 'utils/parseAddress';
 
@@ -15,11 +19,14 @@ export function UserModal({
     modalController,
     setInfoMessage,
     infoModal,
+    loginModal,
 }: {
     modalController: ModalController;
     setInfoMessage: (message: string) => void;
     infoModal: ModalController;
+    loginModal: ModalController;
 }): JSX.Element {
+    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
     const balance = useSelector((state: RootState) => state.account.balance);
     const selectedAccount = useSelector(
@@ -37,11 +44,28 @@ export function UserModal({
 
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
-            <div className={styles.header}>
-                {account?.options[selectedAccount].method_name}
+            <div
+                className={styles.header}
+                onClick={() => {
+                    loginModal.open();
+                    dispatch(setConnectionOption(ConnectionOptions.SELECT));
+                    modalController.close();
+                }}
+            >
+                <div>{account?.options[selectedAccount]?.method_name}</div>
+                <CgArrowsExchange size={20} />
             </div>
             <div className={styles.icon}>
-                <img src={FINGERPRINT.src} alt="seal"></img>
+                {/* <img src={FINGERPRINT.src} alt="seal"></img> */}
+                <Lottie
+                    animationData={face}
+                    loop={true}
+                    style={{
+                        width: '150px',
+                        // backgroundColor: 'red',
+                        margin: '-50px',
+                    }}
+                />
             </div>
             <div className={styles.address}>
                 {parseAddress(
