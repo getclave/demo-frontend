@@ -51,7 +51,14 @@ export function SelectAccount({
                 if (data.data.options.length > previousOptions.length) {
                     setPreviousOptions(data.data.options);
                     for (let i = 0; i < data.data.options.length; i++) {
-                        if (data.data.options[i]?.method_name === nickname) {
+                        if (
+                            data.data.options[i]?.method_name ===
+                            `${account?.name}-${browserName}-${
+                                previousOptions
+                                    ? previousOptions.length + 1
+                                    : '9'
+                            }`
+                        ) {
                             dispatch(setAccount(data.data));
                             dispatch(setSelectedAccount(i));
                             modalController.close();
@@ -149,7 +156,7 @@ export function SelectAccount({
                                         <img src={FINGERPRINT.src}></img>
                                     </div>
                                     <div className={styles.name}>
-                                        {option.method_name}
+                                        {option?.method_name}
                                     </div>
                                     <div className={styles.device}>
                                         {option.type ===
