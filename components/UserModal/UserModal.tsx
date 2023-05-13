@@ -39,7 +39,7 @@ export function UserModal({
                 )}
             </div>
             <div className={styles.balance}>
-                {ethers.utils.formatEther(balance)} ETH
+                {ethers.utils.formatEther(balance.toString())} ETH
             </div>
             {page === 'buttons' ? (
                 <Buttons modalController={modalController} setPage={setPage} />

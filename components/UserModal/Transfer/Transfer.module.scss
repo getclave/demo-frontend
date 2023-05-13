@@ -1,7 +1,31 @@
 .wrapper {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .back {
+        position: absolute;
+        top: 15px;
+        left: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            background-color: white;
+        }
+    }
 
     .input {
+        margin: 5px 0px;
+        width: 100%;
+
         .inputField {
             width: 100%;
             border-radius: 12px;

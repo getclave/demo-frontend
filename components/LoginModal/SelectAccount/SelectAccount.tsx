@@ -1,6 +1,5 @@
 import type { ModalController } from '@ethylene/ui-hooks/useModal';
 import FINGERPRINT from 'assets/fingerprint.png';
-import QRLOGO from 'assets/qr-seal.png';
 import { useNotify } from 'hooks';
 import { useResetAllStore } from 'hooks/useResetStore';
 import { register } from 'module/webauthn';
@@ -35,11 +34,12 @@ export function SelectAccount({
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
     const [previousOptions, setPreviousOptions] = useState<Array<Option>>([]);
-    const { data, isError, error } = useGetAccountQueryV2(
+    const { data, error } = useGetAccountQueryV2(
         account?.name ? account?.name : '',
         !publicKey ? false : true,
     );
     useEffect(() => {
+        console.log(data?.data.options, previousOptions);
         if (previousOptions.length === 0) {
             if (data) {
                 setPreviousOptions(data.data.options);
@@ -57,8 +57,8 @@ export function SelectAccount({
                 }
             }
         }
-        console.log(data);
-    }, [error]);
+    }, [data]);
+
     const { resetAllStore } = useResetAllStore();
     const collectionOption = useSelector(
         (state: RootState) => state.account.account,
@@ -96,8 +96,9 @@ export function SelectAccount({
             <div
                 className={styles.back}
                 onClick={(): void => {
-                    if (publicKey) {
+                    if (publicKey && selectOrCreate) {
                         setPublicKey(null);
+                        setSelectOrCreate(false);
                     } else if (selectOrCreate) {
                         setSelectOrCreate(false);
                     } else {
@@ -204,14 +205,6 @@ export function SelectAccount({
                             authName: nickname,
                         })}
                         size={250}
-                        // imageSettings={{
-                        //     src: QRLOGO.src,
-                        //     x: undefined,
-                        //     y: undefined,
-                        //     height: 42,
-                        //     width: 42,
-                        //     excavate: true,
-                        // }}
                     />
                 </div>
             )}

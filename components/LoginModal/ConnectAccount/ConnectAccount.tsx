@@ -72,6 +72,11 @@ export function ConnectAccount({
                         ) {
                             if (data && !disabled) {
                                 dispatch(setAccount(data?.data));
+                                dispatch(
+                                    setConnectionOption(
+                                        ConnectionOptions.SELECT,
+                                    ),
+                                );
                             }
                         }
                     }}
@@ -87,6 +92,9 @@ export function ConnectAccount({
                     onClick={(): void => {
                         if (data && accountName !== '') {
                             dispatch(setAccount(data?.data));
+                            dispatch(
+                                setConnectionOption(ConnectionOptions.SELECT),
+                            );
                         }
                     }}
                 >

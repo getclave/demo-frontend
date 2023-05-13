@@ -37,9 +37,7 @@ export function LoginModal({
     useEffect(() => {
         if (!account) {
             return;
-        } else if (connectionOption === ConnectionOptions.CONNECT) {
-            dispatch(setConnectionOption(ConnectionOptions.SELECT));
-        } else {
+        } else if (connectionOption !== ConnectionOptions.SELECT) {
             loginModal.close();
         }
     }, [account]);

@@ -27,7 +27,7 @@ export function User({
         <div className={styles.wrapper}>
             <div className={styles.user} onClick={(): void => userModal.open()}>
                 <div className={styles.balance}>
-                    {ethers.utils.formatEther(balance)} ETH
+                    {ethers.utils.formatEther(balance.toString())} ETH
                 </div>
                 <div className={styles.account}>
                     <div className={styles.icon}>
