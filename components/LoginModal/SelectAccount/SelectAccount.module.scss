@@ -45,6 +45,7 @@
             display: flex;
             align-items: center;
             background-color: #191945;
+            position: relative;
             padding: 5px;
             border-radius: 12px;
             height: 40px;
@@ -69,6 +70,13 @@
                 img {
                     height: 20px;
                 }
+            }
+
+            .device {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
             }
         }
 

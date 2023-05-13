@@ -17,6 +17,7 @@ type AxiosResponsePromise<T> = Promise<AxiosResponse<T>>;
 
 export function useGetAccountQueryV2(
     name: string | null,
+    interval = false,
 ): CustomQueryResult<AccountV2> {
     const { data, isLoading, isError, error, refetch, ...rest } = useQuery<
         AxiosResponse<AccountV2>,
@@ -31,6 +32,7 @@ export function useGetAccountQueryV2(
             retry: false,
             enabled: name != null,
             keepPreviousData: false,
+            refetchInterval: interval ? 5000 : false,
         },
     );
 

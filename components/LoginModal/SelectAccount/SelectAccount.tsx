@@ -6,8 +6,11 @@ import { useResetAllStore } from 'hooks/useResetStore';
 import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
 import { QRCodeSVG } from 'qrcode.react';
+import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
+import { AiOutlineLaptop } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
+import { TbDeviceMobile } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import type { Option } from 'restapi/types';
 import { Authenticator } from 'restapi/types';
@@ -16,8 +19,6 @@ import {
     setRegistrationResponse,
     setSelectedAccount,
 } from 'store/slicers/account';
-import { setConnectionOption } from 'store/slicers/connection';
-import { ConnectionOptions } from 'types/connection';
 import { Button, Input } from 'ui';
 
 import styles from './SelectAccount.module.scss';
@@ -33,6 +34,31 @@ export function SelectAccount({
     const [nickname, setNickname] = useState<string>('');
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
+    const [previousOptions, setPreviousOptions] = useState<Array<Option>>([]);
+    const { data, isError, error } = useGetAccountQueryV2(
+        account?.name ? account?.name : '',
+        !publicKey ? false : true,
+    );
+    useEffect(() => {
+        if (previousOptions.length === 0) {
+            if (data) {
+                setPreviousOptions(data.data.options);
+            }
+        } else {
+            if (data) {
+                if (data.data.options.length > previousOptions.length) {
+                    setPreviousOptions(data.data.options);
+                    for (let i = 0; i < data.data.options.length; i++) {
+                        if (data.data.options[i]?.method_name === nickname) {
+                            dispatch(setSelectedAccount(i));
+                            modalController.close();
+                        }
+                    }
+                }
+            }
+        }
+        console.log(data);
+    }, [error]);
     const { resetAllStore } = useResetAllStore();
     const collectionOption = useSelector(
         (state: RootState) => state.account.account,
@@ -111,6 +137,14 @@ export function SelectAccount({
                                     </div>
                                     <div className={styles.name}>
                                         {option.method_name}
+                                    </div>
+                                    <div className={styles.device}>
+                                        {option.type ===
+                                        Authenticator.DESKTOP ? (
+                                            <AiOutlineLaptop />
+                                        ) : (
+                                            <TbDeviceMobile />
+                                        )}
                                     </div>
                                 </div>
                             );

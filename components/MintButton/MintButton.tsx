@@ -55,6 +55,7 @@ export function MintButton({
 
             setInfoMessage('TXSENT');
             dispatch(setAuthenticationResponse(authenticationResponse));
+
             const res = await sendUserOpToEntrypoint(
                 challange,
                 account.options[selectedAccount].public_key,
