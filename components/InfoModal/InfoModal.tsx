@@ -56,7 +56,7 @@ export function InfoModal({
                 {'TXSENT' === info && (
                     <Lottie
                         animationData={transactionSent}
-                        loop={true}
+                        loop={false}
                         style={{
                             width: '80px',
                             marginBottom: '-20px',

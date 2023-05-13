@@ -46,7 +46,7 @@ export function UserModal({
         <Modal className={styles.wrapper} modalController={modalController}>
             <div
                 className={styles.header}
-                onClick={() => {
+                onClick={(): void => {
                     loginModal.open();
                     dispatch(setConnectionOption(ConnectionOptions.SELECT));
                     modalController.close();

@@ -18,10 +18,10 @@ export const useNotify = () => {
             toast(text, { progressStyle: { background: color } });
         };
         return {
-            error: (text?: string) => _notify(text, COLORS.error),
-            info: (text?: string) => _notify(text, COLORS.info),
-            success: (text?: string) => _notify(text, COLORS.success),
-            warn: (text?: string) => _notify(text, COLORS.warn),
+            error: (text?: string): void => _notify(text, COLORS.error),
+            info: (text?: string): void => _notify(text, COLORS.info),
+            success: (text?: string): void => _notify(text, COLORS.success),
+            warn: (text?: string): void => _notify(text, COLORS.warn),
         };
     }, []);
 

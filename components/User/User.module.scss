@@ -2,7 +2,7 @@
     height: 40px;
     position: absolute;
     top: 35px;
-    left: 80%;
+    right: 8%;
     z-index: 2;
     display: flex;
     align-items: center;
@@ -10,6 +10,7 @@
 
     @media(max-width: 768px) {
         left: 50%;
+        right: auto;
         transform: translateX(-50%);
     }
 

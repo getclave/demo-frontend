@@ -18,7 +18,11 @@ function ClaveApp({ Component, pageProps }: AppProps): JSX.Element {
                     <Component {...pageProps} />
                 </>
             </Provider>
-            <ToastContainer draggable />
+            <ToastContainer
+                draggable
+                position="bottom-right"
+                autoClose={3000}
+            />
         </QueryClientProvider>
     );
 }
