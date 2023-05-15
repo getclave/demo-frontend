@@ -29,12 +29,10 @@ export function MintButton({
     const selectedAccount = useSelector(
         (state: RootState) => state.account.selectedAccount,
     );
-    const registrationResponse = useSelector(
-        (state: RootState) => state.account.registrationResponse,
-    );
 
     const handleAuthentication = async (): Promise<void> => {
-        if (!account || !selectedAccount) return;
+        if (!selectedAccount && selectedAccount !== 0) return;
+        if (!account) return;
         try {
             setInfoMessage('MINTAUTH');
             infoModal.open();
@@ -45,8 +43,9 @@ export function MintButton({
                 BYTECODES.mintFunction,
             );
             const encodedChallenge: string = encodeChallenge(challange);
+            const clientData = account.options[selectedAccount]?.client_id;
             const authenticationResponse = await authenticate(
-                registrationResponse ? registrationResponse.credential.id : '',
+                clientData ? clientData : '',
                 encodedChallenge,
             );
 
@@ -63,7 +62,6 @@ export function MintButton({
                 account?.address,
                 BYTECODES.mintFunction,
             );
-            console.log(res, 'res');
             if (res) {
                 // notify.success('Minted successfully!');
                 setInfoMessage('MINTED');
@@ -71,8 +69,8 @@ export function MintButton({
                     infoModal.close();
                 }, 3000);
             } else {
-                infoModal.close();
                 notify.error('Something went wrong!');
+                infoModal.close();
             }
         } catch (e) {
             console.log(e);

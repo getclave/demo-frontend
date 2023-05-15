@@ -126,6 +126,7 @@ export function CreateAccount({
                             authName: `${accountName}-${browserName}-1`,
                             authPublic: publicKey,
                             authType: 1,
+                            clientId: registrationResponse.credential.id,
                         } as CreateAccountDto);
                     }
                 }

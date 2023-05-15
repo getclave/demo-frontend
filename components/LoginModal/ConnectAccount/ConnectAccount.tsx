@@ -26,7 +26,7 @@ export function ConnectAccount({
     const connectionOption = useSelector(
         (state: RootState) => state.connection.connectionOption,
     );
-
+    console.log(data);
     useEffect(() => {
         if (isError && accountName !== '') {
             setErrorMessage(error?.response?.data.message || '');

@@ -40,6 +40,9 @@ export function SelectAccount({
     const [selectOrCreate, setSelectOrCreate] = useState<boolean>(false);
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
+    const registrationResponse = useSelector(
+        (state: RootState) => state.account.registrationResponse,
+    );
     const [previousOptions, setPreviousOptions] = useState<Array<Option>>([]);
     const { data } = useGetAccountQueryV2(
         account ? account?.name : '',
@@ -218,6 +221,7 @@ export function SelectAccount({
                                         ? account?.options.length + 1
                                         : publicKey.slice(2, 4)
                                 }`,
+                                clientId: registrationResponse?.credential.id,
                             })}
                             size={250}
                         />

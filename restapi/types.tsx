@@ -52,6 +52,7 @@ export type CreateAccountDto = {
     authName: string;
     authPublic: string;
     authType: number;
+    clientId?: string;
 };
 
 export type NewOptionDto = {
@@ -71,6 +72,7 @@ export type Option = {
     method_name: string;
     public_key: string;
     type: Authenticator;
+    client_id?: string;
 };
 
 export type AccountV2 = {

@@ -59,6 +59,7 @@ export const useSetTransferTx = (): {
         infoModal: ModalController,
     ): Promise<void> => {
         if (!account) return;
+        if (!selectedAccount && selectedAccount !== 0) return;
         try {
             const calldata = encodeDirectTransactionCalldata(_to, _value);
             setInfoMessage('SENDTX');
@@ -69,8 +70,9 @@ export const useSetTransferTx = (): {
                 calldata,
             );
             const encodedChallenge: string = encodeChallenge(challange);
+            const clientData = account.options[selectedAccount]?.client_id;
             const authenticationResponse = await authenticate(
-                registrationResponse ? registrationResponse.credential.id : '',
+                clientData ? clientData : '',
                 encodedChallenge,
             );
 
