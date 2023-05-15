@@ -21,7 +21,7 @@ export const useResetAllStore = (): {
         dispatch(setBalance(0));
         dispatch(setDeployedContractAddress(null));
         dispatch(setRegistrationResponse(null));
-        dispatch(setSelectedAccount(0));
+        dispatch(setSelectedAccount(null));
         dispatch(setConnectionOption(ConnectionOptions.CONNECT));
     };
 

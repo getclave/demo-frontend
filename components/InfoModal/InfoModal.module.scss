@@ -10,6 +10,12 @@
     margin-top: 200px;
     z-index: 999;
 
+    @media(max-width: 756px) {
+        margin-top: none;
+        margin-bottom: 400px;
+
+    }
+
     .message {
         text-align: center;
         margin-bottom: 15px;
@@ -21,8 +27,8 @@
         font-size: 14px;
     }
 
-    .animation {
-        // width: 150px;
-        // background-color: red;
-    }
+    // .animation {
+    //     width: 150px;
+    //     background-color: red;
+    // }
 }

@@ -9,7 +9,7 @@ import type { AccountV2 } from 'restapi/types';
 export interface AccountState {
     account: AccountV2 | undefined;
     balance: number;
-    selectedAccount: number;
+    selectedAccount: number | null;
     registrationResponse: RegistrationEncoded | null;
     authenticationResponse: AuthenticationEncoded | null;
     deployedContractAddress: string | null;
@@ -18,7 +18,7 @@ export interface AccountState {
 const initialState: AccountState = {
     account: undefined,
     balance: 0,
-    selectedAccount: 0,
+    selectedAccount: null,
     registrationResponse: null,
     authenticationResponse: null,
     deployedContractAddress: null,
@@ -34,7 +34,7 @@ export const accountSlice = createSlice({
         setBalance: (state, action: PayloadAction<number>) => {
             state.balance = action.payload;
         },
-        setSelectedAccount: (state, action: PayloadAction<number>) => {
+        setSelectedAccount: (state, action: PayloadAction<number | null>) => {
             state.selectedAccount = action.payload;
         },
         setRegistrationResponse: (

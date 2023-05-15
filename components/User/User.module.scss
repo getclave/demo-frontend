@@ -10,6 +10,8 @@
 
     @media(max-width: 768px) {
         left: 50%;
+        top: 20px;
+        height: 40px;
         right: auto;
         transform: translateX(-50%);
     }

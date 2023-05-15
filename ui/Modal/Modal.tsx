@@ -1,8 +1,11 @@
 import type { ModalController } from 'hooks/useModal';
 import { useOnClickOutside } from 'hooks/useOnClickOutside';
+import { useResetAllStore } from 'hooks/useResetStore';
 import { Fragment, useEffect } from 'react';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'store';
 import { clsnm } from 'utils/clsnm';
 
 import styles from './Modal.module.scss';
@@ -27,6 +30,12 @@ const Modal = ({
     width,
 }: ModalProps): JSX.Element => {
     const { isOpen, close } = modalController;
+    const { resetAllStore } = useResetAllStore();
+    const selectedAccount = useSelector(
+        (state: RootState) => state.account.selectedAccount,
+    );
+
+    const account = useSelector((state: RootState) => state.account.account);
 
     useEffect(() => {
         if (isOpen) {
@@ -35,7 +44,7 @@ const Modal = ({
             document.body.style.overflowY = 'auto';
         }
 
-        return () => {
+        return (): void => {
             document.body.style.overflowY = 'auto';
         };
     }, [isOpen]);
@@ -43,6 +52,9 @@ const Modal = ({
     const outsideRef = useOnClickOutside<HTMLDivElement>(() => {
         if (closeOnClickOutside) {
             close();
+            if (account && !selectedAccount) {
+                resetAllStore();
+            }
         }
     });
 

@@ -61,7 +61,11 @@ export function LoginModal({
                     setAccountName={setAccountName}
                 />
             ) : connectionOption === ConnectionOptions.SELECT ? (
-                <SelectAccount modalController={loginModal} />
+                <SelectAccount
+                    modalController={loginModal}
+                    infoModal={infoModal}
+                    setInfo={setInfoMessage}
+                />
             ) : (
                 <CreateAccount
                     infoModal={infoModal}

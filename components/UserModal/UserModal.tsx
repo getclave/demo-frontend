@@ -29,9 +29,7 @@ export function UserModal({
     const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
     const balance = useSelector((state: RootState) => state.account.balance);
-    const selectedAccount = useSelector(
-        (state: RootState) => state.account.selectedAccount,
-    );
+
     const [copy, setCopy] = useState<string>('Copy Address');
     const [page, setPage] = useState<'buttons' | 'transfer'>('buttons');
 
@@ -52,7 +50,7 @@ export function UserModal({
                     modalController.close();
                 }}
             >
-                <div>{account?.options[selectedAccount]?.method_name}</div>
+                <div>{account?.name}</div>
                 <CgArrowsExchange size={20} />
             </div>
             <div className={styles.icon}>

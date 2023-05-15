@@ -21,6 +21,7 @@ import {
     setAuthenticationResponse,
     setDeployedContractAddress,
     setRegistrationResponse,
+    setSelectedAccount,
 } from 'store/slicers/account';
 import { setConnectionOption } from 'store/slicers/connection';
 import { ConnectionOptions } from 'types/connection';
@@ -77,7 +78,9 @@ export function CreateAccount({
         try {
             setInfo('CREATEREGISTER');
             infoModal.open();
-            const registrationResponse = await register(accountName);
+            const registrationResponse = await register(
+                `${accountName}-${browserName}-1`,
+            );
             if (registrationResponse) {
                 setInfo('CREATEAUTH');
                 setLoading(true);
@@ -116,6 +119,7 @@ export function CreateAccount({
                     if (res) {
                         setLoading(false);
                         dispatch(setDeployedContractAddress(create2Address));
+                        dispatch(setSelectedAccount(0));
                         postAccount({
                             name: accountName,
                             address: create2Address,

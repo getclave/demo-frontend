@@ -1,5 +1,6 @@
-import transactionSent from 'assets/lottie/fingerprinted.json';
 import fingerprinting from 'assets/lottie/fingerprinting.json';
+import loading from 'assets/lottie/loading.json';
+import successful from 'assets/lottie/successful.json';
 import transfered from 'assets/lottie/transfer.json';
 import wallet from 'assets/lottie/wallet.json';
 import type { ModalController } from 'hooks/useModal';
@@ -15,6 +16,8 @@ const MESSAGES: { [key: string]: string } = {
     MINTAUTH: 'Sign the transaction to mint NFT',
     TXSENT: 'The transaction has been sent. Please wait for confirmation',
     SENDTX: 'Sign the transaction to make the transfer',
+    MINTED: "You've successfully minted NFT",
+    AUTHED: 'Device authorized successfully',
 };
 const STEP: { [key: string]: string } = {
     CREATEREGISTER: '1/2',
@@ -33,7 +36,8 @@ export function InfoModal({
             <div className={styles.message}>{MESSAGES[info]}</div>
             {info !== 'TXSENT' &&
                 info !== 'CREATEDWALLET' &&
-                info !== 'TRANSFERED' && (
+                info !== 'TRANSFERED' &&
+                info !== 'MINTED' && (
                     <div className={styles.toDo}>
                         Touch ID or enter your password to allow this.
                     </div>
@@ -55,11 +59,12 @@ export function InfoModal({
                 )}
                 {'TXSENT' === info && (
                     <Lottie
-                        animationData={transactionSent}
-                        loop={false}
+                        animationData={loading}
+                        loop={true}
                         style={{
-                            width: '80px',
-                            marginBottom: '-20px',
+                            width: '150px',
+                            margin: '-30px',
+                            marginBottom: '-40px',
                         }}
                     />
                 )}
@@ -80,6 +85,16 @@ export function InfoModal({
                         style={{
                             width: '300px',
                             margin: '-50px',
+                        }}
+                    />
+                )}
+                {('MINTED' === info || info === 'AUTHED') && (
+                    <Lottie
+                        animationData={successful}
+                        loop={true}
+                        style={{
+                            width: '60px',
+                            marginBottom: '-20px',
                         }}
                     />
                 )}

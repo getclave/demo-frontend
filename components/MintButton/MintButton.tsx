@@ -7,7 +7,6 @@ import {
     sendUserOpToEntrypoint,
 } from 'module/webauthn';
 import { encodeChallenge } from 'module/webauthnUtils';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { setAuthenticationResponse } from 'store/slicers/account';
@@ -27,7 +26,6 @@ export function MintButton({
     const dispatch = useDispatch();
     const notify = useNotify();
     const account = useSelector((state: RootState) => state.account.account);
-    const [loading, setLoading] = useState<boolean>(false);
     const selectedAccount = useSelector(
         (state: RootState) => state.account.selectedAccount,
     );
@@ -36,9 +34,8 @@ export function MintButton({
     );
 
     const handleAuthentication = async (): Promise<void> => {
-        if (!account) return;
+        if (!account || !selectedAccount) return;
         try {
-            setLoading(true);
             setInfoMessage('MINTAUTH');
             infoModal.open();
 
@@ -68,24 +65,24 @@ export function MintButton({
             );
             console.log(res, 'res');
             if (res) {
-                setLoading(false);
-                notify.success('Minted successfully!');
-                infoModal.close();
+                // notify.success('Minted successfully!');
+                setInfoMessage('MINTED');
+                setTimeout(() => {
+                    infoModal.close();
+                }, 3000);
             } else {
-                setLoading(false);
                 infoModal.close();
                 notify.error('Something went wrong!');
             }
         } catch (e) {
             console.log(e);
-            setLoading(false);
             infoModal.close();
         }
     };
     return (
         <Button
             className={styles.wrapper}
-            loading={!account ? false : loading}
+            // loading={!account ? false : loading}
             onClick={async (): Promise<void> => {
                 if (!account) {
                     open();

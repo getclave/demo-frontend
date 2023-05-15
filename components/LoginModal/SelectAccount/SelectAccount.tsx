@@ -22,13 +22,18 @@ import {
 } from 'store/slicers/account';
 import { Button } from 'ui';
 import { clsnm } from 'utils/clsnm';
+import { isSameDevice } from 'utils/isSameDevice';
 
 import styles from './SelectAccount.module.scss';
 
 export function SelectAccount({
     modalController,
+    infoModal,
+    setInfo,
 }: {
     modalController: ModalController;
+    infoModal: ModalController;
+    setInfo: (value: string) => void;
 }): JSX.Element {
     const notify = useNotify();
     const dispatch = useDispatch();
@@ -49,7 +54,11 @@ export function SelectAccount({
             if (data) {
                 if (data.data.options.length > previousOptions.length) {
                     setPreviousOptions(data.data.options);
-
+                    setInfo('AUTHED');
+                    infoModal.open();
+                    setTimeout(() => {
+                        infoModal.close();
+                    }, 3000);
                     dispatch(setAccount(data.data));
                     dispatch(setSelectedAccount(data.data.options.length - 1));
                     modalController.close();
@@ -72,6 +81,8 @@ export function SelectAccount({
                     registrationResponse?.credential.publicKey,
                 );
                 setPublicKey(publicKey);
+
+                setSelectOrCreate(true);
                 if (account) {
                     dispatch(setSelectedAccount(account?.options.length + 1));
                 }
@@ -107,8 +118,8 @@ export function SelectAccount({
                     {!selectOrCreate
                         ? 'Select Account'
                         : publicKey
-                        ? 'Scan QR Code'
-                        : 'Set Account Name'}
+                        ? 'Scan QR Code on Clave Mobile'
+                        : 'Register to create new PublicKey'}
                 </span>
             </div>
             {!selectOrCreate ? (
@@ -151,62 +162,66 @@ export function SelectAccount({
                             );
                         })}
                     {account &&
-                        account.options[0].type === Authenticator.MOBILE && (
+                        account.options[0].type === Authenticator.MOBILE &&
+                        !isSameDevice(account, browserName) && (
                             <div className={styles.newAccount}>
                                 <Button
-                                    width="195px"
+                                    width="215px"
                                     height="30px"
                                     color="purple"
                                     fontSize="fs14"
                                     fontWeight="fw400"
-                                    onClick={(): void => {
-                                        setSelectOrCreate(true);
+                                    onClick={async (): Promise<void> => {
+                                        await handleRegister();
                                     }}
                                 >
-                                    Create New PublicKey
+                                    Authenticate this device
                                 </Button>
                             </div>
                         )}
                 </div>
-            ) : !publicKey ? (
-                <div className={styles.create}>
-                    {/* <div className={styles.nickname}>
-                        <Input
-                            placeholder="Authenticator Name"
-                            height="40px"
-                            color="dark"
-                            value={nickname}
-                        />
-                    </div> */}
-                    <div className={styles.button}>
-                        <Button
-                            // disabled={nickname === ''}
-                            width="120px"
-                            height="40px"
-                            color="purple"
-                            onClick={async (): Promise<void> => {
-                                // if (nickname === '') return;
-                                await handleRegister();
-                            }}
-                        >
-                            Register
-                        </Button>
-                    </div>
-                </div>
-            ) : (
+            ) : !publicKey ? null : (
+                //  !publicKey ? (
+                //     <div className={styles.create}>
+                //         {/* <div className={styles.nickname}>
+                //             <Input
+                //                 placeholder="Authenticator Name"
+                //                 height="40px"
+                //                 color="dark"
+                //                 value={nickname}
+                //             />
+                //         </div> */}
+                //         <div className={styles.button}>
+                //             <Button
+                //                 // disabled={nickname === ''}
+                //                 width="120px"
+                //                 height="40px"
+                //                 color="purple"
+                //                 onClick={async (): Promise<void> => {
+                //                     // if (nickname === '') return;
+                //                     await handleRegister();
+                //                 }}
+                //             >
+                //                 Register
+                //             </Button>
+                //         </div>
+                //     </div>
+                // ) :
                 <div className={styles.qrCode}>
-                    <QRCodeSVG
-                        value={JSON.stringify({
-                            name: account?.name,
-                            publicKey: publicKey,
-                            authName: `${account?.name}-${browserName}-${
-                                account?.options
-                                    ? account?.options.length + 1
-                                    : publicKey.slice(2, 4)
-                            }`,
-                        })}
-                        size={250}
-                    />
+                    {publicKey && (
+                        <QRCodeSVG
+                            value={JSON.stringify({
+                                name: account?.name,
+                                publicKey: publicKey,
+                                authName: `${account?.name}-${browserName}-${
+                                    account?.options
+                                        ? account?.options.length + 1
+                                        : publicKey.slice(2, 4)
+                                }`,
+                            })}
+                            size={250}
+                        />
+                    )}
                 </div>
             )}
         </div>
