@@ -100,7 +100,11 @@ export const verifySignatureOnChain = async (
         _clientData,
     );
 
-    const contract = new Contract(ADDRESSES.webauthn, ABIs.webauthn, provider);
+    const contract = new Contract(
+        ADDRESSES.webauthn,
+        ABIs.webauthnContract,
+        provider,
+    );
 
     console.log(signature);
 
@@ -238,7 +242,7 @@ export function getRS(_signatureBase64: string): Array<ethers.BigNumber> {
     return sig;
 }
 
-async function getKey(pubkey: ArrayBufferLike) {
+async function getKey(pubkey: ArrayBufferLike): Promise<CryptoKey> {
     const algoParams = {
         name: 'ECDSA',
         namedCurve: 'P-256',

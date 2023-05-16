@@ -18,6 +18,8 @@ const MESSAGES: { [key: string]: string } = {
     SENDTX: 'Sign the transaction to make the transfer',
     MINTED: "You've successfully minted NFT",
     AUTHED: 'Device authorized successfully',
+    AUTH: 'Verify that you own the account',
+    LOGINED: 'You have successfully logged in',
 };
 const STEP: { [key: string]: string } = {
     CREATEREGISTER: '1/2',
@@ -37,26 +39,29 @@ export function InfoModal({
             {info !== 'TXSENT' &&
                 info !== 'CREATEDWALLET' &&
                 info !== 'TRANSFERED' &&
-                info !== 'MINTED' && (
+                info !== 'MINTED' &&
+                info !== 'AUTHED' &&
+                'LOGINED' !== info && (
                     <div className={styles.toDo}>
                         Touch ID or enter your password to allow this.
                     </div>
                 )}
             <div className={styles.animation}>
-                {('MINTAUTH' === info ||
+                {'MINTAUTH' === info ||
                     'CREATEREGISTER' === info ||
                     'SENDTX' === info ||
-                    'CREATEAUTH' === info) && (
-                    <Lottie
-                        animationData={fingerprinting}
-                        loop={true}
-                        style={{
-                            width: '120px',
-                            margin: '-20px',
-                            marginBottom: '-40px',
-                        }}
-                    />
-                )}
+                    'CREATEAUTH' === info ||
+                    (info === 'AUTH' && (
+                        <Lottie
+                            animationData={fingerprinting}
+                            loop={true}
+                            style={{
+                                width: '120px',
+                                margin: '-20px',
+                                marginBottom: '-40px',
+                            }}
+                        />
+                    ))}
                 {'TXSENT' === info && (
                     <Lottie
                         animationData={loading}
@@ -88,7 +93,9 @@ export function InfoModal({
                         }}
                     />
                 )}
-                {('MINTED' === info || info === 'AUTHED') && (
+                {('MINTED' === info ||
+                    info === 'AUTHED' ||
+                    'LOGINED' === info) && (
                     <Lottie
                         animationData={successful}
                         loop={true}

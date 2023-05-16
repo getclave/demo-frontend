@@ -3,7 +3,8 @@ import type {
     AuthenticationEncoded,
     RegistrationEncoded,
 } from '@passwordless-id/webauthn/dist/esm/types';
-import type { Contract, Transaction } from 'ethers';
+import type { Transaction } from 'ethers';
+import type { Contract } from 'ethers';
 import { useGetAccountContract } from 'hooks/useGetAccountContract';
 import {
     useGetEntrypointContract,
@@ -100,7 +101,6 @@ export const sendUserOpToEntrypoint = async (
         signature,
         _calldata,
     );
-
     const response = await contract.handleOps([userOp], _beneficiary, {
         gasLimit: 5000000,
     });

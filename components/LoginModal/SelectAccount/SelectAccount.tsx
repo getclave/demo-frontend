@@ -2,6 +2,7 @@ import FINGERPRINT from 'assets/fingerprint.png';
 import { useNotify } from 'hooks';
 import type { ModalController } from 'hooks/useModal';
 import { useResetAllStore } from 'hooks/useResetStore';
+import { useVerifyAuthentication } from 'hooks/useVerifyAuthentication';
 import { register } from 'module/webauthn';
 import { getPublicKey } from 'module/webauthnUtils';
 import { QRCodeSVG } from 'qrcode.react';
@@ -137,14 +138,40 @@ export function SelectAccount({
                                             : clsnm(styles.account, styles.off)
                                     }
                                     key={i}
-                                    onClick={(): void => {
+                                    onClick={async (): Promise<void> => {
                                         if (
-                                            option.type ===
+                                            option.type !==
                                             Authenticator.DESKTOP
-                                        ) {
-                                            dispatch(setSelectedAccount(i));
-                                            modalController.close();
+                                        )
+                                            return;
+                                        try {
+                                            const clientId = account.options[i]
+                                                ? account.options[i]?.client_id
+                                                : '';
+                                            if (!clientId) return;
+                                            const result =
+                                                await useVerifyAuthentication(
+                                                    account,
+                                                    clientId,
+                                                    account.options[i]
+                                                        .public_key,
+                                                    infoModal,
+                                                    setInfo,
+                                                );
+                                            if (result) {
+                                                dispatch(setSelectedAccount(i));
+                                                modalController.close();
+                                            }
+                                        } catch (e) {
+                                            console.log(e);
                                         }
+                                        // if (
+                                        //     option.type ===
+                                        //     Authenticator.DESKTOP
+                                        // ) {
+                                        //     dispatch(setSelectedAccount(i));
+                                        //     modalController.close();
+                                        // }
                                     }}
                                 >
                                     <div className={styles.icon}>

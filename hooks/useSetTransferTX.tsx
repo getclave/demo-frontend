@@ -29,9 +29,7 @@ export const useSetTransferTx = (): {
 } => {
     const notify = useNotify();
     const dispatch = useDispatch();
-    const registrationResponse = useSelector(
-        (state: RootState) => state.account.registrationResponse,
-    );
+
     const selectedAccount = useSelector(
         (state: RootState) => state.account.selectedAccount,
     );

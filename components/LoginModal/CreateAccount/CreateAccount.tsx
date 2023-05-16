@@ -92,7 +92,7 @@ export function CreateAccount({
                 const create2Address: string = await useGetCreate2Address(
                     publicKey,
                 );
-                console.log('create2Address', create2Address);
+
                 const challenge = await getInitChallange(
                     create2Address,
                     publicKey,
