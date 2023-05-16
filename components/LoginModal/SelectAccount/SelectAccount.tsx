@@ -71,6 +71,33 @@ export function SelectAccount({
         }
     }, [data]);
 
+    const handleVerifyAuthentication = async (
+        option: Option,
+        _index: number,
+    ): Promise<void> => {
+        if (!account) return;
+        if (option.type !== Authenticator.DESKTOP) return;
+        try {
+            const clientId = account.options[_index]
+                ? account.options[_index]?.client_id
+                : '';
+            if (!clientId) return;
+            const result = await useVerifyAuthentication(
+                account,
+                clientId,
+                account.options[_index].public_key,
+                infoModal,
+                setInfo,
+            );
+            if (result) {
+                dispatch(setSelectedAccount(_index));
+                modalController.close();
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     const { resetAllStore } = useResetAllStore();
     const handleRegister = async (): Promise<void> => {
         try {
@@ -139,39 +166,10 @@ export function SelectAccount({
                                     }
                                     key={i}
                                     onClick={async (): Promise<void> => {
-                                        if (
-                                            option.type !==
-                                            Authenticator.DESKTOP
-                                        )
-                                            return;
-                                        try {
-                                            const clientId = account.options[i]
-                                                ? account.options[i]?.client_id
-                                                : '';
-                                            if (!clientId) return;
-                                            const result =
-                                                await useVerifyAuthentication(
-                                                    account,
-                                                    clientId,
-                                                    account.options[i]
-                                                        .public_key,
-                                                    infoModal,
-                                                    setInfo,
-                                                );
-                                            if (result) {
-                                                dispatch(setSelectedAccount(i));
-                                                modalController.close();
-                                            }
-                                        } catch (e) {
-                                            console.log(e);
-                                        }
-                                        // if (
-                                        //     option.type ===
-                                        //     Authenticator.DESKTOP
-                                        // ) {
-                                        //     dispatch(setSelectedAccount(i));
-                                        //     modalController.close();
-                                        // }
+                                        await handleVerifyAuthentication(
+                                            option,
+                                            i,
+                                        );
                                     }}
                                 >
                                     <div className={styles.icon}>
@@ -191,52 +189,25 @@ export function SelectAccount({
                                 </div>
                             );
                         })}
-                    {account &&
-                        account.options[0].type === Authenticator.MOBILE &&
-                        !isSameDevice(account, browserName) && (
-                            <div className={styles.newAccount}>
-                                <Button
-                                    width="215px"
-                                    height="30px"
-                                    color="purple"
-                                    fontSize="fs14"
-                                    fontWeight="fw400"
-                                    onClick={async (): Promise<void> => {
-                                        await handleRegister();
-                                    }}
-                                >
-                                    Authenticate this device
-                                </Button>
-                            </div>
-                        )}
+                    {account && (
+                        // account.options[0].type === Authenticator.MOBILE &&
+                        <div className={styles.newAccount}>
+                            <Button
+                                width="215px"
+                                height="30px"
+                                color="purple"
+                                fontSize="fs14"
+                                fontWeight="fw400"
+                                onClick={async (): Promise<void> => {
+                                    await handleRegister();
+                                }}
+                            >
+                                Authenticate this device
+                            </Button>
+                        </div>
+                    )}
                 </div>
             ) : !publicKey ? null : (
-                //  !publicKey ? (
-                //     <div className={styles.create}>
-                //         {/* <div className={styles.nickname}>
-                //             <Input
-                //                 placeholder="Authenticator Name"
-                //                 height="40px"
-                //                 color="dark"
-                //                 value={nickname}
-                //             />
-                //         </div> */}
-                //         <div className={styles.button}>
-                //             <Button
-                //                 // disabled={nickname === ''}
-                //                 width="120px"
-                //                 height="40px"
-                //                 color="purple"
-                //                 onClick={async (): Promise<void> => {
-                //                     // if (nickname === '') return;
-                //                     await handleRegister();
-                //                 }}
-                //             >
-                //                 Register
-                //             </Button>
-                //         </div>
-                //     </div>
-                // ) :
                 <div className={styles.qrCode}>
                     {publicKey && (
                         <QRCodeSVG

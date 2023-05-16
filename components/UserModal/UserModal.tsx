@@ -3,11 +3,8 @@ import { ethers } from 'ethers';
 import type { ModalController } from 'hooks/useModal';
 import Lottie from 'lottie-react';
 import { useEffect, useState } from 'react';
-import { CgArrowsExchange } from 'react-icons/cg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { setConnectionOption } from 'store/slicers/connection';
-import { ConnectionOptions } from 'types/connection';
 import { Modal } from 'ui';
 import { parseAddress } from 'utils/parseAddress';
 
@@ -26,7 +23,6 @@ export function UserModal({
     infoModal: ModalController;
     loginModal: ModalController;
 }): JSX.Element {
-    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
     const balance = useSelector((state: RootState) => state.account.balance);
 
@@ -42,25 +38,12 @@ export function UserModal({
 
     return (
         <Modal className={styles.wrapper} modalController={modalController}>
-            <div
-                className={styles.header}
-                onClick={(): void => {
-                    loginModal.open();
-                    dispatch(setConnectionOption(ConnectionOptions.SELECT));
-                    modalController.close();
-                }}
-            >
-                <div>{account?.name}</div>
-                <CgArrowsExchange size={20} />
-            </div>
             <div className={styles.icon}>
-                {/* <img src={FINGERPRINT.src} alt="seal"></img> */}
                 <Lottie
                     animationData={face}
                     loop={true}
                     style={{
                         width: '150px',
-                        // backgroundColor: 'red',
                         margin: '-50px',
                     }}
                 />
@@ -74,7 +57,11 @@ export function UserModal({
                 {ethers.utils.formatEther(balance.toString())} ETH
             </div>
             {page === 'buttons' ? (
-                <Buttons modalController={modalController} setPage={setPage} />
+                <Buttons
+                    modalController={modalController}
+                    setPage={setPage}
+                    loginModal={loginModal}
+                />
             ) : (
                 <Transfer
                     modalController={modalController}

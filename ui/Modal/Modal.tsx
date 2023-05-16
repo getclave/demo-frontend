@@ -52,9 +52,6 @@ const Modal = ({
     const outsideRef = useOnClickOutside<HTMLDivElement>(() => {
         if (closeOnClickOutside) {
             close();
-            if (account && !selectedAccount) {
-                resetAllStore();
-            }
         }
     });
 

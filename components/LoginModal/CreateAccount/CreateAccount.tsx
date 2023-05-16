@@ -99,7 +99,7 @@ export function CreateAccount({
                 );
                 const encodedChallenge = encodeChallenge(challenge);
                 const authenticationResponse = await authenticate(
-                    registrationResponse.credential.id,
+                    [registrationResponse.credential.id],
                     encodedChallenge,
                 );
                 dispatch(setAuthenticationResponse(authenticationResponse));

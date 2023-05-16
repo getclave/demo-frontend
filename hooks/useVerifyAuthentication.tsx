@@ -8,6 +8,7 @@ import { encodeChallenge, getDefaultUserOp } from 'module/webauthnUtils';
 import type { UserOperationWithSignature } from 'module/webauthnUtils';
 import { provider } from 'restapi/index';
 import type { AccountV2 } from 'restapi/types';
+import { getClientIds } from 'utils/getClientIds';
 
 export const useVerifyAuthentication = async (
     _account: AccountV2,
@@ -16,15 +17,15 @@ export const useVerifyAuthentication = async (
     infoModal: ModalController,
     setInfo: (value: string) => void,
 ): Promise<boolean> => {
-    console.log('icerdeme');
     if (!_account) return false;
     try {
+        const clientIds: Array<string> = getClientIds(_account);
         infoModal.open();
         setInfo('AUTH');
         const challenge: string = await getChallange(_account.address);
         const encodedChallenge: string = encodeChallenge(challenge);
         const authenticationResponse = await authenticate(
-            _clientId,
+            clientIds,
             encodedChallenge,
         );
         if (!authenticationResponse) {

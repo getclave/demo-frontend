@@ -4,19 +4,25 @@ import { useEffect, useState } from 'react';
 import { BiTransfer } from 'react-icons/bi';
 import { BsImages } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
+import { MdManageAccounts } from 'react-icons/md';
 import { VscDebugDisconnect } from 'react-icons/vsc';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { setConnectionOption } from 'store/slicers/connection';
+import { ConnectionOptions } from 'types/connection';
 
 import styles from './Buttons.module.scss';
 
 export function Buttons({
     modalController,
     setPage,
+    loginModal,
 }: {
     modalController: ModalController;
     setPage: (page: 'buttons' | 'transfer') => void;
+    loginModal: ModalController;
 }): JSX.Element {
+    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account.account);
     const [copy, setCopy] = useState<string>('Copy Address');
     const { resetAllStore } = useResetAllStore();
@@ -68,6 +74,18 @@ export function Buttons({
             >
                 <VscDebugDisconnect size={16} />
                 <div className={styles.text}>Disconnect</div>
+            </div>
+            <div
+                className={styles.button}
+                onClick={(): void => {
+                    loginModal.open();
+                    dispatch(setConnectionOption(ConnectionOptions.SELECT));
+                    modalController.close();
+                }}
+                style={{ width: '100%' }}
+            >
+                <MdManageAccounts size={16} />
+                <div className={styles.text}>Authenticated Devices</div>
             </div>
         </div>
     );

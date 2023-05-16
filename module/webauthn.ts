@@ -62,13 +62,11 @@ export const register = async (
 };
 
 export const authenticate = async (
-    credentialId: string,
+    credentialId: Array<string>,
     challenge: string,
 ): Promise<AuthenticationEncoded> => {
-    const credential =
-        credentialId === '' || !credentialId ? [] : [credentialId];
     const login = await client.authenticate(
-        credential,
+        credentialId,
         challenge,
         WebauthnOptions.authOptions,
     );

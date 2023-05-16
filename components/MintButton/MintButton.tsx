@@ -45,7 +45,7 @@ export function MintButton({
             const encodedChallenge: string = encodeChallenge(challange);
             const clientData = account.options[selectedAccount]?.client_id;
             const authenticationResponse = await authenticate(
-                clientData ? clientData : '',
+                clientData ? [clientData] : [],
                 encodedChallenge,
             );
 
