@@ -24,14 +24,14 @@ export const WebauthnOptions = (): {
     console.log('userAgent: ', userAgent, window.navigator.userAgent);
     return {
         registerOptions: {
-            authenticatorType: userAgent ? 'auto' : 'roaming', // extern => remove browser
+            authenticatorType: userAgent ? 'auto' : 'extern', // extern => remove browser
             userVerification: 'required',
             timeout: 60000,
             attestation: false,
             debug: false,
         } as RegisterOptions,
         authOptions: {
-            authenticatorType: userAgent ? 'auto' : 'roaming', // extern => remove browser
+            authenticatorType: userAgent ? 'auto' : 'extern', // extern => remove browser
             userVerification: 'required',
             timeout: 60000,
         } as AuthenticateOptions,
