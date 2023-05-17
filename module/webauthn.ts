@@ -10,7 +10,6 @@ import {
     useGetEntrypointContract,
     useGetEntrypointContractWithSigner,
 } from 'hooks/useGetEntrypointContract';
-import { useInitSendEther } from 'hooks/useInitSendEther';
 import {
     WebauthnOptions,
     getSignatureVerifyParamEncoded,
@@ -135,7 +134,6 @@ export const sendInitUserOp = async (
         gasLimit: 20000000,
     });
     await response.wait();
-    await useInitSendEther(_senderAddress);
     return response;
 };
 
