@@ -27,10 +27,13 @@ export function Intro(): JSX.Element {
     );
 
     const account = useSelector((state: RootState) => state.account.account);
+    const selectedAccount = useSelector(
+        (state: RootState) => state.account.selectedAccount,
+    );
 
     return (
         <div className={styles.wrapper}>
-            {account && connectionOption !== ConnectionOptions.SELECT && (
+            {account && (selectedAccount || selectedAccount === 0) && (
                 <User userModal={userModal} />
             )}
             <LoginModal

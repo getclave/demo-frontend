@@ -23,7 +23,7 @@ import {
 } from 'store/slicers/account';
 import { Button } from 'ui';
 import { clsnm } from 'utils/clsnm';
-import { isSameDevice } from 'utils/isSameDevice';
+import { isInArray } from 'utils/isInArray';
 
 import styles from './SelectAccount.module.scss';
 
@@ -41,35 +41,19 @@ export function SelectAccount({
     const [selectOrCreate, setSelectOrCreate] = useState<boolean>(false);
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const account = useSelector((state: RootState) => state.account.account);
+    const selectedAccount = useSelector(
+        (state: RootState) => state.account.selectedAccount,
+    );
+    const [lStorage, setLStorage] = useState<Array<string>>([]);
     const registrationResponse = useSelector(
         (state: RootState) => state.account.registrationResponse,
     );
     const [previousOptions, setPreviousOptions] = useState<Array<Option>>([]);
+    const { resetAllStore } = useResetAllStore();
     const { data } = useGetAccountQueryV2(
         account ? account?.name : '',
         !publicKey ? false : true,
     );
-    useEffect(() => {
-        if (previousOptions.length === 0) {
-            if (data) {
-                setPreviousOptions(data.data.options);
-            }
-        } else {
-            if (data) {
-                if (data.data.options.length > previousOptions.length) {
-                    setPreviousOptions(data.data.options);
-                    setInfo('AUTHED');
-                    infoModal.open();
-                    setTimeout(() => {
-                        infoModal.close();
-                    }, 3000);
-                    dispatch(setAccount(data.data));
-                    dispatch(setSelectedAccount(data.data.options.length - 1));
-                    modalController.close();
-                }
-            }
-        }
-    }, [data]);
 
     const handleVerifyAuthentication = async (
         option: Option,
@@ -98,7 +82,6 @@ export function SelectAccount({
         }
     };
 
-    const { resetAllStore } = useResetAllStore();
     const handleRegister = async (): Promise<void> => {
         try {
             const registrationResponse = await register(
@@ -124,6 +107,42 @@ export function SelectAccount({
         }
     };
 
+    useEffect(() => {
+        if (previousOptions.length === 0) {
+            if (data) {
+                setPreviousOptions(data.data.options);
+            }
+        } else {
+            if (data) {
+                if (data.data.options.length > previousOptions.length) {
+                    setPreviousOptions(data.data.options);
+                    setInfo('AUTHED');
+                    infoModal.open();
+                    setTimeout(() => {
+                        infoModal.close();
+                    }, 3000);
+                    dispatch(setAccount(data.data));
+                    dispatch(setSelectedAccount(data.data.options.length - 1));
+
+                    const lStorage = localStorage.getItem('ClaveAccounts');
+                    const accountsFromLS = lStorage ? JSON.parse(lStorage) : [];
+                    console.log(lStorage, accountsFromLS);
+                    accountsFromLS.push(account?.name);
+                    localStorage.setItem(
+                        'ClaveAccounts',
+                        JSON.stringify(accountsFromLS),
+                    );
+                    modalController.close();
+                }
+            }
+        }
+    }, [data]);
+
+    useEffect(() => {
+        const localS = localStorage.getItem('ClaveAccounts');
+        setLStorage(localS ? JSON.parse(localS) : lStorage);
+    }, []);
+
     return (
         <div className={styles.wrapper}>
             <div
@@ -134,7 +153,10 @@ export function SelectAccount({
                         setSelectOrCreate(false);
                     } else if (selectOrCreate) {
                         setSelectOrCreate(false);
+                    } else if (selectedAccount || selectedAccount === 0) {
+                        modalController.close();
                     } else {
+                        console.log(selectedAccount);
                         resetAllStore();
                     }
                 }}
@@ -189,8 +211,7 @@ export function SelectAccount({
                                 </div>
                             );
                         })}
-                    {account && (
-                        // account.options[0].type === Authenticator.MOBILE &&
+                    {account && !isInArray(lStorage, account.name) && (
                         <div className={styles.newAccount}>
                             <Button
                                 width="215px"

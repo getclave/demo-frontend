@@ -13,20 +13,29 @@ import {
 } from 'module/webauthnUtils';
 import { looksLikeHex } from 'utils/looksLikeHex';
 
-export const WebauthnOptions = {
-    registerOptions: {
-        authenticatorType: 'auto', // extern => remove browser
-        userVerification: 'required',
-        timeout: 60000,
-        attestation: false,
-        debug: false,
-    } as RegisterOptions,
-    authOptions: {
-        authenticatorType: 'auto', // extern => remove browser
-        userVerification: 'required',
-        timeout: 60000,
-    } as AuthenticateOptions,
-    algorithm: 'ES256',
+export const WebauthnOptions = (): {
+    registerOptions: RegisterOptions;
+    authOptions: AuthenticateOptions;
+    algorithm: string;
+} => {
+    const userAgent: boolean = window.navigator.userAgent
+        .toLowerCase()
+        .includes('mac');
+    return {
+        registerOptions: {
+            authenticatorType: userAgent ? 'auto' : 'roaming', // extern => remove browser
+            userVerification: 'required',
+            timeout: 60000,
+            attestation: false,
+            debug: false,
+        } as RegisterOptions,
+        authOptions: {
+            authenticatorType: userAgent ? 'auto' : 'roaming', // extern => remove browser
+            userVerification: 'required',
+            timeout: 60000,
+        } as AuthenticateOptions,
+        algorithm: 'ES256',
+    };
 };
 
 export const getSignatureVerifyParamEncoded = async (

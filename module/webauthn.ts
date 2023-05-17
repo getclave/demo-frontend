@@ -56,7 +56,7 @@ export const register = async (
     const registration = await client.register(
         user,
         challenge,
-        WebauthnOptions.registerOptions,
+        WebauthnOptions().registerOptions,
     );
     return registration;
 };
@@ -68,7 +68,7 @@ export const authenticate = async (
     const login = await client.authenticate(
         credentialId,
         challenge,
-        WebauthnOptions.authOptions,
+        WebauthnOptions().authOptions,
     );
 
     return login;

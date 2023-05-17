@@ -117,6 +117,16 @@ export function CreateAccount({
                     );
 
                     if (res) {
+                        const lStorage = localStorage.getItem('ClaveAccounts');
+                        const accountsFromLS = lStorage
+                            ? JSON.parse(lStorage)
+                            : [];
+                        console.log(lStorage, accountsFromLS);
+                        accountsFromLS.push(accountName);
+                        localStorage.setItem(
+                            'ClaveAccounts',
+                            JSON.stringify(accountsFromLS),
+                        );
                         setLoading(false);
                         dispatch(setDeployedContractAddress(create2Address));
                         dispatch(setSelectedAccount(0));

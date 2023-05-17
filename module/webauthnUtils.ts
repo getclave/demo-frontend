@@ -213,8 +213,6 @@ async function getKey(pubkey: ArrayBufferLike): Promise<CryptoKey> {
         hash: 'SHA-256',
     };
 
-    console.log(window.crypto.subtle.importKey);
-
     const response = await crypto.subtle.importKey(
         'spki',
         pubkey,
@@ -222,7 +220,6 @@ async function getKey(pubkey: ArrayBufferLike): Promise<CryptoKey> {
         true,
         ['verify'],
     );
-    console.log('response', response);
     return response;
 }
 

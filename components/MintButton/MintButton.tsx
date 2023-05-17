@@ -89,7 +89,9 @@ export function MintButton({
                 }
             }}
         >
-            {account ? 'Mint' : 'Connect'}
+            {account && (selectedAccount || selectedAccount === 0)
+                ? 'Mint'
+                : 'Connect'}
         </Button>
     );
 }
