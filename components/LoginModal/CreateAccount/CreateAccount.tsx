@@ -103,7 +103,6 @@ export function CreateAccount({
                     encodedChallenge,
                 );
                 dispatch(setAuthenticationResponse(authenticationResponse));
-                console.log('authenticationResponse', authenticationResponse);
                 if (authenticationResponse) {
                     setInfo('TXSENT');
                     const res = await sendInitUserOp(
@@ -126,6 +125,28 @@ export function CreateAccount({
                         localStorage.setItem(
                             'ClaveAccounts',
                             JSON.stringify(accountsFromLS),
+                        );
+                        const ClaveAccount = {
+                            account: {
+                                id: 0,
+                                name: accountName,
+                                address: create2Address,
+                                options: [
+                                    {
+                                        id: 0,
+                                        method_name: `${accountName}-${browserName}-1`,
+                                        public_key: publicKey,
+                                        type: 1,
+                                        client_id:
+                                            registrationResponse.credential.id,
+                                    },
+                                ],
+                            },
+                            selectedAccount: 0,
+                        };
+                        localStorage.setItem(
+                            'ClaveAccount',
+                            JSON.stringify(ClaveAccount),
                         );
                         setLoading(false);
                         dispatch(setDeployedContractAddress(create2Address));

@@ -8,6 +8,5 @@ export const getClientIds = (_account: AccountV2): Array<string> => {
             creadentialIds.push(clientId);
         }
     }
-    console.log('creadentials: ', creadentialIds);
     return creadentialIds;
 };

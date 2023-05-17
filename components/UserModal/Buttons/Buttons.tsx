@@ -68,6 +68,7 @@ export function Buttons({
             <div
                 className={styles.button}
                 onClick={(): void => {
+                    localStorage.removeItem('ClaveAccount');
                     resetAllStore();
                     modalController.close();
                 }}

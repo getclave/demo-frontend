@@ -21,7 +21,6 @@ export const WebauthnOptions = (): {
     const userAgent: boolean = window.navigator.userAgent
         .toLowerCase()
         .includes('mac');
-    console.log('userAgent: ', userAgent, window.navigator.userAgent);
     return {
         registerOptions: {
             authenticatorType: userAgent ? 'auto' : 'both', // extern => remove browser

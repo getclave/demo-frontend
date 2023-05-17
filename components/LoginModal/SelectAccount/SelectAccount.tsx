@@ -75,6 +75,14 @@ export function SelectAccount({
             );
             if (result) {
                 dispatch(setSelectedAccount(_index));
+                const ClaveAccount = {
+                    account: account,
+                    selectedAccount: _index,
+                };
+                localStorage.setItem(
+                    'ClaveAccount',
+                    JSON.stringify(ClaveAccount),
+                );
                 modalController.close();
             }
         } catch (e) {
@@ -126,11 +134,18 @@ export function SelectAccount({
 
                     const lStorage = localStorage.getItem('ClaveAccounts');
                     const accountsFromLS = lStorage ? JSON.parse(lStorage) : [];
-                    console.log(lStorage, accountsFromLS);
                     accountsFromLS.push(account?.name);
                     localStorage.setItem(
                         'ClaveAccounts',
                         JSON.stringify(accountsFromLS),
+                    );
+                    const ClaveAccount = {
+                        account: data.data,
+                        selectedAccount: data.data.options.length - 1,
+                    };
+                    localStorage.setItem(
+                        'ClaveAccount',
+                        JSON.stringify(ClaveAccount),
                     );
                     modalController.close();
                 }

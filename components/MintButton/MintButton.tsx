@@ -1,6 +1,7 @@
 import { BYTECODES } from 'constants/bytecode';
 import { useNotify } from 'hooks';
 import type { ModalController } from 'hooks/useModal';
+import { useResetAllStore } from 'hooks/useResetStore';
 import {
     authenticate,
     getChallange,
@@ -25,6 +26,7 @@ export function MintButton({
 }): JSX.Element {
     const dispatch = useDispatch();
     const notify = useNotify();
+    const { resetAllStore } = useResetAllStore();
     const account = useSelector((state: RootState) => state.account.account);
     const selectedAccount = useSelector(
         (state: RootState) => state.account.selectedAccount,
@@ -82,7 +84,8 @@ export function MintButton({
             className={styles.wrapper}
             // loading={!account ? false : loading}
             onClick={async (): Promise<void> => {
-                if (!account) {
+                if (!account || !(selectedAccount || selectedAccount === 0)) {
+                    resetAllStore();
                     open();
                 } else {
                     await handleAuthentication();
