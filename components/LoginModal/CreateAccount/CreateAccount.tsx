@@ -82,10 +82,8 @@ export function CreateAccount({
             const registrationResponse = await register(
                 `${accountName}-${browserName}-1`,
             );
-            console.log('started');
-            await new Promise((r) => setTimeout(r, 4000));
-            console.log('ended');
             if (registrationResponse) {
+                console.log(registrationResponse);
                 setInfo('CREATEAUTH');
                 setLoading(true);
                 dispatch(setRegistrationResponse(registrationResponse));
@@ -102,15 +100,12 @@ export function CreateAccount({
                     publicKey,
                 );
                 const encodedChallenge = encodeChallenge(challenge);
-                let authenticationResponse;
-                try {
-                    authenticationResponse = await authenticate(
-                        [registrationResponse.credential.id],
-                        encodedChallenge,
-                    );
-                } catch (e) {
-                    console.log(e);
-                }
+                console.log('came until auth');
+                console.log(browserName);
+                const authenticationResponse = await authenticate(
+                    [registrationResponse.credential.id],
+                    encodedChallenge,
+                );
 
                 dispatch(
                     setAuthenticationResponse(
