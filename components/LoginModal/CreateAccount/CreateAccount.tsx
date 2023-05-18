@@ -1,3 +1,4 @@
+import { AuthenticationEncoded } from '@passwordless-id/webauthn/dist/esm/types';
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
 import type { AxiosResponse } from 'axios';
@@ -101,11 +102,21 @@ export function CreateAccount({
                     publicKey,
                 );
                 const encodedChallenge = encodeChallenge(challenge);
-                const authenticationResponse = await authenticate(
-                    [registrationResponse.credential.id],
-                    encodedChallenge,
+                let authenticationResponse;
+                try {
+                    authenticationResponse = await authenticate(
+                        [registrationResponse.credential.id],
+                        encodedChallenge,
+                    );
+                } catch (e) {
+                    console.log(e);
+                }
+
+                dispatch(
+                    setAuthenticationResponse(
+                        authenticationResponse as AuthenticationEncoded,
+                    ),
                 );
-                dispatch(setAuthenticationResponse(authenticationResponse));
                 if (authenticationResponse) {
                     setInfo('TXSENT');
                     const res = await sendInitUserOp(
