@@ -82,7 +82,6 @@ export function CreateAccount({
                 `${accountName}-${browserName}-1`,
             );
             if (registrationResponse) {
-                console.log(registrationResponse);
                 setInfo('CREATEAUTH');
                 setLoading(true);
                 dispatch(setRegistrationResponse(registrationResponse));
