@@ -11,6 +11,7 @@ import {
     getCoordinatesFromHexPublicKey,
     getRS,
 } from 'module/webauthnUtils';
+import { deviceType } from 'react-device-detect';
 import { looksLikeHex } from 'utils/looksLikeHex';
 
 export const WebauthnOptions = (): {
@@ -18,9 +19,9 @@ export const WebauthnOptions = (): {
     authOptions: AuthenticateOptions;
     algorithm: string;
 } => {
-    const userAgent: boolean = window.navigator.userAgent
-        .toLowerCase()
-        .includes('mac');
+    const userAgent: boolean =
+        window.navigator.userAgent.toLowerCase().includes('mac') ||
+        deviceType == 'mobile';
     console.log(userAgent);
     return {
         registerOptions: {
