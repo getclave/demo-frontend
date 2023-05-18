@@ -9,7 +9,6 @@
     z-index: 1;
     overflow: hidden;
 
-
     .bg {
         position: absolute;
         height: 100%;
@@ -24,18 +23,18 @@
         width: 600px;
         left: -150px;
         bottom: -150px;
-        animation: turning 60s infinite linear;
+        animation: turning 470s infinite linear;
         opacity: 0.4;
         border-radius: 50%;
         box-shadow: 0 0 55px #d8d8d863;
         z-index: 1;
 
-        @media(max-width: 1200px) {
+        @media (max-width: 1200px) {
             width: 400px;
             bottom: -70px;
         }
 
-        @media(max-width: 1000px) {
+        @media (max-width: 1000px) {
             display: none;
         }
     }

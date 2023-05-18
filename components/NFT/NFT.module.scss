@@ -5,7 +5,6 @@
     flex-direction: column;
     z-index: 1;
 
-
     .frame {
         width: 225px;
         height: 225px;
@@ -16,7 +15,7 @@
         margin: 15px 0px;
         margin-bottom: 25px;
 
-        @media(max-width: 600px) {
+        @media (max-width: 600px) {
             width: 150px;
             height: 150px;
         }
@@ -25,11 +24,11 @@
             width: 200px;
             height: 200px;
             position: absolute;
-            animation: rotating 7s infinite linear;
-            box-shadow: 0 0 15px #d8d8d8;
+            animation: rotating 5s infinite linear;
+            box-shadow: 0 0 100px rgba(216, 216, 216, 0.4);
             border-radius: 50%;
 
-            @media(max-width: 600px) {
+            @media (max-width: 600px) {
                 width: 125px;
                 height: 125px;
             }
