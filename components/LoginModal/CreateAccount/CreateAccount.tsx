@@ -99,11 +99,9 @@ export function CreateAccount({
                     publicKey,
                 );
                 const encodedChallenge = encodeChallenge(challenge);
-                console.log('came until auth');
-                console.log(browserVersion);
-                console.log(deviceType);
+
                 const authenticationResponse = await authenticate(
-                    [],
+                    [registrationResponse.credential.id],
                     encodedChallenge,
                 );
 
