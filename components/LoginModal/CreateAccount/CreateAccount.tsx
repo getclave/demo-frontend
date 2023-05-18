@@ -1,4 +1,3 @@
-import { AuthenticationEncoded } from '@passwordless-id/webauthn/dist/esm/types';
 import { useMutation } from '@tanstack/react-query';
 import FINGERPRINT from 'assets/fingerprint.png';
 import type { AxiosResponse } from 'axios';
@@ -11,7 +10,7 @@ import { getInitChallange, sendInitUserOp } from 'module/webauthn';
 import { encodeChallenge, getPublicKey } from 'module/webauthnUtils';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
-import { browserName } from 'react-device-detect';
+import { browserName, browserVersion, deviceType } from 'react-device-detect';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiCreateAccountV2 } from 'restapi';
@@ -101,17 +100,14 @@ export function CreateAccount({
                 );
                 const encodedChallenge = encodeChallenge(challenge);
                 console.log('came until auth');
-                console.log(browserName);
+                console.log(browserVersion);
+                console.log(deviceType);
                 const authenticationResponse = await authenticate(
-                    [registrationResponse.credential.id],
+                    [],
                     encodedChallenge,
                 );
 
-                dispatch(
-                    setAuthenticationResponse(
-                        authenticationResponse as AuthenticationEncoded,
-                    ),
-                );
+                dispatch(setAuthenticationResponse(authenticationResponse));
                 if (authenticationResponse) {
                     setInfo('TXSENT');
                     const res = await sendInitUserOp(
