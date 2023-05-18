@@ -81,6 +81,9 @@ export function CreateAccount({
             const registrationResponse = await register(
                 `${accountName}-${browserName}-1`,
             );
+            console.log('started');
+            await new Promise((r) => setTimeout(r, 4000));
+            console.log('ended');
             if (registrationResponse) {
                 setInfo('CREATEAUTH');
                 setLoading(true);
@@ -163,6 +166,7 @@ export function CreateAccount({
                 }
             }
         } catch (e) {
+            console.log(e);
             infoModal.close();
             setLoading(false);
         }

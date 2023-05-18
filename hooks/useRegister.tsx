@@ -23,6 +23,7 @@ export const useRegister = (): {
         _bytecode: string,
     ): Promise<void> => {
         const registrationResponse = await register(_username);
+
         if (registrationResponse) {
             dispatch(setRegistrationResponse(registrationResponse));
             const publicKey: string = await getPublicKey(
