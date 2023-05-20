@@ -4,6 +4,10 @@
     min-width: 400px;
     color: white;
 
+    @media(max-width:500px) {
+        min-width: 300px;
+    }
+
 
     .header {
         background-color: #15153e;

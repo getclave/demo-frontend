@@ -29,8 +29,12 @@ export function ConnectAccount({
 
     useEffect(() => {
         if (isError && accountName !== '') {
-            setErrorMessage(error?.response?.data.message || '');
-            setDisabled(true);
+            try {
+                setErrorMessage(error?.response?.data.message || '');
+                setDisabled(true);
+            } catch (e) {
+                console.log(e);
+            }
         } else if (accountName !== '' && !isError) {
             setDisabled(false);
         }
@@ -56,6 +60,7 @@ export function ConnectAccount({
                     color="dark"
                     placeholder="Username"
                     height="40px"
+                    width={'100%'}
                     regularMessage={errorMessage}
                     value={accountName}
                     onChange={(e): void => {

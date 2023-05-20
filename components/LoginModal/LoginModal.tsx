@@ -50,9 +50,9 @@ export function LoginModal({
     return (
         <Modal className={styles.wrapper} modalController={loginModal}>
             <div className={styles.header}>
-                <div className={styles.fingerprint}>
+                {/* <div className={styles.fingerprint}>
                     <img src={FINGERPRINT.src}></img>
-                </div>
+                </div> */}
                 <span className={styles.text}>Clave Kit</span>
             </div>
             {connectionOption === ConnectionOptions.CONNECT ? (

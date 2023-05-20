@@ -85,83 +85,91 @@ export function CreateAccount({
                 setInfo('CREATEAUTH');
                 setLoading(true);
                 dispatch(setRegistrationResponse(registrationResponse));
-                const publicKey: string = await getPublicKey(
-                    registrationResponse?.credential.publicKey,
-                );
-
-                const create2Address: string = await useGetCreate2Address(
-                    publicKey,
-                );
-
-                const challenge = await getInitChallange(
-                    create2Address,
-                    publicKey,
-                );
-                const encodedChallenge = encodeChallenge(challenge);
-
-                const authenticationResponse = await authenticate(
-                    [registrationResponse.credential.id],
-                    encodedChallenge,
-                );
-
-                dispatch(setAuthenticationResponse(authenticationResponse));
-                if (authenticationResponse) {
-                    setInfo('TXSENT');
-                    const res = await sendInitUserOp(
-                        challenge,
-                        publicKey,
-                        encodedChallenge,
-                        authenticationResponse.signature,
-                        authenticationResponse.authenticatorData,
-                        authenticationResponse.clientData,
-                        create2Address,
+                try {
+                    const publicKey: string = await getPublicKey(
+                        registrationResponse?.credential.publicKey,
                     );
 
-                    if (res) {
-                        const lStorage = localStorage.getItem('ClaveAccounts');
-                        const accountsFromLS = lStorage
-                            ? JSON.parse(lStorage)
-                            : [];
-                        console.log(lStorage, accountsFromLS);
-                        accountsFromLS.push(accountName);
-                        localStorage.setItem(
-                            'ClaveAccounts',
-                            JSON.stringify(accountsFromLS),
+                    const create2Address: string = await useGetCreate2Address(
+                        publicKey,
+                    );
+
+                    const challenge = await getInitChallange(
+                        create2Address,
+                        publicKey,
+                    );
+                    const encodedChallenge = encodeChallenge(challenge);
+
+                    const authenticationResponse = await authenticate(
+                        [registrationResponse.credential.id],
+                        encodedChallenge,
+                    );
+
+                    dispatch(setAuthenticationResponse(authenticationResponse));
+                    if (authenticationResponse) {
+                        setInfo('TXSENT');
+                        const res = await sendInitUserOp(
+                            challenge,
+                            publicKey,
+                            encodedChallenge,
+                            authenticationResponse.signature,
+                            authenticationResponse.authenticatorData,
+                            authenticationResponse.clientData,
+                            create2Address,
                         );
-                        const ClaveAccount = {
-                            account: {
-                                id: 0,
+
+                        if (res) {
+                            const lStorage =
+                                localStorage.getItem('ClaveAccounts');
+                            const accountsFromLS = lStorage
+                                ? JSON.parse(lStorage)
+                                : [];
+                            console.log(lStorage, accountsFromLS);
+                            accountsFromLS.push(accountName);
+                            localStorage.setItem(
+                                'ClaveAccounts',
+                                JSON.stringify(accountsFromLS),
+                            );
+                            const ClaveAccount = {
+                                account: {
+                                    id: 0,
+                                    name: accountName,
+                                    address: create2Address,
+                                    options: [
+                                        {
+                                            id: 0,
+                                            method_name: `${accountName}-${browserName}-1`,
+                                            public_key: publicKey,
+                                            type: 1,
+                                            client_id:
+                                                registrationResponse.credential
+                                                    .id,
+                                        },
+                                    ],
+                                },
+                                selectedAccount: 0,
+                            };
+                            localStorage.setItem(
+                                'ClaveAccount',
+                                JSON.stringify(ClaveAccount),
+                            );
+                            setLoading(false);
+                            dispatch(
+                                setDeployedContractAddress(create2Address),
+                            );
+                            dispatch(setSelectedAccount(0));
+                            postAccount({
                                 name: accountName,
                                 address: create2Address,
-                                options: [
-                                    {
-                                        id: 0,
-                                        method_name: `${accountName}-${browserName}-1`,
-                                        public_key: publicKey,
-                                        type: 1,
-                                        client_id:
-                                            registrationResponse.credential.id,
-                                    },
-                                ],
-                            },
-                            selectedAccount: 0,
-                        };
-                        localStorage.setItem(
-                            'ClaveAccount',
-                            JSON.stringify(ClaveAccount),
-                        );
-                        setLoading(false);
-                        dispatch(setDeployedContractAddress(create2Address));
-                        dispatch(setSelectedAccount(0));
-                        postAccount({
-                            name: accountName,
-                            address: create2Address,
-                            authName: `${accountName}-${browserName}-1`,
-                            authPublic: publicKey,
-                            authType: 1,
-                            clientId: registrationResponse.credential.id,
-                        } as CreateAccountDto);
+                                authName: `${accountName}-${browserName}-1`,
+                                authPublic: publicKey,
+                                authType: 1,
+                                clientId: registrationResponse.credential.id,
+                            } as CreateAccountDto);
+                        }
                     }
+                } catch (e) {
+                    console.log(e);
                 }
             }
         } catch (e) {
@@ -207,6 +215,7 @@ export function CreateAccount({
                     color="dark"
                     placeholder="Username"
                     height="40px"
+                    width={'100%'}
                     error={errorMessage}
                     value={accountName}
                     onChange={(e): void => {

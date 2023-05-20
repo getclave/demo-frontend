@@ -1,7 +1,6 @@
 .wrapper {
     background-color: #212153;
     max-width: 550px;
-    min-width: 400px;
     color: white;
 
     .back {
@@ -29,15 +28,28 @@
         justify-content: center;
         flex-direction: column;
 
+        @media(max-width: 468px) {
+            margin-top: 50px;
+        }
+
         .fingerprint {
             img {
                 width: 50px;
+
+                @media(max-width: 468px) {
+                    width: 40px;
+                }
             }
         }
 
         .text {
             font-size: 20px;
             font-weight: 500;
+
+            @media(max-width: 468px) {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
         }
     }
 
@@ -51,6 +63,10 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 100px;
+
+        @media(max-width: 468px) {
+            margin-bottom: 50px;
+        }
     }
 
 }
