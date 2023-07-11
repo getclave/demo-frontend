@@ -17,6 +17,15 @@ import {
 import { getDefaultUserOp, getInitUserOp } from 'module/webauthnUtils';
 import type { UserOperationWithSignature } from 'module/webauthnUtils';
 
+/**
+ * To call the getUserOpHash function of the entryPoint contract,
+ * first create a userOp and then return the response of the function
+ * Get the challenge for the user authentication
+ * @param {string} _senderAddress - Address of the contract who will be signing the transaction
+ * @param {string} _signature - Signature of the transaction
+ * @param {string} _calldata - Calldata of the transaction
+ * @returns {string} - getUserOpHash function result of entrypoint
+ */
 export const getChallange = async (
     _senderAddress = '',
     _signature = '0x',
@@ -45,9 +54,15 @@ export const getInitChallange = async (
     );
 
     const response = await contract.getUserOpHash(userOp);
-
     return response;
 };
+
+/**
+ * Create a new passkey for the user
+ * @param {string} user - Nickname for the registration
+ * @param {string} challenge - Challenge for the registration, does not matter what it is for registration
+ * @returns {RegistrationEncoded} - Registration return object
+ */
 
 export const register = async (
     user = 'seal',
@@ -60,6 +75,13 @@ export const register = async (
     );
     return registration;
 };
+
+/**
+ * After the user has registered, authenticate the user with challenge
+ * @param {Array<string>} credentialId - Credential ID from the registration
+ * @param {string} challenge - Challenge for the authentication
+ * @returns {AuthenticationEncoded} - Authentication return object
+ */
 
 export const authenticate = async (
     credentialId: Array<string>,

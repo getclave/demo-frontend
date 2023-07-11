@@ -14,6 +14,10 @@ import {
 import { deviceType } from 'react-device-detect';
 import { looksLikeHex } from 'utils/looksLikeHex';
 
+/**
+ * Set WebAuthn options for the registration and authentication
+ */
+
 export const WebauthnOptions = (): {
     registerOptions: RegisterOptions;
     authOptions: AuthenticateOptions;
@@ -39,6 +43,15 @@ export const WebauthnOptions = (): {
     };
 };
 
+/**
+ * Encode the signature to be verified by the smart contract
+ * @param {string} _authenticatorData - authenticatorData comes from authentication response
+ * @param {string} _clientData - clientData comes from authentication response
+ * @param {string} _challenge - challenge which is used to authentication
+ * @param {string} _publicKey - publicKey of the user
+ * @param {string} _signatureBase64 - signature comes from authentication response
+ * @returns {string} - encoded signature
+ */
 export const getSignatureVerifyParamEncoded = async (
     _authenticatorData: string,
     _clientData: string,
@@ -80,6 +93,9 @@ export const getSignatureVerifyParamEncoded = async (
 
 export type HexString = `0x${string}`;
 
+/**
+ * The AbiCoder is a collection of Coders which can be used to encode and decode the binary data formats used to interoperate between the EVM and higher level libraries.
+ */
 export const abiEncoder = (
     types: Array<string | ethers.utils.ParamType>,
     values: Array<unknown>,
@@ -92,10 +108,22 @@ export const abiEncoder = (
 const initializationCode = (publicKey: string): string =>
     `${initializationCodeStart}${publicKey.slice(2)}`;
 
+/**
+ * This function contains the calldata of the Clave contracts to be deployed.
+ * At first, it adds the publicKey that can control the contract while deployed.
+ * @param {HexString} publicKey - The publicKey which will be used to control the contract
+ * @returns {string} - The initialization code of the contract
+ */
 export const getInitializationCode = (publicKey: string): HexString => {
     return initializationCode(publicKey) as HexString;
 };
 
+/**
+ * Function that adds the factory contratin address and selector to be used when deploying it with the clave account calldata.
+ * In this way, the necessary calldata to deploy the contract is created.
+ * @param {string} publicKey - The publicKey which will be used to control the contract
+ * @returns {HexString} - The initialization code of the contract
+ */
 export const getInitCode = (_publicKey: string): HexString => {
     const publicKey = looksLikeHex(_publicKey);
     const SELECTOR = 'fd7230d6';
