@@ -15,7 +15,7 @@ import {
     getSignatureVerifyParamEncoded,
 } from 'module/webauthnHelper';
 import { getDefaultUserOp, getInitUserOp } from 'module/webauthnUtils';
-import type { UserOperationWithSignature } from 'module/webauthnUtils';
+import type { UserOp } from 'module/webauthnUtils';
 
 /**
  * To call the getUserOpHash function of the entryPoint contract,
@@ -33,7 +33,7 @@ export const getChallange = async (
 ): Promise<string> => {
     const contract = await useGetEntrypointContract();
 
-    const userOp: UserOperationWithSignature = await getDefaultUserOp(
+    const userOp: UserOp = await getDefaultUserOp(
         _senderAddress,
         _signature,
         _calldata,
@@ -48,10 +48,7 @@ export const getInitChallange = async (
     _publicKey = '0x',
 ): Promise<string> => {
     const contract = await useGetEntrypointContract();
-    const userOp: UserOperationWithSignature = await getInitUserOp(
-        _senderAddress,
-        _publicKey,
-    );
+    const userOp: UserOp = await getInitUserOp(_senderAddress, _publicKey);
 
     const response = await contract.getUserOpHash(userOp);
     return response;
@@ -116,7 +113,7 @@ export const sendUserOpToEntrypoint = async (
     );
     const contract: Contract = await useGetEntrypointContractWithSigner();
 
-    const userOp: UserOperationWithSignature = await getDefaultUserOp(
+    const userOp: UserOp = await getDefaultUserOp(
         _senderAddress,
         signature,
         _calldata,
@@ -147,7 +144,7 @@ export const sendInitUserOp = async (
     );
     const contract: Contract = await useGetEntrypointContractWithSigner();
 
-    const userOp: UserOperationWithSignature = await getInitUserOp(
+    const userOp: UserOp = await getInitUserOp(
         _senderAddress,
         _publicKey,
         signature,
@@ -176,7 +173,7 @@ export const verifySignature = async (
         _signatureBase64,
     );
 
-    const userOp: UserOperationWithSignature = await getDefaultUserOp(
+    const userOp: UserOp = await getDefaultUserOp(
         _senderAddress,
         _publicKey,
         signature,

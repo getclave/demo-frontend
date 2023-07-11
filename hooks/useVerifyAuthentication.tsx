@@ -5,7 +5,7 @@ import type { ModalController } from 'hooks/useModal';
 import { authenticate, getChallange } from 'module/webauthn';
 import { getSignatureVerifyParamEncoded } from 'module/webauthnHelper';
 import { encodeChallenge, getDefaultUserOp } from 'module/webauthnUtils';
-import type { UserOperationWithSignature } from 'module/webauthnUtils';
+import type { UserOp } from 'module/webauthnUtils';
 import { provider } from 'restapi/index';
 import type { AccountV2 } from 'restapi/types';
 import { getClientIds } from 'utils/getClientIds';
@@ -44,7 +44,7 @@ export const useVerifyAuthentication = async (
             ABIs.verificationContract,
             provider,
         );
-        const userOp: UserOperationWithSignature = await getDefaultUserOp(
+        const userOp: UserOp = await getDefaultUserOp(
             _account.address,
             signature,
         );

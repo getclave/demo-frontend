@@ -3,7 +3,11 @@ import { useGetNonce } from 'hooks/useGetNonce';
 import { getInitCode } from 'module/webauthnHelper';
 import { looksLikeHex } from 'utils/looksLikeHex';
 
-export type UserOperationWithSignature = {
+/**
+ * UserOp type definition, it comes from eip-4337
+ */
+
+export type UserOp = {
     sender: string;
     nonce: number;
     initCode: string;
@@ -17,14 +21,22 @@ export type UserOperationWithSignature = {
     signature: string;
 };
 
+/**
+ * To create a UserOp object
+ * @param {string} _senderAddress - sender address
+ * @param {string} _signature - signature of the userOp
+ * @param {string} _calldata - calldata of the userOp
+ * @returns {UserOp} - UserOp object
+ */
+
 export const getDefaultUserOp = async (
     _senderAddress = '',
     _signature = '0x',
     _calldata = '0x',
-): Promise<UserOperationWithSignature> => {
+): Promise<UserOp> => {
     const nonce = await useGetNonce(_senderAddress);
 
-    const defaultUserOp: UserOperationWithSignature = {
+    const defaultUserOp: UserOp = {
         sender: _senderAddress,
         nonce: nonce,
         initCode: '0x',
@@ -41,13 +53,21 @@ export const getDefaultUserOp = async (
     return defaultUserOp;
 };
 
+/**
+ * To Create UserOp for init Clave Contract
+ * @param _senderAddress - sender address
+ * @param _publicKey - publicKey for control contract
+ * @param _signature - signature of the userOp
+ * @returns {UserOp} - UserOp object
+ */
+
 export const getInitUserOp = async (
     _senderAddress = '',
     _publicKey = '0x',
     _signature = '0x',
-): Promise<UserOperationWithSignature> => {
+): Promise<UserOp> => {
     const initCode = getInitCode(_publicKey);
-    const initUserOp: UserOperationWithSignature = {
+    const initUserOp: UserOp = {
         sender: _senderAddress,
         nonce: 0,
         initCode: initCode,
@@ -227,6 +247,11 @@ const base64toBase64Url = (txt: string): string => {
     return txt.replaceAll('+', '-').replaceAll('/', '_');
 };
 
+/**
+ * Encode challenge to base64url
+ * @param challenge
+ * @returns {string} - Enocded challenge
+ */
 export const encodeChallenge = (challenge: string): string => {
     const sliced = challenge.slice(2);
     const split = base64toBase64Url(
