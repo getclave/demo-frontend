@@ -43,7 +43,14 @@ export const getChallange = async (
     return response;
 };
 
-export const getInitChallange = async (
+/**
+ * To call the getUserOpHash function of the entryPoint for init contract
+ * @param {string} _senderAddress - Create2 address
+ * @param {string} _publicKey - Public key which comes from registration
+ * @returns {string} - string
+ */
+
+export const getInitChallenge = async (
     _senderAddress = '',
     _publicKey = '0x',
 ): Promise<string> => {
@@ -93,6 +100,20 @@ export const authenticate = async (
     return login;
 };
 
+/**
+ * After sign the userOp (authentication with challenge),
+ * send the userOp to the entrypoint contract.
+ * @param _challenge
+ * @param _publicKey
+ * @param _encodedChallenge
+ * @param _signatureBase64
+ * @param _authenticatorData
+ * @param _clientData
+ * @param _senderAddress
+ * @param _calldata
+ * @param _beneficiary
+ * @returns {Transaction} - Transaction response
+ */
 export const sendUserOpToEntrypoint = async (
     _challenge: string,
     _publicKey: string,
@@ -125,6 +146,19 @@ export const sendUserOpToEntrypoint = async (
     return response;
 };
 
+/**
+ * After sign the userOp (authentication with challenge),
+ * send the userOp to the entrypoint contract.
+ * @param _challenge
+ * @param _publicKey
+ * @param _encodedChallenge
+ * @param _signatureBase64
+ * @param _authenticatorData
+ * @param _clientData
+ * @param _senderAddress
+ * @param _beneficiary
+ * @returns {Transaction} - Transaction response
+ */
 export const sendInitUserOp = async (
     _challenge: string,
     _publicKey: string,
@@ -150,11 +184,16 @@ export const sendInitUserOp = async (
         signature,
     );
     const response = await contract.handleOps([userOp], _beneficiary, {
-        gasLimit: 20000000,
+        gasLimit: 20000000, //change this
     });
     await response.wait();
     return response;
 };
+
+/**
+ * Verify the signature, (validateSignature function can be internal)
+ * @returns {Transaction} - Transaction response
+ */
 
 export const verifySignature = async (
     _challenge: string,

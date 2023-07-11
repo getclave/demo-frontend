@@ -6,7 +6,7 @@ import { useNotify } from 'hooks';
 import { useGetCreate2Address } from 'hooks/useGetCreate2Address';
 import type { ModalController } from 'hooks/useModal';
 import { authenticate, register } from 'module/webauthn';
-import { getInitChallange, sendInitUserOp } from 'module/webauthn';
+import { getInitChallenge, sendInitUserOp } from 'module/webauthn';
 import { encodeChallenge, getPublicKey } from 'module/webauthnUtils';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
@@ -94,7 +94,7 @@ export function CreateAccount({
                         publicKey,
                     );
 
-                    const challenge = await getInitChallange(
+                    const challenge = await getInitChallenge(
                         create2Address,
                         publicKey,
                     );
