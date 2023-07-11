@@ -4,6 +4,10 @@ import { BigNumber } from 'ethers';
 import { QUERIES } from '../constants/queries';
 import { provider } from '../restapi/index';
 
+/**
+ * Gets balance of address query
+ * @param address - Address to get balance of
+ */
 export const useBalanceQuery = (
     address: string,
 ): { balance: BigNumber; refetch: () => void } => {

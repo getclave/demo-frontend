@@ -4,6 +4,11 @@ import { useGetFactoryContract } from '../hooks/useGetFactoryContract';
 import { getInitializationCode } from '../userOp/userOp';
 import { toHexString } from '../utils/toHexString';
 
+/**
+ * Gets a create2 address with publickey and clave contract calldata
+ * @param {string} _publicKey - Public key which comes from webauthn
+ * @returns {Promise<string>} - Create2 address
+ */
 export const useGetCreate2Address = async (
     _publicKey: string,
 ): Promise<string> => {
