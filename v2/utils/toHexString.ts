@@ -1,5 +1,5 @@
 /**
- * Function to convert a string to a hex string
+ * Function to convert a string to a hex string.
  * If string is already a hex string, it returns the same string
  * @param _string
  * @returns
