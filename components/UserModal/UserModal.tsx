@@ -1,7 +1,7 @@
 import face from 'assets/lottie/face.json';
 import { ethers } from 'ethers';
 import type { ModalController } from 'hooks/useModal';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
@@ -11,6 +11,10 @@ import { parseAddress } from 'utils/parseAddress';
 import { Buttons } from './Buttons/Buttons';
 import { Transfer } from './Transfer/Transfer';
 import styles from './UserModal.module.scss';
+
+const Lottie = dynamic(() => import('lottie-react'), {
+    ssr: false,
+});
 
 export function UserModal({
     modalController,

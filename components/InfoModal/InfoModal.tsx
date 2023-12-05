@@ -4,10 +4,14 @@ import successful from 'assets/lottie/successful.json';
 import transfered from 'assets/lottie/transfer.json';
 import wallet from 'assets/lottie/wallet.json';
 import type { ModalController } from 'hooks/useModal';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
 import { Modal } from 'ui';
 
 import styles from './InfoModal.module.scss';
+
+const Lottie = dynamic(() => import('lottie-react'), {
+    ssr: false,
+});
 
 const MESSAGES: { [key: string]: string } = {
     CREATEREGISTER:

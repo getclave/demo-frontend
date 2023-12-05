@@ -10,7 +10,7 @@ import { getInitChallenge, sendInitUserOp } from 'module/webauthn';
 import { encodeChallenge, getPublicKey } from 'module/webauthnUtils';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
-import { browserName, browserVersion, deviceType } from 'react-device-detect';
+import { browserName } from 'react-device-detect';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiCreateAccountV2 } from 'restapi';
