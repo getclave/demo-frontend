@@ -1,0 +1,34 @@
+.wrapper {
+    height: 100vh;
+    background: linear-gradient(65.04deg, #7617a4 2.97%, #270550 64.73%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1;
+    overflow: hidden;
+
+
+    .mobile {
+        border: black 2px solid;
+        border-radius: 16px;
+        max-width: 335px;
+        max-height: 670px;
+        height: 100%;
+        width: 100%;
+        opacity: 1;
+        overflow: hidden;
+        background-color: #1D1D1D;
+    }
+}
+
+@keyframes turning {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
