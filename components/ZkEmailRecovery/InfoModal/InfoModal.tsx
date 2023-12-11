@@ -24,6 +24,7 @@ const MESSAGES: { [key: string]: string } = {
     AUTHED: 'Device authorized successfully',
     AUTH: 'Verify that you own the account',
     LOGINED: 'You have successfully logged in',
+    ADDGUARDIAN: 'Sign the transaction to add guardian',
 };
 const STEP: { [key: string]: string } = {
     CREATEREGISTER: '1/2',
@@ -44,6 +45,7 @@ export function InfoModal({
                 info !== 'CREATEDWALLET' &&
                 info !== 'TRANSFERED' &&
                 info !== 'MINTED' &&
+                info !== 'ADDGUARDIAN' &&
                 info !== 'AUTHED' &&
                 'LOGINED' !== info && (
                     <div className={styles.toDo}>
@@ -51,21 +53,22 @@ export function InfoModal({
                     </div>
                 )}
             <div className={styles.animation}>
-                {'MINTAUTH' === info ||
+                {('MINTAUTH' === info ||
                     'CREATEREGISTER' === info ||
                     'SENDTX' === info ||
+                    'ADDGUARDIAN' === info ||
                     'CREATEAUTH' === info ||
-                    (info === 'AUTH' && (
-                        <Lottie
-                            animationData={fingerprinting}
-                            loop={true}
-                            style={{
-                                width: '120px',
-                                margin: '-20px',
-                                marginBottom: '-40px',
-                            }}
-                        />
-                    ))}
+                    info === 'AUTH') && (
+                    <Lottie
+                        animationData={fingerprinting}
+                        loop={true}
+                        style={{
+                            width: '120px',
+                            margin: '-20px',
+                            marginBottom: '-40px',
+                        }}
+                    />
+                )}
                 {'TXSENT' === info && (
                     <Lottie
                         animationData={loading}

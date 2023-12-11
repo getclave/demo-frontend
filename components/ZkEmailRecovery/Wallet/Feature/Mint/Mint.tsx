@@ -10,7 +10,7 @@ import {
 import { encodeChallenge } from 'module/webauthnUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { setAuthenticationResponse } from 'store/slicers/account';
+import { setZKAuthenticationResponse } from 'store/slicers/zkaccount';
 import { Button } from 'ui';
 
 import styles from './Mint.module.scss';
@@ -24,9 +24,9 @@ export function Mint({
 }): JSX.Element {
     const dispatch = useDispatch();
     const notify = useNotify();
-    const account = useSelector((state: RootState) => state.account.account);
+    const account = useSelector((state: RootState) => state.zkaccount.account);
     const selectedAccount = useSelector(
-        (state: RootState) => state.account.selectedAccount,
+        (state: RootState) => state.zkaccount.selectedAccount,
     );
 
     const handleAuthentication = async (): Promise<void> => {
@@ -49,7 +49,7 @@ export function Mint({
             );
 
             setInfoMessage('TXSENT');
-            dispatch(setAuthenticationResponse(authenticationResponse));
+            dispatch(setZKAuthenticationResponse(authenticationResponse));
 
             const res = await sendUserOpToEntrypoint(
                 challange,
@@ -62,7 +62,7 @@ export function Mint({
                 BYTECODES.mintFunction,
             );
             if (res) {
-                // notify.success('Minted successfully!');
+                notify.success('Minted successfully!');
                 setInfoMessage('MINTED');
                 setTimeout(() => {
                     infoModal.close();

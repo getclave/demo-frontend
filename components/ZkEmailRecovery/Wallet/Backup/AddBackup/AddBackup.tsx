@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import { ethers } from 'ethers';
+import { useNotify } from 'hooks';
 import type { ModalController } from 'hooks/useModal';
 import {
     authenticate,
@@ -24,42 +25,66 @@ export function AddBackup({
     setStep: (step: 'create' | 'add') => void;
 }): JSX.Element {
     const [guardian, setGuardian] = useState<string>('');
-    const account = useSelector((state: RootState) => state.account.account);
-
+    const account = useSelector((state: RootState) => state.zkaccount.account);
+    const notify = useNotify();
     const selectedAccount = useSelector(
-        (state: RootState) => state.account.selectedAccount,
+        (state: RootState) => state.zkaccount.selectedAccount,
     );
 
     const handleAddGuardian = async (): Promise<void> => {
         if (!account) return;
         if (!selectedAccount && selectedAccount !== 0) return;
-        const prepareData = (thisAddress: string, guard: string): string => {
-            const thisAddressNo0x =
-                thisAddress.slice(0, 2) === '0x'
-                    ? thisAddress.slice(2)
-                    : thisAddress;
-            const guardianNo0x = guard.slice(2);
-            return `0xb61d27f6000000000000000000000000${thisAddressNo0x}0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000246cd9f3be000000000000000000000000${guardianNo0x}00000000000000000000000000000000000000000000000000000000`;
-        };
-        const calldata = prepareData(account?.address, guardian);
-        const challange = await getChallange(account?.address, '0x', calldata);
-        const encodedChallenge: string = encodeChallenge(challange);
-        const clientData = account.options[selectedAccount]?.client_id;
-        const authenticationResponse = await authenticate(
-            clientData ? [clientData] : [],
-            encodedChallenge,
-        );
-
-        await sendUserOpToEntrypoint(
-            challange,
-            account.options[selectedAccount].public_key,
-            encodedChallenge,
-            authenticationResponse.signature,
-            authenticationResponse.authenticatorData,
-            authenticationResponse.clientData,
-            account?.address,
-            calldata,
-        );
+        try {
+            const prepareData = (
+                thisAddress: string,
+                guard: string,
+            ): string => {
+                const thisAddressNo0x =
+                    thisAddress.slice(0, 2) === '0x'
+                        ? thisAddress.slice(2)
+                        : thisAddress;
+                const guardianNo0x = guard.slice(2);
+                return `0xb61d27f6000000000000000000000000${thisAddressNo0x}0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000246cd9f3be000000000000000000000000${guardianNo0x}00000000000000000000000000000000000000000000000000000000`;
+            };
+            setInfoMessage('ADDGUARDIAN');
+            infoModal.open();
+            const calldata = prepareData(account?.address, guardian);
+            const challange = await getChallange(
+                account?.address,
+                '0x',
+                calldata,
+            );
+            const encodedChallenge: string = encodeChallenge(challange);
+            const clientData = account.options[selectedAccount]?.client_id;
+            const authenticationResponse = await authenticate(
+                clientData ? [clientData] : [],
+                encodedChallenge,
+            );
+            setInfoMessage('TXSENT');
+            const res = await sendUserOpToEntrypoint(
+                challange,
+                account.options[selectedAccount].public_key,
+                encodedChallenge,
+                authenticationResponse.signature,
+                authenticationResponse.authenticatorData,
+                authenticationResponse.clientData,
+                account?.address,
+                calldata,
+            );
+            if (res) {
+                notify.success('Guardian added');
+                setGuardian('');
+                setInfoMessage('TRANSFERED');
+                setStep('create');
+                setTimeout(() => {
+                    infoModal.close();
+                }, 2500);
+            }
+        } catch (e) {
+            console.log(e);
+            infoModal.close();
+            notify.error('Guardian not added');
+        }
     };
 
     return (

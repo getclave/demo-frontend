@@ -35,6 +35,12 @@ export function Recover({
     const [errorMessage, setErrorMessage] = useState<string>('');
     const debounced = useDebounce(accountName, 500);
     const [email, setEmail] = useState<string>('');
+    const [linkToEmail, setLinkToEmail] = useState<{
+        link: string;
+        publicKey: string;
+        name: string;
+        cliendId: string;
+    } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { data, isError, error } = useGetAccountQueryV2(debounced);
     const connectionOption = useSelector(
@@ -62,7 +68,7 @@ export function Recover({
         },
     });
 
-    const handleStartRecovery = async (): Promise<void> => {
+    const handleSignRecovery = async (): Promise<void> => {
         const address = data?.data.address;
         if (!address) return;
 
@@ -78,19 +84,35 @@ export function Recover({
                     address,
                     publicKey,
                 );
-                recoverAccount({
-                    name: accountName,
-                    authName: registrationName,
-                    authPublic: publicKey,
-                    authType: 1,
-                    clientId: registrationResponse.credential.id,
-                } as NewOptionDto);
-                window.open(sendLink, '_blank');
+                console.log(sendLink, publicKey);
+                setLinkToEmail({
+                    link: sendLink,
+                    publicKey: publicKey,
+                    name: registrationName,
+                    cliendId: registrationResponse.credential.id,
+                });
             }
         } catch (e) {
             console.log(e);
         }
     };
+
+    const handleStartRecovery = async (): Promise<void> => {
+        if (linkToEmail == null) return;
+        window.open(linkToEmail.link, '_blank');
+        recoverAccount({
+            name: accountName,
+            authName: linkToEmail.name,
+            authPublic: linkToEmail.publicKey,
+            authType: 1,
+            clientId: linkToEmail.cliendId,
+        } as NewOptionDto);
+        dispatch(setZKConnectionOption(ConnectionOptions.CONNECT));
+    };
+
+    useEffect(() => {
+        setLinkToEmail(null);
+    }, [email, debounced]);
 
     useEffect(() => {
         setErrorMessage('');
@@ -155,35 +177,24 @@ export function Recover({
                         setEmail(e.target.value);
                         setErrorMessage('');
                     }}
-                    onKeyPress={(e): void => {
-                        if (accountName === '') return;
-                        if (
-                            e.key === 'enter' ||
-                            e.key === 'Enter' ||
-                            e.key === 'NumpadEnter'
-                        ) {
-                            if (data && !isButtonDisabled) {
-                                dispatch(setZKAccount(data?.data));
-                                dispatch(
-                                    setZKConnectionOption(
-                                        ConnectionOptions.SELECT,
-                                    ),
-                                );
-                            }
-                        }
-                    }}
                 />
             </div>
             <div className={styles.button}>
                 <Button
                     disabled={isButtonDisabled}
-                    width="160px"
+                    width="180px"
                     height="40px"
                     color="special"
                     loading={loading || isLoading}
-                    onClick={handleStartRecovery}
+                    onClick={
+                        linkToEmail == null
+                            ? handleSignRecovery
+                            : handleStartRecovery
+                    }
                 >
-                    Start Recovery
+                    {linkToEmail == null
+                        ? 'Create new signer'
+                        : 'Start Recovery'}
                 </Button>
             </div>
         </div>

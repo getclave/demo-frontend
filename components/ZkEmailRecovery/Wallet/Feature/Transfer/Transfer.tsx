@@ -20,7 +20,7 @@ export function Transfer({
     const balance = useSelector((state: RootState) => state.zkaccount.balance);
     const [recipient, setRecipient] = useState<string>('');
     const [amount, setAmount] = useState<string>('');
-    const { transfer } = useSetTransferTx();
+    const { zktransfer } = useSetTransferTx();
 
     const handleSend = async (): Promise<void> => {
         if (
@@ -35,7 +35,7 @@ export function Transfer({
                 setRecipient('');
                 setAmount('');
             };
-            await transfer(
+            await zktransfer(
                 account?.address,
                 recipient,
                 ethers.utils.parseEther(amount),

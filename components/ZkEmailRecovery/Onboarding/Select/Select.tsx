@@ -1,9 +1,6 @@
-import { useNotify } from 'hooks';
 import type { ModalController } from 'hooks/useModal';
 import { useResetAllStore } from 'hooks/useResetStore';
 import { useVerifyAuthentication } from 'hooks/useVerifyAuthentication';
-import { register } from 'module/webauthn';
-import { getPublicKey } from 'module/webauthnUtils';
 import { QRCodeSVG } from 'qrcode.react';
 import { useGetAccountQueryV2 } from 'queries/useGetAccountQueryV2';
 import { useEffect, useState } from 'react';
@@ -15,14 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { Option } from 'restapi/types';
 import { Authenticator } from 'restapi/types';
 import type { RootState } from 'store';
-import {
-    setZKAccount,
-    setZKRegistrationResponse,
-    setZKSelectedAccount,
-} from 'store/slicers/zkaccount';
-import { Button } from 'ui';
+import { setZKAccount, setZKSelectedAccount } from 'store/slicers/zkaccount';
 import { clsnm } from 'utils/clsnm';
-import { isInArray } from 'utils/isInArray';
 
 import styles from './Select.module.scss';
 
@@ -33,7 +24,6 @@ export function Select({
     infoModal: ModalController;
     setInfo: (value: string) => void;
 }): JSX.Element {
-    const notify = useNotify();
     const dispatch = useDispatch();
     const [selectOrCreate, setSelectOrCreate] = useState<boolean>(false);
     const [publicKey, setPublicKey] = useState<string | null>(null);
@@ -83,31 +73,6 @@ export function Select({
             }
         } catch (e) {
             console.log(e);
-        }
-    };
-
-    const handleRegister = async (): Promise<void> => {
-        try {
-            const registrationResponse = await register(
-                `${account?.name}-${browserName}-${
-                    account?.options ? account?.options.length + 1 : '9'
-                }`,
-            );
-            if (registrationResponse) {
-                dispatch(setZKRegistrationResponse(registrationResponse));
-                const publicKey: string = await getPublicKey(
-                    registrationResponse?.credential.publicKey,
-                );
-                setPublicKey(publicKey);
-
-                setSelectOrCreate(true);
-                if (account) {
-                    dispatch(setZKSelectedAccount(account?.options.length + 1));
-                }
-            }
-        } catch (e) {
-            console.log(e);
-            notify.error(e as string);
         }
     };
 
@@ -215,22 +180,6 @@ export function Select({
                                 </div>
                             );
                         })}
-                    {account && !isInArray(lStorage, account.name) && (
-                        <div className={styles.newAccount}>
-                            <Button
-                                width="215px"
-                                height="30px"
-                                color="purple"
-                                fontSize="fs14"
-                                fontWeight="fw400"
-                                onClick={async (): Promise<void> => {
-                                    await handleRegister();
-                                }}
-                            >
-                                Authenticate this device
-                            </Button>
-                        </div>
-                    )}
                 </div>
             ) : !publicKey ? null : (
                 <div className={styles.qrCode}>
