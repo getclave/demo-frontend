@@ -1,0 +1,23 @@
+.wrapper {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 100px;
+
+    .poc {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .madeBy {
+        font-size: 22px;
+        margin-top: -3px;
+    }
+}

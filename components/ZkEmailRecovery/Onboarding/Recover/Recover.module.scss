@@ -1,0 +1,87 @@
+.wrapper {
+    color: white;
+    width: 100%;
+    position: relative;
+    padding: 0px 10px;
+
+
+    .back {
+        position: absolute;
+        top: -45px;
+        left: 10px;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #3A3746;
+
+        &:hover {
+            background-color: #0f0f33;
+        }
+    }
+
+    .title {
+        margin-top: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        @media(max-width: 468px) {
+            margin-top: 50px;
+        }
+
+        .fingerprint {
+            img {
+                width: 50px;
+
+                @media(max-width: 468px) {
+                    width: 40px;
+                }
+            }
+        }
+
+        .text {
+            font-size: 20px;
+            font-weight: 500;
+
+            @media(max-width: 468px) {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .nickname {
+        margin: 10px 0px;
+    }
+
+    .button {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .create {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 100px;
+        flex-direction: column;
+
+        @media(max-width: 468px) {
+            margin-bottom: 50px;
+        }
+
+        .text {
+            // margin-right: 10px;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}
