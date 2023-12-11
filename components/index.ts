@@ -11,3 +11,7 @@ export { User } from './User/User';
 export { SelectAccount } from './LoginModal/SelectAccount/SelectAccount';
 export { UserModal } from './UserModal/UserModal';
 export { RemoveThis } from './RemoveThis/RemoveThis';
+export { StartRecovery } from './LoginModal/StartRecovery/StartRecovery';
+
+// -------- zkemail recovery ---------
+export * from './ZkEmailRecovery';
