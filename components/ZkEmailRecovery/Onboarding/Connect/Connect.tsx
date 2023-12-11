@@ -21,7 +21,7 @@ export function Connect({
     const [errorMessage, setErrorMessage] = useState<string>('');
     const debounced = useDebounce(accountName, 500);
     const [disabled, setDisabled] = useState<boolean>(true);
-    const { data, isError, error } = useGetAccountQueryV2(debounced);
+    const { data, isError, error, isLoading } = useGetAccountQueryV2(debounced);
     const connectionOption = useSelector(
         (state: RootState) => state.zkconnection.connectionOption,
     );
@@ -72,13 +72,14 @@ export function Connect({
                     width="120px"
                     height="40px"
                     color="special"
-                    // loading={isLoading}
+                    loading={isLoading}
                     onClick={(): void => {
                         if (data && accountName !== '') {
                             dispatch(setZKAccount(data?.data));
                             dispatch(
                                 setZKConnectionOption(ConnectionOptions.SELECT),
                             );
+                            setAccountName('');
                         }
                     }}
                 >

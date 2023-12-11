@@ -31,7 +31,6 @@ export function getCreateEmailLink(
     }
 
     const hashedPublicKey = ethers.utils.keccak256('0x'.concat(publicKey));
-    console.log('publicKey', publicKey, 'hash: ', hashedPublicKey, 'to: ', to);
 
     const startRecoveryCalldata = `0x000000000000000000000000${to.slice(
         2,
@@ -64,7 +63,6 @@ export function getEmailLink(
     subject: string,
     body: string,
     send_to_instead_of_cc = false,
-    force_mailto = false,
 ): [string, string, string] {
     const encodedSubject = encodeURIComponent(subject);
     const encodedBody = encodeURIComponent(body);

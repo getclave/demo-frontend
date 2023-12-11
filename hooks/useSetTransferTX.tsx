@@ -12,6 +12,7 @@ import { encodeChallenge } from 'module/webauthnUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { setAuthenticationResponse } from 'store/slicers/account';
+import { setZKAuthenticationResponse } from 'store/slicers/zkaccount';
 
 export const useSetTransferTx = (): {
     encodeDirectTransactionCalldata: (
@@ -19,6 +20,14 @@ export const useSetTransferTx = (): {
         value: ethers.BigNumber,
     ) => void;
     transfer: (
+        _sender: string,
+        _to: string,
+        _value: ethers.BigNumber,
+        reset: () => void,
+        setInfoMessage: (message: string) => void,
+        infoModal: ModalController,
+    ) => Promise<void>;
+    zktransfer: (
         _sender: string,
         _to: string,
         _value: ethers.BigNumber,
@@ -34,6 +43,12 @@ export const useSetTransferTx = (): {
         (state: RootState) => state.account.selectedAccount,
     );
     const account = useSelector((state: RootState) => state.account.account);
+    const zkselectedAccount = useSelector(
+        (state: RootState) => state.zkaccount.selectedAccount,
+    );
+    const zkaccount = useSelector(
+        (state: RootState) => state.zkaccount.account,
+    );
 
     const encodeDirectTransactionCalldata = (
         to: string,
@@ -100,5 +115,57 @@ export const useSetTransferTx = (): {
         }
     };
 
-    return { encodeDirectTransactionCalldata, transfer };
+    const zktransfer = async (
+        _sender: string,
+        _to: string,
+        _value: ethers.BigNumber,
+        reset: () => void,
+        setInfoMessage: (message: string) => void,
+        infoModal: ModalController,
+    ): Promise<void> => {
+        if (!zkaccount) return;
+        if (!zkselectedAccount && zkselectedAccount !== 0) return;
+        try {
+            const calldata = encodeDirectTransactionCalldata(_to, _value);
+            setInfoMessage('SENDTX');
+            infoModal.open();
+            const challange: string = await getChallange(
+                _sender,
+                '0x',
+                calldata,
+            );
+            const encodedChallenge: string = encodeChallenge(challange);
+            const clientData = zkaccount.options[zkselectedAccount]?.client_id;
+            const authenticationResponse = await authenticate(
+                clientData ? [clientData] : [],
+                encodedChallenge,
+            );
+
+            dispatch(setZKAuthenticationResponse(authenticationResponse));
+            setInfoMessage('TXSENT');
+            const res: Transaction = await sendUserOpToEntrypoint(
+                challange,
+                zkaccount.options[zkselectedAccount].public_key,
+                encodedChallenge,
+                authenticationResponse.signature,
+                authenticationResponse.authenticatorData,
+                authenticationResponse.clientData,
+                zkaccount?.address,
+                calldata,
+            );
+            if (res) {
+                notify.success('Transfer successful');
+                reset();
+                setInfoMessage('TRANSFERED');
+                setTimeout(() => {
+                    infoModal.close();
+                }, 2500);
+            }
+        } catch (e) {
+            infoModal.close();
+            notify.error('Transfer failed');
+        }
+    };
+
+    return { encodeDirectTransactionCalldata, transfer, zktransfer };
 };
