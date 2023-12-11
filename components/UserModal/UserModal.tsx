@@ -8,6 +8,7 @@ import type { RootState } from 'store';
 import { Modal } from 'ui';
 import { parseAddress } from 'utils/parseAddress';
 
+import { AddRecovery } from './AddRecovery/AddRecovery';
 import { Buttons } from './Buttons/Buttons';
 import { Transfer } from './Transfer/Transfer';
 import styles from './UserModal.module.scss';
@@ -31,7 +32,9 @@ export function UserModal({
     const balance = useSelector((state: RootState) => state.account.balance);
 
     const [copy, setCopy] = useState<string>('Copy Address');
-    const [page, setPage] = useState<'buttons' | 'transfer'>('buttons');
+    const [page, setPage] = useState<
+        'buttons' | 'transfer' | 'addRecovery' | 'startRecovery'
+    >('buttons');
 
     useEffect(() => {
         if (copy === 'Copy Address') return;
@@ -66,8 +69,15 @@ export function UserModal({
                     setPage={setPage}
                     loginModal={loginModal}
                 />
-            ) : (
+            ) : page === 'transfer' ? (
                 <Transfer
+                    modalController={modalController}
+                    setPage={setPage}
+                    setInfoMessage={setInfoMessage}
+                    infoModal={infoModal}
+                />
+            ) : (
+                <AddRecovery
                     modalController={modalController}
                     setPage={setPage}
                     setInfoMessage={setInfoMessage}

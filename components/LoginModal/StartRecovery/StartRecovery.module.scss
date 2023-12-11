@@ -4,6 +4,25 @@
     color: white;
     width: 100%;
 
+
+    .back {
+        position: absolute;
+        top: 75px;
+        left: 10px;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #181843dc;
+
+        &:hover {
+            background-color: #15153e;
+        }
+    }
+
     .title {
         margin-top: 100px;
         display: flex;

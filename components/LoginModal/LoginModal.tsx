@@ -1,5 +1,5 @@
 import FINGERPRINT from 'assets/fingerprint.png';
-import { CreateAccount, SelectAccount } from 'components';
+import { CreateAccount, SelectAccount, StartRecovery } from 'components';
 import { ConnectAccount } from 'components';
 import type { ModalController } from 'hooks/useModal';
 import { useEffect, useState } from 'react';
@@ -55,7 +55,14 @@ export function LoginModal({
                 </div> */}
                 <span className={styles.text}>Clave Kit</span>
             </div>
-            {connectionOption === ConnectionOptions.CONNECT ? (
+            {connectionOption === ConnectionOptions.STARTRECOVERY ? (
+                <StartRecovery
+                    accountName={accountName}
+                    setAccountName={setAccountName}
+                    infoModal={infoModal}
+                    setInfo={setInfoMessage}
+                />
+            ) : connectionOption === ConnectionOptions.CONNECT ? (
                 <ConnectAccount
                     accountName={accountName}
                     setAccountName={setAccountName}

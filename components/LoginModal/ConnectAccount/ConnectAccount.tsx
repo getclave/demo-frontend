@@ -115,6 +115,18 @@ export function ConnectAccount({
                 >
                     Need a account?
                 </div>
+                <div
+                    className={styles.text}
+                    onClick={(): void => {
+                        dispatch(
+                            setConnectionOption(
+                                ConnectionOptions.STARTRECOVERY,
+                            ),
+                        );
+                    }}
+                >
+                    Start Recovery?
+                </div>
             </div>
         </div>
     );
