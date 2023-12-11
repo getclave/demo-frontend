@@ -4,11 +4,15 @@ import type { TypedUseSelectorHook } from 'react-redux';
 
 import accountSlice from './slicers/account';
 import connectionSlice from './slicers/connection';
+import zkaccountSlice from './slicers/zkaccount';
+import zkconnectionSlice from './slicers/zkconnection';
 
 export const store = configureStore({
     reducer: {
         account: accountSlice,
         connection: connectionSlice,
+        zkaccount: zkaccountSlice,
+        zkconnection: zkconnectionSlice,
     },
     middleware: (getDefaultMiddleware) => {
         const customizedMiddleware = getDefaultMiddleware({

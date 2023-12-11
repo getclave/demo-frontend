@@ -34,8 +34,14 @@
     &.purple {
         background: #15153e !important;
         color: white;
-        
-        border: solid 1px #0c0c39  !important;
+
+        border: solid 1px #0c0c39 !important;
+        background-color: transparent;
+    }
+
+    &.special {
+        background: #0B8AA3 !important;
+        color: white;
         background-color: transparent;
     }
 

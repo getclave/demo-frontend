@@ -4,6 +4,7 @@ export enum ConnectionOptions {
     CONNECT = 'connect',
     CREATE = 'create',
     SELECT = 'select',
+    STARTRECOVERY = 'startrecovery',
 }
 
 export interface ConnectAccountProps {

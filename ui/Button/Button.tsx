@@ -15,6 +15,7 @@ interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
         | 'black'
         | 'white'
         | 'purple'
+        | 'special'
         | 'transparentWhite'
         | 'transparentBlack';
     textPosition?: 'center' | 'left' | 'right';

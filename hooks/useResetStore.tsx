@@ -8,10 +8,20 @@ import {
     setSelectedAccount,
 } from 'store/slicers/account';
 import { setConnectionOption } from 'store/slicers/connection';
+import {
+    setZKAccount,
+    setZKAuthenticationResponse,
+    setZKBalance,
+    setZKDeployedContractAddress,
+    setZKRegistrationResponse,
+    setZKSelectedAccount,
+} from 'store/slicers/zkaccount';
+import { setZKConnectionOption } from 'store/slicers/zkconnection';
 import { ConnectionOptions } from 'types/connection';
 
 export const useResetAllStore = (): {
     resetAllStore: () => void;
+    zkResetAllStore: () => void;
 } => {
     const dispatch = useDispatch();
 
@@ -25,5 +35,15 @@ export const useResetAllStore = (): {
         dispatch(setConnectionOption(ConnectionOptions.CONNECT));
     };
 
-    return { resetAllStore };
+    const zkResetAllStore = (): void => {
+        dispatch(setZKAccount(undefined));
+        dispatch(setZKAuthenticationResponse(null));
+        dispatch(setZKBalance(0));
+        dispatch(setZKDeployedContractAddress(null));
+        dispatch(setZKRegistrationResponse(null));
+        dispatch(setZKSelectedAccount(null));
+        dispatch(setZKConnectionOption(ConnectionOptions.CONNECT));
+    };
+
+    return { resetAllStore, zkResetAllStore };
 };

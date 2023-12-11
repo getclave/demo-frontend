@@ -22,7 +22,7 @@ interface InputProps extends ComponentPropsWithoutRef<'input'> {
     regularMessage?: string;
     absoluteError?: boolean;
     inputRef?: React.RefObject<HTMLInputElement>;
-    color: 'dark' | 'light';
+    color: 'dark' | 'light' | 'special';
 }
 
 const Input = ({
@@ -69,7 +69,11 @@ const Input = ({
                     extendRight && styles.extendRight,
                     rightEl && styles.rightEl,
                     leftEl && styles.leftEl,
-                    color === 'dark' ? styles.dark : styles.light,
+                    color === 'special'
+                        ? styles.special
+                        : color === 'dark'
+                        ? styles.dark
+                        : styles.light,
                     className,
                 )}
                 {...props}

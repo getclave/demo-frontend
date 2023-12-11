@@ -64,3 +64,9 @@ export const apiCreateNewOption = async (
 ): Promise<AxiosResponse<AccountV2>> => {
     return await axios.post(API.getNewOptionRoute(), params);
 };
+
+export const apiRecovery = async (
+    params: NewOptionDto,
+): Promise<AxiosResponse<AccountV2>> => {
+    return await axios.post(API.recoveryRoute(), params);
+};
