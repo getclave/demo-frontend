@@ -31,7 +31,14 @@ export const useVerifyAuthentication = async (
         if (!authenticationResponse) {
             infoModal.close();
             return false;
+        } else {
+            setInfo('LOGINED');
+            setTimeout(() => {
+                infoModal.close();
+            }, 3000);
+            return true;
         }
+
         const signature: string = await getSignatureVerifyParamEncoded(
             authenticationResponse.authenticatorData,
             authenticationResponse.clientData,
@@ -39,11 +46,13 @@ export const useVerifyAuthentication = async (
             _publicKey,
             authenticationResponse.signature,
         );
+
         const contract: Contract = new Contract(
-            ADDRESSES.verification,
+            _account?.address,
             ABIs.verificationContract,
             provider,
         );
+
         const userOp: UserOp = await getDefaultUserOp(
             _account.address,
             signature,

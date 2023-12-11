@@ -1,0 +1,53 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    padding: 0px 10px;
+
+    .title {
+        font-size: 24px;
+        color: white;
+        margin-top: -10px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: white;
+        margin-top: 0px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+
+        .active {
+            background-color: white;
+            min-width: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .deactive {
+            background-color: white;
+            opacity: 0.5;
+            min-width: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}
