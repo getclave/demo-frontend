@@ -1,24 +1,29 @@
-import { InfoModal, LoginModal, User, UserModal } from 'components';
-import { Intro } from 'components';
+import GRADIENT from 'assets/gradient.png';
+import { Onboarding, Wallet } from 'components';
+import { Title } from 'components';
 import { useModal } from 'hooks/useModal';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { setAccount, setSelectedAccount } from 'store/slicers/account';
 
+import { InfoModal } from '../InfoModal/InfoModal';
 import styles from './Landing.module.scss';
 
 export function Landing(): JSX.Element {
     const dispatch = useDispatch();
-    const loginModal = useModal();
     const infoModal = useModal();
-    const userModal = useModal();
     const [infoMessage, setInfoMessage] = useState<string>('CREATEREGISTER');
+    const [accountName, setAccountName] = useState<string>('');
 
-    const account = useSelector((state: RootState) => state.account.account);
+    const account = useSelector((state: RootState) => state.zkaccount.account);
     const selectedAccount = useSelector(
-        (state: RootState) => state.account.selectedAccount,
+        (state: RootState) => state.zkaccount.selectedAccount,
     );
+
+    const isOnboarding = useMemo(() => {
+        return !(account && (selectedAccount || selectedAccount === 0));
+    }, [account, selectedAccount]);
 
     useEffect(() => {
         const lStorage = localStorage.getItem('ClaveAccount');
@@ -37,23 +42,31 @@ export function Landing(): JSX.Element {
 
     return (
         <div className={styles.wrapper}>
-            {account && (selectedAccount || selectedAccount === 0) && (
-                <User userModal={userModal} />
-            )}
-            <LoginModal
-                loginModal={loginModal}
-                infoModal={infoModal}
-                setInfoMessage={setInfoMessage}
-            />
-            <UserModal
-                modalController={userModal}
-                setInfoMessage={setInfoMessage}
-                infoModal={infoModal}
-                loginModal={loginModal}
-            />
             <InfoModal modalController={infoModal} info={infoMessage} />
 
-            <div className={styles.mobile}>Telefon</div>
+            <div className={styles.mobile}>
+                {!isOnboarding ? (
+                    <Wallet
+                        infoModal={infoModal}
+                        setInfoMessage={setInfoMessage}
+                    />
+                ) : (
+                    <>
+                        <Title />
+                        <Onboarding
+                            accountName={accountName}
+                            setAccountName={setAccountName}
+                            infoModal={infoModal}
+                            setInfo={setInfoMessage}
+                        />
+                    </>
+                )}
+            </div>
+            <div className={styles.background}>
+                <div className={styles.gradient}>
+                    <img src={GRADIENT.src}></img>
+                </div>
+            </div>
         </div>
     );
 }

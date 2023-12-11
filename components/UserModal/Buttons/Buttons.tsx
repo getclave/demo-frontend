@@ -19,7 +19,9 @@ export function Buttons({
     loginModal,
 }: {
     modalController: ModalController;
-    setPage: (page: 'buttons' | 'transfer') => void;
+    setPage: (
+        page: 'buttons' | 'transfer' | 'addRecovery' | 'startRecovery',
+    ) => void;
     loginModal: ModalController;
 }): JSX.Element {
     const dispatch = useDispatch();
@@ -87,6 +89,17 @@ export function Buttons({
             >
                 <MdManageAccounts size={16} />
                 <div className={styles.text}>Authenticated Devices</div>
+            </div>
+            <div
+                className={styles.button}
+                onClick={(): void => {
+                    if (!account) return;
+                    setPage('addRecovery');
+                }}
+                style={{ width: '100%' }}
+            >
+                <MdManageAccounts size={16} />
+                <div className={styles.text}>Add Email Backup</div>
             </div>
         </div>
     );

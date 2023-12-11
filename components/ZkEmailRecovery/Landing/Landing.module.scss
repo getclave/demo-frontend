@@ -1,6 +1,5 @@
 .wrapper {
     height: 100vh;
-    background: linear-gradient(65.04deg, #7617a4 2.97%, #270550 64.73%);
     position: relative;
     display: flex;
     align-items: center;
@@ -8,10 +7,12 @@
     flex-direction: column;
     z-index: 1;
     overflow: hidden;
+    background-color: black;
 
 
     .mobile {
-        border: black 2px solid;
+        z-index: 1;
+        border: #3A3746 2px solid;
         border-radius: 16px;
         max-width: 335px;
         max-height: 670px;
@@ -19,7 +20,22 @@
         width: 100%;
         opacity: 1;
         overflow: hidden;
-        background-color: #1D1D1D;
+        background-color: #0A0A11;
+    }
+
+    .background {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100vw;
+
+        .gradient {
+            width: 100vw;
+
+            img {
+                width: 100%;
+            }
+        }
     }
 }
 
