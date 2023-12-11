@@ -1,0 +1,26 @@
+.wrapper {
+    margin-top: 25px;
+    padding: 0px 10px;
+    height: 136px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .nft {
+        display: flex;
+
+        img {
+            border-radius: 100%;
+            width: 90px;
+        }
+    }
+
+    .btn {
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+}

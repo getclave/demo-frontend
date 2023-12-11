@@ -1,0 +1,62 @@
+.wrapper {
+    height: 40px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+
+    .user {
+        background-color: white;
+        height: 100%;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 5px;
+        margin: 0px 7.5px;
+        cursor: pointer;
+
+        .balance {
+            font-weight: 500;
+            white-space: nowrap
+        }
+
+        .account {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+            border-radius: 12px;
+            width: 100%;
+            padding: 0px 5px;
+            margin-left: 5px;
+
+            .icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 5px;
+
+                img {
+                    width: 20px;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+
+    .logout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 45px;
+        background-color: #f1f1f1;
+        padding: 0px 5px;
+        margin: 0px 7.5px;
+        height: 100%;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+}
