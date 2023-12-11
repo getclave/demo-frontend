@@ -64,6 +64,7 @@ export function Create({
             notify.success(`Account created successfully <3`);
             dispatch(setZKAccount(data.data));
             setInfo('CREATEDWALLET');
+            setAccountName('');
             setTimeout(() => {
                 infoModal.close();
             }, 5000);

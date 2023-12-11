@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { ImExit } from 'react-icons/im';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { setBalance } from 'store/slicers/account';
+import { setZKBalance } from 'store/slicers/zkaccount';
 import { parseAddress } from 'utils/parseAddress';
 
 import styles from './Navbar.module.scss';
@@ -22,7 +22,7 @@ export function Navbar(): JSX.Element {
 
     useEffect(() => {
         if (!account) return;
-        dispatch(setBalance(Number(balance.toString())));
+        dispatch(setZKBalance(Number(balance.toString())));
     }, [balance]);
 
     useEffect(() => {
