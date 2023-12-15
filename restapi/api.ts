@@ -8,4 +8,8 @@ export const API = {
     getCreateAccountRoute: (): string => `/create`,
     getNewOptionRoute: (): string => `/newOption`,
     recoveryRoute: (): string => `/recovery`,
+    getLogs: (from: number, address: string, apiKey: string): string =>
+        `https://api-sepolia.etherscan.io/api?module=logs&action=getLogs&fromBlock=${from}&toBlock=latest&address=${address}&apikey=${apiKey}`,
+    getTransaction: (txHash: string, apiKey: string): string =>
+        `https://api-sepolia.etherscan.io/api?module=transaction&action=getstatus&txhash=${txHash}&apikey=${apiKey}`,
 };

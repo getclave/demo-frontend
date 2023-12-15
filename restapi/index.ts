@@ -19,6 +19,9 @@ const baseURL =
 export const provider: ethers.providers.JsonRpcProvider =
     new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
 
+export const opProvider: ethers.providers.JsonRpcProvider =
+    new ethers.providers.JsonRpcProvider('https://goerli.optimism.io');
+
 export const axios = Axios.create({
     baseURL,
 });
@@ -51,6 +54,27 @@ export const apiGetAccount2 = async (
     name: string,
 ): Promise<AxiosResponse<AccountV2>> => {
     return await axios.get(API.getAccountByNameRoute(name));
+};
+
+export const apiGetLogs = async (
+    from: number,
+    address: string,
+): Promise<AxiosResponse<unknown>> => {
+    const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
+    if (!apiKey) {
+        throw new Error('Missing API key');
+    }
+    return await axios.get(API.getLogs(from, address, apiKey));
+};
+
+export const apiGetTransaction = async (
+    txHash: string,
+): Promise<AxiosResponse<unknown>> => {
+    const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
+    if (!apiKey) {
+        throw new Error('Missing API key');
+    }
+    return await axios.get(API.getTransaction(txHash, apiKey));
 };
 
 export const apiCreateAccountV2 = async (

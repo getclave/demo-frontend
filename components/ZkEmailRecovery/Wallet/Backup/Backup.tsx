@@ -17,7 +17,11 @@ export function Backup({
         <div className={styles.wrapper}>
             <div className={styles.title}> Add ZK Email Backup</div>
             {step === 'create' ? (
-                <CreateZkEmail setStep={setStep} />
+                <CreateZkEmail
+                    infoModal={infoModal}
+                    setInfoMessage={setInfoMessage}
+                    setStep={setStep}
+                />
             ) : (
                 <AddBackup
                     infoModal={infoModal}

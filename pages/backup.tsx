@@ -2,7 +2,7 @@ import { Layout } from 'components';
 import { Landing } from 'components';
 import type { NextPage } from 'next';
 
-const Test: NextPage = () => {
+const Backup: NextPage = () => {
     return (
         <Layout>
             <Landing />
@@ -10,4 +10,4 @@ const Test: NextPage = () => {
     );
 };
 
-export default Test;
+export default Backup;
