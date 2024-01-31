@@ -2,6 +2,7 @@
 export type ExtraConfig = {
     PRIVATE_KEY: string;
     RPC_URL: string;
+    OP_RPC_URL: string;
 };
 
 export type BaseConfig<TExtra> = {

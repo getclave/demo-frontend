@@ -45,11 +45,10 @@ export function getCreateEmailLink(
         ...getEmailLink(
             fromEmail,
             subject,
-            `You are creating your Email Wallet.\n
+            `You are recovering your account with your Email Wallet.\n
 ❗ You must send this email without editing the to: or subject: fields, or else it will fail!\n
 📤 sendeth.org privately relays your email on Sepolia testnet to create your account. Expect a confirmation email in a minute.\n
-🤫 Your unique secret code hides your email on-chain.\n
-📖 Read more on our docs at http://docs.emailwallet.org`,
+`,
             true,
         ),
         subject,

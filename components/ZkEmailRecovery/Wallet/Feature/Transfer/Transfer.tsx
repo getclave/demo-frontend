@@ -47,6 +47,7 @@ export function Transfer({
     };
     return (
         <div className={styles.wrapper}>
+            <div className={styles.title}> Transfer</div>
             <div className={styles.input}>
                 <TextField
                     id="outlined-basic"

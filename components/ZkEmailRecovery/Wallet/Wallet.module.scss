@@ -12,4 +12,37 @@
         width: 100%;
         margin: 20px 0px;
     }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+        margin: 25px 0px;
+
+        .active {
+            background-color: white;
+            min-width: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .deactive {
+            background-color: white;
+            opacity: 0.5;
+            min-width: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
 }

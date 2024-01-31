@@ -20,7 +20,7 @@ export const provider: ethers.providers.JsonRpcProvider =
     new ethers.providers.JsonRpcProvider(CONFIG.RPC_URL);
 
 export const opProvider: ethers.providers.JsonRpcProvider =
-    new ethers.providers.JsonRpcProvider('https://goerli.optimism.io');
+    new ethers.providers.JsonRpcProvider(CONFIG.OP_RPC_URL);
 
 export const axios = Axios.create({
     baseURL,

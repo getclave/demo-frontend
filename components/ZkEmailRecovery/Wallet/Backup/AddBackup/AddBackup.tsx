@@ -108,28 +108,32 @@ export function AddBackup({
                     }}
                 />
             </div>
-            <Button
-                disabled={
-                    guardian.length !== 42 || !ethers.utils.isAddress(guardian)
-                }
-                width="140px"
-                height="40px"
-                color="special"
-                onClick={handleAddGuardian}
-            >
-                Add Backup
-            </Button>
-            <div className={styles.line}></div>
-            <Button
-                width="80px"
-                height="40px"
-                color="special"
-                onClick={(): void => {
-                    setStep('create');
-                }}
-            >
-                Back
-            </Button>
+            <div>
+                <Button
+                    disabled={
+                        guardian.length !== 42 ||
+                        !ethers.utils.isAddress(guardian)
+                    }
+                    width="140px"
+                    height="40px"
+                    color="special"
+                    onClick={handleAddGuardian}
+                >
+                    Add Backup
+                </Button>
+            </div>
+            <div className={styles.backButton}>
+                <Button
+                    width="140px"
+                    height="40px"
+                    color="special"
+                    onClick={(): void => {
+                        setStep('create');
+                    }}
+                >
+                    Back
+                </Button>
+            </div>
         </div>
     );
 }

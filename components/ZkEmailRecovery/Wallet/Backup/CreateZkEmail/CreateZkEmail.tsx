@@ -56,61 +56,62 @@ export function CreateZkEmail({
     const trial = async (): Promise<void> => {
         const address = account?.address;
         if (!address) return;
-        let walletAddress: string | undefined;
-        const block = await provider.getBlockNumber();
-        setInfoMessage('ADDGUARDIAN');
-        infoModal.open();
-        let internalCount = 0;
+        try {
+            let walletAddress: string | undefined;
+            const block = await provider.getBlockNumber();
+            setInfoMessage('CREATEANDADDGUARDIAN');
+            infoModal.open();
+            let internalCount = 0;
 
-        await dbContract.update();
-        const receipt = await dbContract.isAlone();
-
-        if (!receipt) {
-            await handleCreate();
-        } else {
             const [, sendLink] = getCreateEmailLink(email);
+            console.log(sendLink);
             window.open(sendLink, '_blank');
+            await dbContract.update();
+            const receipt = await dbContract.isAlone();
+
+            if (!receipt) {
+                setTimeout(() => {
+                    setStep('add');
+                }, 2500);
+            }
+
+            const interval = setInterval(async () => {
+                if (internalCount > 16) clearInterval(interval);
+                internalCount++;
+                const logs = await getLogsMutation.mutateAsync({
+                    block: block,
+                    address: '0x50ea0748316e3d6823cc27CE3A8ceA5EE3b1B792',
+                });
+                const data = logs as Array<{
+                    transactionHash: string;
+                    topics: Array<string>;
+                }>;
+
+                if (data.length > 0) {
+                    const checkData =
+                        '0xa67edfb1574973cc13ebf7c178328ec2097c4c164d9595c006e65c0ff02fba66';
+                    const lastDataLogs = data[data.length - 1]?.topics;
+                    const realIndex = lastDataLogs.includes(checkData) ? 1 : 2;
+                    const lastData =
+                        data[data.length - realIndex]?.transactionHash;
+                    if (lastData == null) return;
+                    const tx = await alchemy.core.getTransactionReceipt(
+                        lastData,
+                    );
+                    walletAddress = tx?.logs[0].address;
+                }
+
+                if (walletAddress != null) {
+                    console.log('recoverer address: ', walletAddress);
+                    handleAddGuardian(walletAddress);
+                    clearInterval(interval);
+                } else {
+                    console.log('interval: ', internalCount);
+                }
+            }, 10000);
+        } catch (e) {
+            console.log(e);
         }
-
-        const interval = setInterval(async () => {
-            if (internalCount > 16) clearInterval(interval);
-            internalCount++;
-            const logs = await getLogsMutation.mutateAsync({
-                block: block,
-                address: '0x50ea0748316e3d6823cc27CE3A8ceA5EE3b1B792',
-            });
-            const data = logs as Array<{
-                transactionHash: string;
-                topics: Array<string>;
-            }>;
-
-            if (data.length > 0) {
-                const checkData =
-                    '0xa67edfb1574973cc13ebf7c178328ec2097c4c164d9595c006e65c0ff02fba66';
-                const lastDataLogs = data[data.length - 1]?.topics;
-                const realIndex = lastDataLogs.includes(checkData) ? 1 : 2;
-                const lastData = data[data.length - realIndex]?.transactionHash;
-                if (lastData == null) return;
-                const tx = await alchemy.core.getTransactionReceipt(lastData);
-                walletAddress = tx?.logs[0].address;
-            }
-
-            if (walletAddress != null) {
-                console.log('recoverer address: ', walletAddress);
-                handleAddGuardian(walletAddress);
-                clearInterval(interval);
-            } else {
-                console.log('interval: ', internalCount);
-            }
-        }, 10000);
-    };
-
-    const handleCreate = async (): Promise<void> => {
-        const [, sendLink] = getCreateEmailLink(email);
-        window.open(sendLink, '_blank');
-        setTimeout(() => {
-            setStep('add');
-        }, 2500);
     };
 
     const handleAddGuardian = async (guardian: string): Promise<void> => {
@@ -174,11 +175,13 @@ export function CreateZkEmail({
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.subtitle}>
-                Have you created Email-Wallet before?
+            <div className={styles.description}>
+                Have you previously created an Email-Wallet using your email?
             </div>
             <div className={styles.createZkEmail}>
-                <div className={styles.subtitle}>If yes, pass this step.</div>
+                <div className={styles.subtitle}>
+                    If yes, click the button below
+                </div>
                 <Button
                     width="160px"
                     height="40px"
@@ -191,8 +194,9 @@ export function CreateZkEmail({
                 </Button>
                 <div className={styles.line}></div>
                 <div className={styles.subtitle}>
-                    If no, enter your email and send it. After you receive
-                    email, sign tx to add backup.
+                    If no, send an email to create one after entering your email
+                    address and then sign the transaction to add it as a
+                    guardian.
                 </div>
                 <div className={styles.flex}>
                     <div className={styles.input}>

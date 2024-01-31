@@ -18,7 +18,15 @@
 
     .message {
         text-align: center;
+        margin-bottom: 5px;
+        white-space: pre-wrap;
+        font-size: 15px;
+    }
+
+    .timer {
+        text-align: center;
         margin-bottom: 15px;
+        font-size: 24px;
     }
 
     .toDo {

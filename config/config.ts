@@ -5,6 +5,7 @@ const EXTRA_CONFIG = {
         ? process.env.NEXT_PUBLIC_PRIVATE_KEY
         : '',
     RPC_URL: `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY_FOR_SEPOLIA}`,
+    OP_RPC_URL: `https://opt-goerli.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY_FOR_OPTIMISM}`,
 };
 
 export const CONFIG: BaseConfig<ExtraConfig> = {

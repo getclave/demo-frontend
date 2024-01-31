@@ -15,7 +15,7 @@ export function Backup({
     const [step, setStep] = useState<'create' | 'add'>('create');
     return (
         <div className={styles.wrapper}>
-            <div className={styles.title}> Add ZK Email Backup</div>
+            <div className={styles.title}> ZK Email Backup</div>
             {step === 'create' ? (
                 <CreateZkEmail
                     infoModal={infoModal}

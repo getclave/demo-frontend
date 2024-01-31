@@ -33,9 +33,7 @@ export const useVerifyAuthentication = async (
             return false;
         } else {
             setInfo('LOGINED');
-            setTimeout(() => {
-                infoModal.close();
-            }, 3000);
+            infoModal.close();
             return true;
         }
 

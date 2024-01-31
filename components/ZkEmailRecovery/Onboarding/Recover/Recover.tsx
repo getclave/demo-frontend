@@ -59,12 +59,7 @@ export function Recover({
         },
         onSuccess: (data) => {
             setLoading(false);
-            notify.success(`Account recovered successfully`);
             dispatch(setZKAccount(data.data));
-            setInfo('CREATEDWALLET');
-            setTimeout(() => {
-                infoModal.close();
-            }, 5000);
         },
     });
 
@@ -72,8 +67,10 @@ export function Recover({
         const address = data?.data.address;
         if (!address) return;
 
+        setInfo('CREATEREGISTER');
+        infoModal.open();
         try {
-            const registrationName = `${accountName}-recovery`;
+            const registrationName = `${accountName}-recovered`;
             const registrationResponse = await register(registrationName);
             if (registrationResponse) {
                 const publicKey: string = await getPublicKey(
@@ -84,7 +81,8 @@ export function Recover({
                     address,
                     publicKey,
                 );
-                console.log(sendLink, publicKey);
+                infoModal.close();
+                setInfo('STARTRECOVERY');
                 setLinkToEmail({
                     link: sendLink,
                     publicKey: publicKey,
@@ -99,15 +97,22 @@ export function Recover({
 
     const handleStartRecovery = async (): Promise<void> => {
         if (linkToEmail == null) return;
+        infoModal.open();
         window.open(linkToEmail.link, '_blank');
-        recoverAccount({
-            name: accountName,
-            authName: linkToEmail.name,
-            authPublic: linkToEmail.publicKey,
-            authType: 1,
-            clientId: linkToEmail.cliendId,
-        } as NewOptionDto);
-        dispatch(setZKConnectionOption(ConnectionOptions.CONNECT));
+        setTimeout(() => {
+            recoverAccount({
+                name: accountName,
+                authName: linkToEmail.name,
+                authPublic: linkToEmail.publicKey,
+                authType: 1,
+                clientId: linkToEmail.cliendId,
+            } as NewOptionDto);
+        }, 10000);
+        setTimeout(() => {
+            infoModal.close();
+            notify.success(`Account recovered successfully`);
+            dispatch(setZKConnectionOption(ConnectionOptions.CONNECT));
+        }, 30000);
     };
 
     useEffect(() => {

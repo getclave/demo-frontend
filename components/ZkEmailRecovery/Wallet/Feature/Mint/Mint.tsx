@@ -61,6 +61,7 @@ export function Mint({
                 account?.address,
                 BYTECODES.mintFunction,
             );
+
             if (res) {
                 notify.success('Minted successfully!');
                 setInfoMessage('MINTED');
@@ -78,6 +79,7 @@ export function Mint({
     };
     return (
         <div className={styles.wrapper}>
+            <div className={styles.title}> Mint NFT</div>
             <div className={styles.nft}>
                 <img src={CLAVE.src} alt="logo"></img>
             </div>
